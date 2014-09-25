@@ -9,4 +9,7 @@ package data.keys;
 public interface Key {
 	@Override
 	public boolean equals(Object key);
+	
+	@Override
+	public int hashCode();
 }

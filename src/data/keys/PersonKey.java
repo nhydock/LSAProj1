@@ -32,4 +32,12 @@ public class PersonKey implements Key
 		eq = eq && (key.id == this.id);
 		return eq;
 	}
+	
+	@Override
+	public int hashCode() {
+	    final int prime = 31;
+	    int result = 1;
+	    result = prime * result + (int) (id ^ (id >>> 32));
+	    return result;
+	}
 }
