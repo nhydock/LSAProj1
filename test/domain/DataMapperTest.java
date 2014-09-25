@@ -65,4 +65,11 @@ public class DataMapperTest {
 		assertNull(mapper.get(Person.class, new PersonKey(-1)));
 	}
 
+	@Test
+	public void testPersist() {
+		//make sure items that are persisted will be created if they don't exist already
+		fail("not yet implemented");
+		//if an item is already in the identity map then it should be updated
+		fail("not yet implemented");
+	}
 }
