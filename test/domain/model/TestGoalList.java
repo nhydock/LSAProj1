@@ -28,5 +28,17 @@ public class TestGoalList
 		assertEquals(gl.getGoalList().get(0), testG);
 		assertEquals(gl.getGoalList().size(),1);
 	}
+	
+	@Test
+	public void testDelete()
+	{
+		GoalList gl = new GoalList();
+		Goal testG = new Goal(123456789, new Date(123456), new Date(231654897),	new Person(1, "name"));
+		
+		gl.insert(testG);
+		gl.delete(0);
+		assertEquals(gl.getGoalList().size(),0);
+		
+	}
 
 }
