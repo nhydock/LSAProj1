@@ -1,5 +1,7 @@
 package domain.model;
 
+import domain.model.proxies.ActivityListProxy;
+
 public class Person extends DomainModelObject {
 
     private ActivityList activitys;
