@@ -13,6 +13,8 @@ public class TestPerson {
 	Person person = new Person(id, name);
 	assertEquals(person.getID(), id);
 	assertEquals(person.getName(), name);
+	assertNotNull(person.getActivitys());
+	assertNotNull(person.getFriends());
     }
 
 }

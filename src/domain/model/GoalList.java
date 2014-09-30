@@ -4,11 +4,12 @@ import java.util.ArrayList;
 
 import domain.model.interfaces.IGoalList;
 
-public class GoalList implements IGoalList {
+public class GoalList extends DomainModelObject implements IGoalList {
 
     private ArrayList<Goal> goals;
     
-    public GoalList() {
+    public GoalList(long sessionID) {
+	super(sessionID);
 	goals = new ArrayList<Goal>();
     }
     

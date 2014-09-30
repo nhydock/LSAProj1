@@ -4,11 +4,12 @@ import java.util.ArrayList;
 
 import domain.model.interfaces.IActivityList;
 
-public class ActivityList implements IActivityList {
+public class ActivityList extends DomainModelObject implements IActivityList {
     
     private ArrayList<Activity> activities;
     
-    public ActivityList() {
+    public ActivityList(long sessionID) {
+	super(sessionID);
 	this.activities = new ArrayList<Activity>();
     }
     
