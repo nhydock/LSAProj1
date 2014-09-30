@@ -15,9 +15,9 @@ public class TestFriendList {
     
     @Before
     public void setup() {
-	friends = new FriendList();
-	friend = new Friend(123, "Jesus");
-	newFriend = new Friend(1234, "Zeus");
+	friends = new FriendList(1);
+	friend = new Friend(123, "Jesus", 1);
+	newFriend = new Friend(1234, "Zeus", 1);
 
     }
 

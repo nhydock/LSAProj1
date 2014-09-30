@@ -56,6 +56,6 @@ public class MockPersonGateway implements IPersonGateway {
 	 *
 	 */
 	private static class MockPerson extends Person{
-		private MockPerson(){super(1, "Walter O'Brien");}
+		private MockPerson(){super(1, "Walter O'Brien", 1);}
 	}
 }

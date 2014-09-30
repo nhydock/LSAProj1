@@ -14,10 +14,10 @@ public class TestPendingFriendsList {
     
     @Before
     public void setup() {
-	pendingFriends = new PendingFriendsList();
-	friend = new Friend(123, "Athena");
-	newFriend = new Friend(1234, "Dinosaur");
-	person = new Person(1, "Velociraptor");
+	pendingFriends = new PendingFriendsList(1);
+	friend = new Friend(123, "Athena", 1);
+	newFriend = new Friend(1234, "Dinosaur", 1);
+	person = new Person(1, "Velociraptor", 1);
     }
 
     @Test
