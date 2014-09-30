@@ -43,12 +43,6 @@ public class MockPersonGateway implements IPersonGateway {
 		
 	}
 
-	@Override
-	public void persist(Person object) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	
 	/**
 	 * Mock class for representing a person in testing

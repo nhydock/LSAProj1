@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import data.gateway.interfaces.Gateway;
 import data.keys.Key;
+import domain.model.DomainModelObject;
+import domain.model.Uow;
 
 /**
  * Maps data objects that have been pulled in from the database
@@ -45,12 +47,12 @@ public class DataMapper
 	/**
 	 * Knows which gateway to use to fetch an object type
 	 */
-	private HashMap<Class<?>, Gateway<?>> gatewayMap = new HashMap<Class<?>, Gateway<?>>();
+	private HashMap<Class<? extends DomainModelObject>, Gateway<?>> gatewayMap = new HashMap<Class<? extends DomainModelObject>, Gateway<?>>();
 	
 	/**
 	 * Identity map contain mapping of objects that have been loaded by their primary key
 	 */
-	private HashMap<Class<?>, IdentityMap> identityRegistry = new HashMap<Class<?>, IdentityMap>();
+	private HashMap<Class<? extends DomainModelObject>, IdentityMap> identityRegistry = new HashMap<Class<? extends DomainModelObject>, IdentityMap>();
 	
 	/**
 	 * Constructor for data mapper should be hidden
@@ -63,7 +65,7 @@ public class DataMapper
 	 * @param gate - gateway to link to the domain object class type
 	 * @return boolean - false if class has already been registered with a gateway
 	 */
-	public boolean register(Class<?> cls, Gateway<?> gate)
+	public boolean register(Class<? extends DomainModelObject> cls, Gateway<?> gate)
 	{
 		if (gatewayMap.containsKey(cls))
 		{
@@ -105,8 +107,17 @@ public class DataMapper
 	 * Persists changes of an object to the database
 	 * @param obj
 	 */
-	public void persist(Object obj)
+	public <T extends DomainModelObject> void persist(T object)
 	{
-		//TODO
+		@SuppressWarnings("unchecked")
+		Gateway<T> gate = (Gateway<T>)gatewayMap.get(object.getClass());
+		if (object.getUnitOfWork().getState() == Uow.State.Changed)
+		{
+			gate.update(object);
+		}
+		else if (object.getUnitOfWork().getState() == Uow.State.Deleted)
+		{
+			gate.delete(object);
+		}
 	}
 }

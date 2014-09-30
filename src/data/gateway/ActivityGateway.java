@@ -24,10 +24,4 @@ public class ActivityGateway implements IActivityGateway {
 		
 	}
 
-	@Override
-	public void persist(ActivityList object) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

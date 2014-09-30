@@ -24,10 +24,4 @@ public class MockActivityGateway implements IActivityGateway {
 		
 	}
 
-	@Override
-	public void persist(ActivityList object) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

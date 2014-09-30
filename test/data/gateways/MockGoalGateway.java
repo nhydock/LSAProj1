@@ -24,10 +24,4 @@ public class MockGoalGateway implements IGoalGateway {
 		
 	}
 
-	@Override
-	public void persist(Goal object) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

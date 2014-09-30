@@ -24,9 +24,4 @@ public class PersonGateway implements IPersonGateway {
 		
 	}
 
-	@Override
-	public void persist(Person object) {
-		
-	}
-
 }
