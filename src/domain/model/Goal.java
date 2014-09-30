@@ -29,6 +29,11 @@ public class Goal {
 	return completedDate;
     }
     
+    public void setCompleted()
+    {
+    	completedDate = new Date(123456789);
+    }
+    
     public Date getGoalDate() {
 	return goalDate;
     }

@@ -1,5 +1,7 @@
 package data.gateway.interfaces;
 
-public interface IActivityGateway {
+import domain.model.ActivityList;
+
+public interface IActivityGateway extends Gateway<ActivityList> {
 
 }

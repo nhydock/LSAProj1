@@ -46,5 +46,4 @@ public class TestFriendList {
 	assertEquals(friends.getFriends().get(0).getID(), 1234);
 
     }
-
 }

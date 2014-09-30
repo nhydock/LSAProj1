@@ -1,5 +1,7 @@
 package data.gateway.interfaces;
 
-public interface IPersonGateway {
+import domain.model.Person;
+
+public interface IPersonGateway extends Gateway<Person>{
 
 }

@@ -29,5 +29,13 @@ public class TestGoal {
 	assertEquals(goal.getGoalDate(), goalDate);
 	assertEquals(goal.getPerson(), person);
     }
+    
+    @Test
+    public void testDateCompleted()
+    {
+    	goal.setCompleted();
+    	
+    	assertTrue(goal.getCompletedDate().equals(new Date(123456789)));
+    }
 
 }
