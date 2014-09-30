@@ -16,9 +16,9 @@ public class TestActivityList
 	@Before
 	public void setup()
 	{
-		activityList = new ActivityList();
+		activityList = new ActivityList(1);
 		activity = new Activity(1, "Running", new Date(12345), 40, 100,
-				new Person(0, "Theordore"));
+				new Person(0, "Theordore", 1), 1);
 
 	}
 
@@ -54,7 +54,7 @@ public class TestActivityList
 		assertEquals(activityList.getActivities().size(), 0);
 		activityList.insert(activity);
 		Activity newActivity = new Activity(1, "Walking", new Date(12345), 40,
-				100, new Person(0, "Theordore"));
+				100, new Person(0, "Theordore", 1), 1);
 		activityList.update(newActivity, 0);
 		assertEquals(activityList.getActivities().get(0).getType(),
 				newActivity.getType());

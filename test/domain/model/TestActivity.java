@@ -15,8 +15,8 @@ public class TestActivity {
 	Date date = new Date(12345);
 	int minutesSpent = 40;
 	int caloriesBurned = 100;
-	Person person = new Person(0, "Bobbo");
-	Activity activity = new Activity(id, type, date, minutesSpent, caloriesBurned, person);
+	Person person = new Person(0, "Bobbo", 1);
+	Activity activity = new Activity(id, type, date, minutesSpent, caloriesBurned, person, 1);
 	assertEquals(activity.getPerson(), person);
 	assertEquals(activity.getId(), id);
 	assertEquals(activity.getType(), type);

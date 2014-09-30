@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import domain.model.interfaces.IFriendList;
 
-public class FriendList implements IFriendList {
-
+public class FriendList extends DomainModelObject implements IFriendList {
     
     private ArrayList<Friend> friends;
     
-    public FriendList() {
+    public FriendList(long sessionID) {
+	super(sessionID);
 	friends = new ArrayList<Friend>();
     }
     

@@ -2,7 +2,7 @@ package domain.model;
 
 import java.sql.Date;
 
-public class Activity {
+public class Activity extends DomainModelObject {
     
     private long id;
     private String type;
@@ -11,7 +11,8 @@ public class Activity {
     private int caloriesBurned;
     private Person person;
     
-    public Activity(long id, String type, Date date, int minutesSpent, int caloriesBurned, Person person) {
+    public Activity(long id, String type, Date date, int minutesSpent, int caloriesBurned, Person person, long sessionID) {
+	super(sessionID);
 	this.id = id;
 	this.type = type;
 	this.date =  date;

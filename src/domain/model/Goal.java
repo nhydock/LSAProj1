@@ -2,7 +2,7 @@ package domain.model;
 
 import java.sql.Date;
 
-public class Goal {
+public class Goal extends DomainModelObject {
     
     private long id;
     private Date startDate;
@@ -10,7 +10,8 @@ public class Goal {
     private Date goalDate;
     private Person person;
     
-    public Goal(long id, Date startDate, Date goalDate, Person person) {
+    public Goal(long id, Date startDate, Date goalDate, Person person, long sessionID) {
+	super(sessionID);
 	this.id = id;
 	this.startDate = startDate;
 	this.goalDate = goalDate;

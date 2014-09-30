@@ -15,9 +15,9 @@ public class TestGoalList {
     
     @Before
     public void setup() {
-	goals = new GoalList();
-	goal = new Goal(123, new Date(123), new Date(12345), new Person(0, "Peach"));
-	newGoal = new Goal(1234, new Date(123), new Date(12345), new Person(0, "Peach"));
+	goals = new GoalList(1);
+	goal = new Goal(123, new Date(123), new Date(12345), new Person(0, "Peach", 1), 1);
+	newGoal = new Goal(1234, new Date(123), new Date(12345), new Person(0, "Peach", 1), 1);
 
     }
 
