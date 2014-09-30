@@ -15,14 +15,14 @@ public class DataMapper
 	/**
 	 * Registry of DataMappers assigned per Session
 	 */
-	private static HashMap<Integer, DataMapper> dmRegistry = new HashMap<Integer, DataMapper>();
+	private static HashMap<Long, DataMapper> dmRegistry = new HashMap<Long, DataMapper>();
 	
 	/**
 	 * Fetches a data mapper assigned to a session.  If none exists a new one is made
 	 * @param sessionID
 	 * @return a data mapper
 	 */
-	public static DataMapper getMapper(int sessionID)
+	public static DataMapper getMapper(long sessionID)
 	{
 		if (!dmRegistry.containsKey(sessionID))
 		{
