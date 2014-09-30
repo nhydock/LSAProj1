@@ -15,6 +15,7 @@ public class TestPerson {
 	assertEquals(person.getName(), name);
 	assertNotNull(person.getActivitys());
 	assertNotNull(person.getFriends());
+	assertNotNull(person.getGoals());
     }
 
 }

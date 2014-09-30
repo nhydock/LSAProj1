@@ -5,6 +5,7 @@ public class Person extends DomainModelObject {
     private ActivityList activitys;
     private FriendList friends;
     private GoalList goals;
+    private PendingFriendsList pendingFriends;
 
     private long id;
     private String name;
@@ -13,9 +14,10 @@ public class Person extends DomainModelObject {
 	super(sessionID);
 	this.id = id;
 	this.name = name;
-	activitys = new ActivityList(sessionID);
-	friends = new FriendList(sessionID);
-	goals = new GoalList(sessionID);
+	activitys = new ActivityListProxy();
+	friends = new FriendListProxy();
+	goals = new GoalListProxy();
+	pendingFriends = new PendingFriendsListProxy();
     }
 
     /**

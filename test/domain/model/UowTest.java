@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import domain.model.Uow.State;
+
 public class UowTest {
 
 	@Test
@@ -33,5 +35,13 @@ public class UowTest {
 		// marked changed after being marked for deletion
 		work.markChanged();
 		assertEquals(work.getState(), Uow.State.Deleted);
+	}
+	
+	@Test
+	public void testReset() {
+	    Uow work = new Uow();
+	    work.markChanged();
+	    work.reset();
+	    assertEquals(work.getState(), State.Loaded);
 	}
 }
