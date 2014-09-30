@@ -1,5 +1,7 @@
 package data.gateway.interfaces;
 
-public interface IGoalGateway {
+import domain.model.Goal;
+
+public interface IGoalGateway extends Gateway<Goal>{
 
 }
