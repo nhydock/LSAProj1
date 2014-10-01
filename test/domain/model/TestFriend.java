@@ -8,9 +8,9 @@ public class TestFriend {
 
     @Test
     public void testInitialization() {
-	Friend friend = new Friend(1, "Frank", 1);
-	assertEquals(friend.getID(), 1);
-	assertEquals(friend.getName(), "Frank");
+        Friend friend = new Friend("Frank", "Frankie");
+        assertEquals(friend.getUserName(), "Frank");
+        assertEquals(friend.getDisplayName(), "Frankie");
     }
 
 }
