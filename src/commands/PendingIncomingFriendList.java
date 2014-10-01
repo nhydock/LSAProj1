@@ -1,5 +1,8 @@
 package commands;
+
 import java.util.ArrayList;
+
+import domain.model.Friend;
 
 /**
  * Cause the list of friend requests from other user to this user to be fetched
@@ -9,43 +12,39 @@ import java.util.ArrayList;
  * @author merlin
  *
  */
-public class PendingIncomingFriendList implements Command
-{
+public class PendingIncomingFriendList implements Command {
 
-	private int userID;
+    private int userID;
 
-	/**
-	 * The userID of the current user
-	 * 
-	 * @param userID
-	 *            unique
-	 */
-	public PendingIncomingFriendList(int userID)
-	{
-		this.userID = userID;
-	}
+    /**
+     * The userID of the current user
+     * 
+     * @param userID
+     *            unique
+     */
+    public PendingIncomingFriendList(int userID) {
+        this.userID = userID;
+    }
 
-	/**
-	 * 
-	 * @see Command#execute()
-	 */
-	@Override
-	public void execute()
-	{
-		// TODO Auto-generated method stub
+    /**
+     * 
+     * @see Command#execute()
+     */
+    @Override
+    public void execute() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	/**
-	 * A list of the friends associated with the given user
-	 * 
-	 * @see Command#getResult()
-	 */
-	@Override
-	public ArrayList<Friend> getResult()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /**
+     * A list of the friends associated with the given user
+     * 
+     * @see Command#getResult()
+     */
+    @Override
+    public ArrayList<Friend> getResult() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
