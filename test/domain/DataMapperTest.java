@@ -2,54 +2,33 @@ package domain;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
 import org.junit.Test;
 
-import data.gateways.MockActivityGateway;
 import data.gateways.MockPersonGateway;
 import data.keys.PersonKey;
 import domain.model.Person;
+import domain.model.Uow;
 
 public class DataMapperTest {
-
-	public final int SESSION_ID = -1;
 	
-	@After
-	public void tearDown() {
-		//make sure data mapper for test session is cleared after each test
-		DataMapper.clearMapper(SESSION_ID);
-	}
-	
-	@Test
-	public void testSetup() {
-		//Test to make sure that when getting a mapper for a session
-		// we'll always get the same mapper when using the same session ID
-		
-		DataMapper mapper = DataMapper.getMapper(SESSION_ID);
-		DataMapper mapper2 = DataMapper.getMapper(SESSION_ID-1);
-		
-		assertNotEquals(mapper, mapper2);
-		assertEquals(mapper, DataMapper.getMapper(SESSION_ID));
-		
-		DataMapper.clearMapper(SESSION_ID-1);
-	}
-	
+	/**
+	 * Test registering gateways to the datamapper by class type
+	 */
 	@Test
 	public void testRegister() {
-		DataMapper mapper = DataMapper.getMapper(SESSION_ID);
+		DataMapper mapper = new DataMapper();
 		
 		MockPersonGateway pGateway = new MockPersonGateway();
-		MockActivityGateway aGateway = new MockActivityGateway();
 		
-		//test making sure the mapper can not register multiple gateways
-		// for a single type
 		assertTrue(mapper.register(Person.class, pGateway));
-		assertFalse(mapper.register(Person.class, aGateway));
 	}
 
+	/**
+	 * Test to make sure data can be fetched from a gateway through a data mapper
+	 */
 	@Test
 	public void testGet() {
-		DataMapper mapper = DataMapper.getMapper(SESSION_ID);	
+		DataMapper mapper = new DataMapper();	
 		MockPersonGateway pGateway = new MockPersonGateway();
 	
 		mapper.register(Person.class, pGateway);
@@ -65,11 +44,55 @@ public class DataMapperTest {
 		assertNull(mapper.get(Person.class, new PersonKey(-1)));
 	}
 
+	/**
+	 * make sure items that are persisted will be created if they don't exist already
+	 */
 	@Test
-	public void testPersist() {
-		//make sure items that are persisted will be created if they don't exist already
-		fail("not yet implemented");
-		//if an item is already in the identity map then it should be updated
-		fail("not yet implemented");
+	public void testPersistingNewObject() {
+		DataMapper mapper = new DataMapper();	
+		MockPersonGateway pGateway = new MockPersonGateway();
+		mapper.register(Person.class, pGateway);
+		
+		assertNull(mapper.get(Person.class, new PersonKey(MockPersonGateway.getNextID())));
+
+		Person p = new Person("Jennifer", "hockeysticks");
+		long id = p.getID();
+		assertEquals(Uow.State.Created, p.getUnitOfWork().getState());
+		
+		mapper.persist(p);
+		
+		Person loaded = mapper.get(Person.class, new PersonKey(MockPersonGateway.getNextID()-1));
+		assertNotNull(loaded);
+		assertEquals(Uow.State.Loaded, loaded.getUnitOfWork().getState());
+		
+		//objects should not be equal because a new one is generated
+		assertNotEquals(p, loaded);
+		
+		assertNotEquals(id, loaded.getID());
+		assertEquals(MockPersonGateway.getNextID()-1, loaded.getID());
+		
+	}
+	
+	/**
+	 * if an item is already in the identity map and changes have occured
+	 * then it should be updated and remarked to as being loaded
+	 */
+	@Test
+	public void testPersistingChanges() {
+		DataMapper mapper = new DataMapper();	
+		MockPersonGateway pGateway = new MockPersonGateway();
+		mapper.register(Person.class, pGateway);
+		
+		Person test = mapper.get(Person.class, new PersonKey(0));
+		assertNotNull(test);
+		assertEquals(Uow.State.Loaded, test.getUnitOfWork().getState());
+		
+		test.setName("Corey");
+		assertEquals(Uow.State.Changed, test.getUnitOfWork().getState());
+		
+		mapper.persist(test);
+		
+		assertEquals(Uow.State.Loaded, test.getUnitOfWork().getState());
+		assertEquals(test, mapper.get(Person.class, new PersonKey(0)));
 	}
 }
