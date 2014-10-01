@@ -1,50 +1,105 @@
 package domain.model;
 
-import domain.model.proxies.ActivityListProxy;
+import java.util.ArrayList;
+
+import domain.model.proxies.*;
 
 public class Person extends DomainModelObject {
 
-    private ActivityList activitys;
     private FriendList friends;
-    private GoalList goals;
     private PendingFriendsList pendingFriends;
 
     private long id;
     private String name;
+    private long password;
 
-    public Person(long id, String name, long sessionID) {
-	super(sessionID);
-	this.id = id;
-	this.name = name;
-	activitys = new ActivityListProxy();
-	friends = new FriendListProxy();
-	goals = new GoalListProxy();
-	pendingFriends = new PendingFriendsListProxy();
+    /**
+     * Construct a new person
+     * 
+     * @param name
+     */
+    public Person(String name, String password) {
+        this.name = name;
+        this.id = -1;
+        this.password = password.hashCode();
+    }
+
+    /**
+     * Construct a person from data loaded from a gateway
+     * 
+     * @param name
+     * @param id
+     */
+    public Person(String name, long password, long id) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        friends = new FriendListProxy();
+        pendingFriends = new PendingFriendsListProxy();
     }
 
     /**
      * @return person id
      */
     public long getID() {
-	return id;
+        return id;
     }
-    
+
     /**
      * @return person name
      */
     public String getName() {
-	return name;
+        return name;
     }
-    
-    public ActivityList getActivitys() {
-	return activitys;
+
+    /**
+     * @return the person's hashed password
+     */
+    public long getPassword() {
+        return password;
     }
-    
-    public FriendList getFriends() {
-	return friends;
+
+    /**
+     * Update's the user's password
+     * 
+     * @param newPass
+     *            - text version of the new password
+     */
+    public void setPassword(String newPass) {
+        password = newPass.hashCode();
+        getUnitOfWork().markChanged();
     }
-    
-    public GoalList getGoals() {
-	return goals;
+
+    /**
+     * Changes this user's name
+     * 
+     * @param newName
+     *            - their new identity
+     */
+    public void setName(String newName) {
+        name = newName;
+        getUnitOfWork().markChanged();
+    }
+
+    /**
+     * @return data representation of a friends list
+     */
+    public ArrayList<Friend> getFriends() {
+        return friends.getFriends();
+    }
+
+    /**
+     * @return data reference of the list of friends
+     */
+    protected FriendList getFriendList() {
+        return friends;
+    }
+
+    public void acceptFriendRequest(Friend friend) {
+
+        boolean removed = pendingFriends.remove(friend);
+        if (removed) {
+            friends.insert(friend);
+        }
     }
 }
