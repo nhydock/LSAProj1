@@ -1,7 +1,11 @@
 package domain.model.proxies;
 
-import domain.model.interfaces.IFriendList;
+import domain.model.FriendList;
 
-public class FriendListProxy implements IFriendList {
+public class FriendListProxy extends FriendList {
+
+    public FriendListProxy() {
+        super();
+    }
 
 }

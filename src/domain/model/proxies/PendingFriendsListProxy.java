@@ -1,7 +1,7 @@
 package domain.model.proxies;
 
-import domain.model.interfaces.IPendingFriendsList;
+import domain.model.PendingFriendsList;
 
-public class PendingFriendsListProxy implements IPendingFriendsList {
+public class PendingFriendsListProxy extends PendingFriendsList {
 
 }
