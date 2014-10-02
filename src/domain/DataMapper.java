@@ -98,6 +98,22 @@ public class DataMapper {
         }
         throw new NullPointerException("Gateway not registered for class type " + cls.getName());
     }
+    
+    /**
+     * Puts an object that has been loaded/made into its corresponding identity map
+     * @param obj
+     * @param key
+     */
+    public <T extends DomainModelObject> void put(T obj, Key<T> key) {
+        @SuppressWarnings("unchecked")
+        Class<T> cls = (Class<T>) obj.getClass();
+        if (identityRegistry.containsKey(cls)) {
+            IdentityMap identityMap = identityRegistry.get(cls);
+            identityMap.put(key, obj);
+        }
+        throw new NullPointerException("Gateway not registered for class type " + cls.getName());
+    
+    }
 
     /**
      * Persists changes of an object to the database

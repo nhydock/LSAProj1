@@ -21,7 +21,7 @@ public class Uow {
      * Marks a unit of work as changed. If the state is marked as deleted,
      * changes will not matter.
      */
-    protected void markChanged() {
+    public void markChanged() {
         if (state == State.Loaded) {
             state = State.Changed;
         }
@@ -31,7 +31,7 @@ public class Uow {
      * Marks a unit of work as to be deleted. Deletion overrides changes in
      * priority
      */
-    protected void markDeleted() {
+    public void markDeleted() {
         state = State.Deleted;
     }
 

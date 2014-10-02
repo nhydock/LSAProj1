@@ -10,12 +10,12 @@ import org.junit.Test;
 public class TestFriendList {
 
     private Friend friend;
-    private FriendList friends;
+    private RealFriendList friends;
     private Friend newFriend;
 
     @Before
     public void setup() {
-        friends = new FriendList(1);
+        friends = new RealFriendList(1);
         friend = new Friend(123, "Jesus", 1);
         newFriend = new Friend(1234, "Zeus", 1);
 

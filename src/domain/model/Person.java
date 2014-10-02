@@ -34,7 +34,7 @@ public class Person extends DomainModelObject {
         this.id = id;
         this.name = name;
         this.password = password;
-        friends = new FriendListProxy();
+        friends = new FriendListProxy(id);
         pendingFriends = new PendingFriendsListProxy();
     }
 
@@ -99,7 +99,7 @@ public class Person extends DomainModelObject {
 
         boolean removed = pendingFriends.remove(friend);
         if (removed) {
-            friends.insert(friend);
+            friends.insertFriend(friend);
         }
     }
 }

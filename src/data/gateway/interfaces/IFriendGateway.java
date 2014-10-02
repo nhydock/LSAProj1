@@ -1,7 +1,7 @@
 package data.gateway.interfaces;
 
-import domain.model.FriendList;
+import domain.model.RealFriendList;
 
-public abstract class IFriendGateway extends Gateway<FriendList> {
+public abstract class IFriendGateway extends Gateway<RealFriendList> {
 
 }
