@@ -54,4 +54,11 @@ public class UowTest {
         work.markLoaded();
         assertEquals(work.getState(), State.Loaded);
     }
+    
+    @Test
+    public void testPackage() throws ClassNotFoundException
+    {
+//	Class c = Class.forName("Uow.java");
+	assertEquals("domain.model.Uow", Uow.class.getName());
+    }
 }

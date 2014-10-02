@@ -1,47 +1,50 @@
 package commands;
+
+import domain.model.Person;
+
 /**
  * Accept a friend request from one user to another
+ * 
  * @author merlin
  *
  */
-public class AcceptFriendRequest implements Command
-{
+public class AcceptFriendRequest implements Command {
 
-	private int userIDOfRequestee;
-	private String userNameOfRequester;
+    private int userIDOfRequestee;
+    private String userNameOfRequester;
 
+    /**
+     * 
+     * @param userIDOfRequestee
+     *            the User ID of the user accepting the request
+     * @param userNameOfRequester
+     *            the User Name of the user who initiated the friend request
+     */
+    public AcceptFriendRequest(int userIDOfRequestee, String userNameOfRequester) {
+	this.userIDOfRequestee = userIDOfRequestee;
+	this.userNameOfRequester = userNameOfRequester;
 
-	/**
-	 * 
-	 * @param userIDOfRequestee the User ID of the user accepting the request
-	 * @param userNameOfRequester the User Name of the user who initiated the friend request
-	 */
-	public AcceptFriendRequest(int userIDOfRequestee, String userNameOfRequester)
-	{
-		this.userIDOfRequestee = userIDOfRequestee;
-		this.userNameOfRequester = userNameOfRequester;
-		
-	}
-	
-	/**
-	 * 
-	 * @see Command#execute()
-	 */
-	@Override
-	public void execute()
-	{
-		// TODO Auto-generated method stub
+    }
 
-	}
+    /**
+     * 
+     * @see Command#execute()
+     */
+    @Override
+    public void execute() {
+	// TODO Auto-generated method stub
+	Person p = Person.findPerson(userIDOfRequestee);
+	p.acceptFriendRequest(userNameOfRequester);
+    }
 
-	/**
-	 * Nothing needs to be retrieved from this command
-	 * @see Command#getResult()
-	 */
-	@Override
-	public Object getResult()
-	{
-		return null;
-	}
+    /**
+     * Nothing needs to be retrieved from this command
+     * 
+     * @see Command#getResult()
+     */
+    @Override
+    public Object getResult() {
+	return null;
+    }
 
 }

@@ -27,4 +27,9 @@ public class FriendList extends DomainModelObject {
         return friends;
     }
 
+    public void delete(Friend toRemove) {
+	// TODO Auto-generated method stub
+	friends.remove(toRemove);
+    }
+
 }

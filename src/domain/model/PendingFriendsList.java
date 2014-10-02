@@ -14,11 +14,7 @@ public class PendingFriendsList extends DomainModelObject {
         friends.add(friend);
     }
 
-    public void update(Friend friend, int index) {
-        friends.set(index, friend);
-    }
-
-    public ArrayList<Friend> getFriends() {
+    public ArrayList<Friend> getAsArrayList() {
         return friends;
     }
 

@@ -15,9 +15,9 @@ public class TestFriendList {
 
     @Before
     public void setup() {
-        friends = new FriendList(1);
-        friend = new Friend(123, "Jesus", 1);
-        newFriend = new Friend(1234, "Zeus", 1);
+        friends = new FriendList();
+        friend = new Friend("Username1", "Jesus");
+        newFriend = new Friend("Username123456", "Zeus");
 
     }
 
@@ -43,7 +43,7 @@ public class TestFriendList {
     public void testUpdatingFriend() {
         friends.insert(friend);
         friends.update(newFriend, 0);
-        assertEquals(friends.getFriends().get(0).getID(), 1234);
+        assertEquals(friends.getFriends().get(0).getUserName(), "Username123456");
 
     }
 }

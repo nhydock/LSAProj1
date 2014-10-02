@@ -2,6 +2,8 @@ package domain.model;
 
 import java.util.ArrayList;
 
+import data.keys.PersonKey;
+import domain.DataMapper;
 import domain.model.proxies.*;
 
 public class Person extends DomainModelObject {
@@ -12,16 +14,20 @@ public class Person extends DomainModelObject {
     private long id;
     private String name;
     private long password;
+    private String displayName;
 
     /**
      * Construct a new person
      * 
      * @param name
      */
-    public Person(String name, String password) {
+    public Person(String name, String password, String displayName) {
         this.name = name;
         this.id = -1;
         this.password = password.hashCode();
+        this.displayName = displayName;
+        friends = new FriendListProxy();
+        pendingFriends = new PendingFriendsListProxy();
     }
 
     /**
@@ -37,6 +43,13 @@ public class Person extends DomainModelObject {
         friends = new FriendListProxy();
         pendingFriends = new PendingFriendsListProxy();
     }
+    
+//    public Person(long id) {
+//        this.id = id;
+//        DataMapper.get().get(Person.class, new PersonKey(id));
+//        friends = new FriendListProxy();
+//        pendingFriends = new PendingFriendsListProxy();
+//    }
 
     /**
      * @return person id
@@ -58,6 +71,13 @@ public class Person extends DomainModelObject {
     public long getPassword() {
         return password;
     }
+    
+    /**
+     * @return person display name
+     */
+    public String getDisplayName() {
+	return displayName;
+    }
 
     /**
      * Update's the user's password
@@ -77,7 +97,7 @@ public class Person extends DomainModelObject {
      *            - their new identity
      */
     public void setName(String newName) {
-        name = newName;
+	displayName = newName;
         getUnitOfWork().markChanged();
     }
 
@@ -101,5 +121,51 @@ public class Person extends DomainModelObject {
         if (removed) {
             friends.insert(friend);
         }
+    }
+    
+    public void acceptFriendRequest(String friendUsername) {
+	//TODO fix this also
+//        boolean removed = pendingFriends.remove(friend);
+//        if (removed) {
+//            friends.insert(friend);
+//        }
+    }
+    
+    public void declineFriendRequest(Friend friend) {
+        pendingFriends.remove(friend);
+    }
+    
+    public PendingFriendsList getPendingFriends()
+    {
+	return pendingFriends;
+    }
+    
+    public static Person findPerson(long id)
+    {
+	Person p = DataMapper.get().get(Person.class, new PersonKey(id));
+	
+	return p;
+    }
+    
+    public void requestFriend(String username)
+    {
+	//TODO fix this shit
+//	pendingFriends.insert(friend);
+    }
+
+    public void removeFriend(String friendUserName) {
+	// TODO Auto-generated method stub
+	Friend toRemove = null;
+	for(Friend f : friends.getFriends())
+	{
+	    if(f.getUserName() == friendUserName)
+	    {
+		toRemove = f;
+	    }
+	}
+	if(toRemove != null)
+	{
+	    friends.delete(toRemove);
+	}
     }
 }
