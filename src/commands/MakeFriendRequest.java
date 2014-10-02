@@ -1,5 +1,9 @@
 package commands;
 
+import data.keys.PersonKey;
+import domain.DataMapper;
+import domain.model.Person;
+
 /**
  * Initiates a friend request from one user to another
  * 
@@ -30,8 +34,9 @@ public class MakeFriendRequest implements Command {
      */
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
-
+	Person p = Person.findPerson(userIDOfRequester);
+	
+	p.requestFriend(userNameOfRequestee);
     }
 
     /**

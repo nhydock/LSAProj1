@@ -13,6 +13,7 @@ public class CreateUserCommand implements Command {
     private String userName;
     private String password;
     private String displayName;
+    private Person person;
 
     /**
      * Create a command that will add a new user to the system
@@ -35,8 +36,8 @@ public class CreateUserCommand implements Command {
      */
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
-
+        Person person = new Person(userName, password, displayName);
+        this.person = person;
     }
 
     /**
@@ -47,8 +48,7 @@ public class CreateUserCommand implements Command {
      */
     @Override
     public Person getResult() {
-        // TODO Auto-generated method stub
-        return null;
+        return person;
     }
 
 }

@@ -3,6 +3,7 @@ package commands;
 import java.util.ArrayList;
 
 import domain.model.Friend;
+import domain.model.Person;
 
 /**
  * Cause the list of friend requests from other user to this user to be fetched
@@ -15,6 +16,7 @@ import domain.model.Friend;
 public class PendingIncomingFriendList implements Command {
 
     private int userID;
+    ArrayList<Friend> pendingFriendsList;
 
     /**
      * The userID of the current user
@@ -32,7 +34,8 @@ public class PendingIncomingFriendList implements Command {
      */
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
+        Person p = Person.findPerson(userID);
+        pendingFriendsList = p.getPendingFriends().getAsArrayList();
 
     }
 
@@ -44,7 +47,7 @@ public class PendingIncomingFriendList implements Command {
     @Override
     public ArrayList<Friend> getResult() {
         // TODO Auto-generated method stub
-        return null;
+        return pendingFriendsList;
     }
 
 }

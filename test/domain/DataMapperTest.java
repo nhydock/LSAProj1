@@ -58,7 +58,7 @@ public class DataMapperTest {
 
         assertNull(mapper.get(Person.class, new PersonKey(MockPersonGateway.getNextID())));
 
-        Person p = new Person("Jennifer", "hockeysticks");
+        Person p = new Person("Jennifer", "hockeysticks", "lol");
         long id = p.getID();
         assertEquals(Uow.State.Created, p.getUnitOfWork().getState());
 

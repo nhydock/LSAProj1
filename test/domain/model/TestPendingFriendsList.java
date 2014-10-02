@@ -9,48 +9,46 @@ public class TestPendingFriendsList {
 
     private Person person;
     private Friend friend;
-    private PendingFriendsList pendingFriends;
     private Friend newFriend;
 
     @Before
     public void setup() {
-        pendingFriends = new PendingFriendsList(1);
-        friend = new Friend(123, "Athena", 1);
-        newFriend = new Friend(1234, "Dinosaur", 1);
-        person = new Person(1, "Velociraptor", 1);
+        friend = new Friend("asd", "Athena");
+        newFriend = new Friend("dfsadfsad", "Dinosaur");
+        person = new Person("qwertyyuiop", "Velociraptor", "Frank");
     }
 
     @Test
     public void testInitialization() {
-        assertNotNull(pendingFriends.getFriends());
+        assertNotNull(person.getPendingFriends().getAsArrayList());
     }
 
     @Test
     public void testInsertingFriend() {
-        pendingFriends.insert(friend);
-        assertEquals(pendingFriends.getFriends().size(), 1);
+	person.getPendingFriends().insert(friend);
+        assertEquals(person.getPendingFriends().getAsArrayList().size(), 1);
     }
 
     @Test
     public void testDecliningRequest() {
-        pendingFriends.insert(friend);
-        pendingFriends.declineFriend(0);
-        assertEquals(pendingFriends.getFriends().size(), 0);
-    }
-
-    @Test
-    public void testUpdatingFriend() {
-        pendingFriends.insert(friend);
-        pendingFriends.update(newFriend, 0);
-        assertEquals(pendingFriends.getFriends().get(0).getID(), 1234);
+	person.getPendingFriends().insert(friend);
+        person.declineFriendRequest(friend);
+        assertEquals(person.getFriendList().getFriends().size(), 0);
     }
 
     @Test
     public void testAcceptingRequest() {
-        pendingFriends.insert(friend);
-        pendingFriends.acceptFriend(person, 0);
-        assertEquals(pendingFriends.getFriends().size(), 0);
-        assertEquals(person.getFriends().getFriends().get(0).getName(), "Athena");
+        person.getPendingFriends().insert(friend);
+        person.acceptFriendRequest(friend);
+        assertEquals(person.getPendingFriends().getAsArrayList().size(), 0);
+        assertEquals(person.getFriends().get(0).getDisplayName(), "Athena");
+    }
+    
+    @Test
+    public void testAcceptingRequestNonExistant() {
+        person.acceptFriendRequest(friend);
+        assertEquals(person.getPendingFriends().getAsArrayList().size(), 0);
+        assertEquals(person.getFriends().size(), 0);
     }
 
 }

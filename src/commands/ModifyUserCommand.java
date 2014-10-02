@@ -1,5 +1,7 @@
 package commands;
 
+import domain.model.Person;
+
 /**
  * Used to change information associated with a person (at this point, only the
  * display name)
@@ -30,7 +32,8 @@ public class ModifyUserCommand implements Command {
      */
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
+        Person p = Person.findPerson(userID);
+        p.setName(newDisplayName);
     }
 
     /**
