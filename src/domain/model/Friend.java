@@ -6,14 +6,21 @@ package domain.model;
  * @author merlin
  *
  */
-public class Friend extends DomainModelObject {
+public class Friend extends User {
 
     private String userName;
     private String displayName;
+    private long id;
 
     public Friend(String userName, String displayName) {
         this.userName = userName;
         this.displayName = displayName;
+    }
+    
+    public Friend(String userName, String displayName, long id) {
+        this.userName = userName;
+        this.displayName = displayName;
+        this.id = id;
     }
 
     /**

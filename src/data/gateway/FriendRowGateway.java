@@ -23,7 +23,7 @@ public class FriendRowGateway extends Gateway<Friend> {
                 ResultSet result = stmt.executeQuery();
                 result.next();
 
-                Friend friend = new Friend(result.getString("p.name"), result.getString("p.name"), result.getLong("f.fid"));                    
+                Friend friend = new Friend(result.getString("p.name"), result.getString("p.name"));                    
                 return friend;
             } catch (SQLException e) {
                 e.printStackTrace();

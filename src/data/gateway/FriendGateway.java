@@ -30,7 +30,7 @@ public class FriendGateway extends Gateway<RealFriendList> {
                 
                 while (result.next())
                 {
-                    Friend friend = new Friend(result.getString("p.name"), result.getString("p.name"), result.getLong("f.fid"));
+                    Friend friend = new Friend(result.getString("p.name"), result.getString("p.name"));
                     friends.add(friend);
                     
                     //insert into the data mapper the loaded friends
@@ -64,11 +64,13 @@ public class FriendGateway extends Gateway<RealFriendList> {
             if (friends.size() > 0)
             {
                 Friend f = friends.get(0);
-                sql += "(" + object.getUserID() + ", " + f.getID() + ")";
+//                sql += "(" + object.getUserID() + ", " + f.getID() + ")";
+                sql += "(" + object.getUserID() + ", "  + ")";
                 for (int i = 1; i < friends.size(); i++)
                 {
                     f = friends.get(i);
-                    sql += ",(" + object.getUserID() + ", " + f.getID() + ")";
+//                    sql += ",(" + object.getUserID() + ", " + f.getID() + ")";
+                    sql += ",(" + object.getUserID() + ", " + ")";
                 }
             }
             

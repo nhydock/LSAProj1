@@ -5,6 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import data.gateways.MockFriendGateway;
+import data.gateways.MockRealFriendGateway;
+import domain.DataMapper;
+
 public class TestPendingFriendsList {
 
     private Person person;
@@ -16,6 +20,8 @@ public class TestPendingFriendsList {
         friend = new Friend("asd", "Athena");
         newFriend = new Friend("dfsadfsad", "Dinosaur");
         person = new Person("qwertyyuiop", "Velociraptor", "Frank");
+        
+        DataMapper.get().register(RealFriendList.class, new MockRealFriendGateway());
     }
 
     @Test

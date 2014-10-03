@@ -3,6 +3,7 @@ package domain.model;
 import static org.junit.Assert.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,9 +16,9 @@ public class TestFriendList {
 
     @Before
     public void setup() {
-        friends = new RealFriendList(1);
-        friend = new Friend(123, "Jesus", 1);
-        newFriend = new Friend(1234, "Zeus", 1);
+        friends = new RealFriendList(1, new ArrayList<Friend>());
+        friend = new Friend("YoYo", "Jesus", 12345);
+        newFriend = new Friend("Ian", "Zeus", 1234);
 
     }
 
@@ -28,22 +29,14 @@ public class TestFriendList {
 
     @Test
     public void testInsertingFriend() {
-        friends.insert(friend);
+        friends.insertFriend(friend);
         assertEquals(friends.getFriends().size(), 1);
     }
 
     @Test
     public void testDeletingFriend() {
-        friends.insert(friend);
-        friends.delete(0);
+        friends.insertFriend(friend);
+        friends.removeFriend(friend);
         assertEquals(friends.getFriends().size(), 0);
-    }
-
-    @Test
-    public void testUpdatingFriend() {
-        friends.insert(friend);
-        friends.update(newFriend, 0);
-        assertEquals(friends.getFriends().get(0).getID(), 1234);
-
     }
 }

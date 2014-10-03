@@ -6,7 +6,7 @@ import data.keys.PersonKey;
 import domain.DataMapper;
 import domain.model.proxies.*;
 
-public class Person extends DomainModelObject {
+public class Person extends User {
 
     private FriendList friends;
     private PendingFriendsList pendingFriends;
@@ -26,7 +26,7 @@ public class Person extends DomainModelObject {
         this.id = -1;
         this.password = password.hashCode();
         this.displayName = displayName;
-        friends = new FriendListProxy();
+        friends = new FriendListProxy(id);
         pendingFriends = new PendingFriendsListProxy();
     }
 
@@ -165,7 +165,7 @@ public class Person extends DomainModelObject {
 	}
 	if(toRemove != null)
 	{
-	    friends.delete(toRemove);
+	    friends.removeFriend(toRemove);
 	}
     }
 }
