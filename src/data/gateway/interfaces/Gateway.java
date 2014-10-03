@@ -34,7 +34,8 @@ public abstract class Gateway<T extends DomainModelObject> {
                 return con;
             } catch (Exception ex) {
                 // if not successful, quit
-                System.out.println("Cannot open database -- make sure ODBC is configured properly.");
+                System.out
+                        .println("Cannot open database -- make sure ODBC is configured properly.");
                 System.exit(1);
             }
             return null;

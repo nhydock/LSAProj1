@@ -7,7 +7,8 @@ public class FriendListKey implements Key<RealFriendList> {
     public final long id;
 
     /**
-     * @param id - person we want the list of friends from
+     * @param id
+     *            - person we want the list of friends from
      */
     public FriendListKey(long id) {
         this.id = id;

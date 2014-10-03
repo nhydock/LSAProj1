@@ -32,11 +32,11 @@ public class PendingOutgoingFriendList implements Command {
      */
     @Override
     public void execute() {
-	
+
     }
 
     /**
-     * A list of the friends associated with the given user
+     * A list of the friends associated with the given user a
      * 
      * @see Command#getResult()
      */

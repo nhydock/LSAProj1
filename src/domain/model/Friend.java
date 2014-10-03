@@ -19,7 +19,7 @@ public class Friend extends User {
         this.userName = userName;
         this.displayName = displayName;
     }
-    
+
     public Friend(String userName, String displayName, long id) {
         this.userName = userName;
         this.displayName = displayName;
@@ -43,9 +43,8 @@ public class Friend extends User {
     public String getDisplayName() {
         return displayName;
     }
-    
-    public static Friend findFriend(String name)
-    {
-	return DataMapper.get().get(Friend.class, new FriendKey(name));
+
+    public static Friend findFriend(String name) {
+        return DataMapper.get().get(Friend.class, new FriendKey(name));
     }
 }

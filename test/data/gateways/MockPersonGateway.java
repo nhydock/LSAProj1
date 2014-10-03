@@ -49,7 +49,8 @@ public class MockPersonGateway extends IPersonGateway {
     public Result<Person> insert(Person object) {
         PersonKey key = new PersonKey(nextID);
 
-        Person generated = new Person(object.getName(), object.getPassword(), nextID);
+        Person generated = new Person(object.getName(), object.getPassword(),
+                nextID);
 
         nextID++;
 

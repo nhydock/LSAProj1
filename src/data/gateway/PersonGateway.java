@@ -24,7 +24,8 @@ public class PersonGateway extends IPersonGateway {
             stmt.setLong(1, key.id);
             ResultSet result = stmt.executeQuery();
 
-            Person person = new Person(result.getString("name"), result.getLong("password"), result.getInt("id"));
+            Person person = new Person(result.getString("name"),
+                    result.getLong("password"), result.getInt("id"));
 
             return person;
         } catch (SQLException e) {
@@ -66,7 +67,8 @@ public class PersonGateway extends IPersonGateway {
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Creating person failed, no rows affected.");
+                throw new SQLException(
+                        "Creating person failed, no rows affected.");
             }
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
@@ -75,7 +77,8 @@ public class PersonGateway extends IPersonGateway {
 
                     // create a new person with the generated id to be put into
                     // our datamapper
-                    Person generated = new Person(object.getName(), object.getPassword(), id);
+                    Person generated = new Person(object.getName(),
+                            object.getPassword(), id);
                     // update the object reference to now be the newly generated
                     // one
                     object = generated;
@@ -84,7 +87,8 @@ public class PersonGateway extends IPersonGateway {
                     Result<Person> result = new Result<Person>(generated, key);
                     return result;
                 } else {
-                    throw new SQLException("Creating user failed, no ID obtained.");
+                    throw new SQLException(
+                            "Creating user failed, no ID obtained.");
                 }
             }
         } catch (SQLException e) {

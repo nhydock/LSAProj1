@@ -21,8 +21,8 @@ public class AcceptFriendRequest implements Command {
      *            the User Name of the user who initiated the friend request
      */
     public AcceptFriendRequest(int userIDOfRequestee, String userNameOfRequester) {
-	this.userIDOfRequestee = userIDOfRequestee;
-	this.userNameOfRequester = userNameOfRequester;
+        this.userIDOfRequestee = userIDOfRequestee;
+        this.userNameOfRequester = userNameOfRequester;
 
     }
 
@@ -32,9 +32,9 @@ public class AcceptFriendRequest implements Command {
      */
     @Override
     public void execute() {
-	// TODO Auto-generated method stub
-	Person p = Person.findPerson(userIDOfRequestee);
-	p.acceptFriendRequest(userNameOfRequester);
+        // TODO Auto-generated method stub
+        Person p = Person.findPerson(userIDOfRequestee);
+        p.acceptFriendRequest(userNameOfRequester);
     }
 
     /**
@@ -44,7 +44,7 @@ public class AcceptFriendRequest implements Command {
      */
     @Override
     public Object getResult() {
-	return null;
+        return null;
     }
 
 }

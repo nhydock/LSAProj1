@@ -56,7 +56,8 @@ public class DataMapperTest {
         MockPersonGateway pGateway = new MockPersonGateway();
         mapper.register(Person.class, pGateway);
 
-        assertNull(mapper.get(Person.class, new PersonKey(MockPersonGateway.getNextID())));
+        assertNull(mapper.get(Person.class,
+                new PersonKey(MockPersonGateway.getNextID())));
 
         Person p = new Person("Jennifer", "hockeysticks", "lol");
         long id = p.getID();
@@ -64,7 +65,8 @@ public class DataMapperTest {
 
         mapper.persist(p);
 
-        Person loaded = mapper.get(Person.class, new PersonKey(MockPersonGateway.getNextID() - 1));
+        Person loaded = mapper.get(Person.class, new PersonKey(
+                MockPersonGateway.getNextID() - 1));
         assertNotNull(loaded);
         assertEquals(Uow.State.Loaded, loaded.getUnitOfWork().getState());
 

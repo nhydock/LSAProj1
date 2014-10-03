@@ -32,7 +32,8 @@ public class FriendKey implements Key<Friend> {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (name.hashCode() ^ (name.hashCode() >>> 32));
+        result = prime * result
+                + (int) (name.hashCode() ^ (name.hashCode() >>> 32));
         return result;
     }
 }

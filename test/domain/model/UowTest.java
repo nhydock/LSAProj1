@@ -19,15 +19,15 @@ public class UowTest {
         Uow work = new Uow();
         assertEquals(work.getState(), Uow.State.Created);
 
-        //should not effect if the unit of work is marked as to be created
+        // should not effect if the unit of work is marked as to be created
         work.markChanged();
         assertNotEquals(work.getState(), Uow.State.Changed);
-        
-        //should work if it has been marked initially as loaded
+
+        // should work if it has been marked initially as loaded
         work.markLoaded();
         work.markChanged();
         assertEquals(work.getState(), Uow.State.Changed);
-        
+
     }
 
     @Test
@@ -54,11 +54,10 @@ public class UowTest {
         work.markLoaded();
         assertEquals(work.getState(), State.Loaded);
     }
-    
+
     @Test
-    public void testPackage() throws ClassNotFoundException
-    {
-//	Class c = Class.forName("Uow.java");
-	assertEquals("domain.model.Uow", Uow.class.getName());
+    public void testPackage() throws ClassNotFoundException {
+        // Class c = Class.forName("Uow.java");
+        assertEquals("domain.model.Uow", Uow.class.getName());
     }
 }

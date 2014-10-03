@@ -34,8 +34,8 @@ public class MakeFriendRequest implements Command {
      */
     @Override
     public void execute() {
-	Person p = Person.findPerson(userIDOfRequester);
-	p.requestFriend(userNameOfRequestee);
+        Person p = Person.findPerson(userIDOfRequester);
+        p.requestFriend(userNameOfRequestee);
     }
 
     /**

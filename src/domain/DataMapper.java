@@ -60,7 +60,8 @@ public class DataMapper {
      * @return boolean - false if class has already been registered with a
      *         gateway
      */
-    public <T extends DomainModelObject> boolean register(Class<T> cls, Gateway<T> gate) {
+    public <T extends DomainModelObject> boolean register(Class<T> cls,
+            Gateway<T> gate) {
         if (gatewayMap.containsKey(cls)) {
             return false;
         }
@@ -96,11 +97,14 @@ public class DataMapper {
                 return obj;
             }
         }
-        throw new NullPointerException("Gateway not registered for class type " + cls.getName());
+        throw new NullPointerException("Gateway not registered for class type "
+                + cls.getName());
     }
-    
+
     /**
-     * Puts an object that has been loaded/made into its corresponding identity map
+     * Puts an object that has been loaded/made into its corresponding identity
+     * map
+     * 
      * @param obj
      * @param key
      */
@@ -111,8 +115,9 @@ public class DataMapper {
             IdentityMap identityMap = identityRegistry.get(cls);
             identityMap.put(key, obj);
         }
-        throw new NullPointerException("Gateway not registered for class type " + cls.getName());
-    
+        throw new NullPointerException("Gateway not registered for class type "
+                + cls.getName());
+
     }
 
     /**
@@ -129,7 +134,8 @@ public class DataMapper {
         } else if (object.getUnitOfWork().getState() == Uow.State.Created) {
             Result<T> result = gate.insert(object);
             result.object.getUnitOfWork().markLoaded();
-            identityRegistry.get(object.getClass()).put(result.key, result.object);
+            identityRegistry.get(object.getClass()).put(result.key,
+                    result.object);
         } else if (object.getUnitOfWork().getState() == Uow.State.Deleted) {
             Key<T> key = gate.delete(object);
             identityRegistry.get(object.getClass()).remove(key);

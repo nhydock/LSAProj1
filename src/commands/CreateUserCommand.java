@@ -25,7 +25,8 @@ public class CreateUserCommand implements Command {
      * @param displayName
      *            the name by which the user wants to be referred
      */
-    public CreateUserCommand(String userName, String password, String displayName) {
+    public CreateUserCommand(String userName, String password,
+            String displayName) {
         this.userName = userName;
         this.password = password;
         this.displayName = displayName;

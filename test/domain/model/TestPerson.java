@@ -19,16 +19,15 @@ public class TestPerson {
         assertEquals(person2.getDisplayName(), "test");
         assertNotNull(person.getFriendList());
     }
-    
+
     @Test
-    public void testChangePassword()
-    {
-	long id = 0;
+    public void testChangePassword() {
+        long id = 0;
         String name = "Leonidas";
         long password = 12384319L;
         Person person = new Person(name, password, id);
         String newpass = "qwerty";
-        
+
         person.setPassword(newpass);
         assertEquals(person.getPassword(), newpass.hashCode());
     }

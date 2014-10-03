@@ -34,7 +34,7 @@ public class RetrieveFriendList implements Command {
     @Override
     public void execute() {
         // TODO Auto-generated method stub
-	list = Person.findPerson(userID).getFriends();
+        list = Person.findPerson(userID).getFriends();
     }
 
     /**
