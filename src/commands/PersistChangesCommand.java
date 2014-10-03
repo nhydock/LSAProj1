@@ -1,5 +1,7 @@
 package commands;
 
+import domain.model.Uow;
+
 /**
  * Tells the system to save any pending changes
  * 
@@ -14,8 +16,7 @@ public class PersistChangesCommand implements Command {
      */
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
-
+        
     }
 
     /**

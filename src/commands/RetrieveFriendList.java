@@ -3,6 +3,7 @@ package commands;
 import java.util.ArrayList;
 
 import domain.model.Friend;
+import domain.model.Person;
 
 /**
  * Cause a user's friend list to be fetched from the domain model (may or may
@@ -14,6 +15,7 @@ import domain.model.Friend;
 public class RetrieveFriendList implements Command {
 
     private int userID;
+    private ArrayList<Friend> list;
 
     /**
      * The userID of the current user
@@ -32,7 +34,7 @@ public class RetrieveFriendList implements Command {
     @Override
     public void execute() {
         // TODO Auto-generated method stub
-
+	list = Person.findPerson(userID).getFriends();
     }
 
     /**
@@ -43,7 +45,7 @@ public class RetrieveFriendList implements Command {
     @Override
     public ArrayList<Friend> getResult() {
         // TODO Auto-generated method stub
-        return null;
+        return list;
     }
 
 }

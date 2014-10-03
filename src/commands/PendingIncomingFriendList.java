@@ -36,7 +36,6 @@ public class PendingIncomingFriendList implements Command {
     public void execute() {
         Person p = Person.findPerson(userID);
         pendingFriendsList = p.getPendingFriends().getAsArrayList();
-
     }
 
     /**

@@ -1,5 +1,8 @@
 package commands;
 
+import domain.model.Friend;
+import domain.model.Person;
+
 /**
  * Reject a friend request from one user to another
  * 
@@ -30,8 +33,8 @@ public class RejectFriendRequest implements Command {
      */
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
-
+        Person p = Person.findPerson(userIDOfRequestee);
+        p.declineFriendRequest(Friend.findFriend(userNameOfRequester));
     }
 
     /**
