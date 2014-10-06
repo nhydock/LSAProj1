@@ -33,7 +33,7 @@ public class ModifyUserCommand implements Command {
     @Override
     public void execute() {
         Person p = Person.findPerson(userID);
-        p.setName(newDisplayName);
+        p.setDisplayName(newDisplayName);
     }
 
     /**
