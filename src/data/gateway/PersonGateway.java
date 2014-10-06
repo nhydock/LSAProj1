@@ -26,7 +26,6 @@ public class PersonGateway extends IPersonGateway {
 
             Person person = new Person(result.getString("name"),
                     result.getLong("password"), result.getInt("id"));
-
             return person;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -43,7 +42,7 @@ public class PersonGateway extends IPersonGateway {
         try {
             String sql = "UPDATE persons SET name=?,password=? WHERE id=?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
-            stmt.setString(1, object.getName());
+            stmt.setString(1, object.getUserName());
             stmt.setLong(2, object.getPassword());
             stmt.setLong(3, object.getID());
 
@@ -62,7 +61,7 @@ public class PersonGateway extends IPersonGateway {
         try {
             String sql = "INSERT INTO persons (name, password) VALUES (?, ?)";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
-            stmt.setString(1, object.getName());
+            stmt.setString(1, object.getUserName());
             stmt.setLong(2, object.getPassword());
 
             int affectedRows = stmt.executeUpdate();
@@ -77,7 +76,7 @@ public class PersonGateway extends IPersonGateway {
 
                     // create a new person with the generated id to be put into
                     // our datamapper
-                    Person generated = new Person(object.getName(),
+                    Person generated = new Person(object.getUserName(),
                             object.getPassword(), id);
                     // update the object reference to now be the newly generated
                     // one
@@ -88,7 +87,7 @@ public class PersonGateway extends IPersonGateway {
                     return result;
                 } else {
                     throw new SQLException(
-                            "Creating user failed, no ID obtained.");
+                            "Creating Person failed, no ID obtained.");
                 }
             }
         } catch (SQLException e) {
@@ -120,7 +119,7 @@ public class PersonGateway extends IPersonGateway {
     }
 
     /**
-     * Deligating method for finding a person dependent on the type of key given
+     * Delegating method for finding a person dependent on the type of key given
      */
     @Override
     public Person find(Key<Person> key) {

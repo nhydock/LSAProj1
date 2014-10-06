@@ -14,7 +14,7 @@ public class TestPerson {
         Person person = new Person(name, password, id);
         Person person2 = new Person(name, "pass", "test");
         assertEquals(person.getID(), id);
-        assertEquals(person.getName(), name);
+        assertEquals(person.getUserName(), name);
         assertEquals(person.getPassword(), password);
         assertEquals(person2.getDisplayName(), "test");
         assertNotNull(person.getFriendList());
@@ -30,6 +30,11 @@ public class TestPerson {
 
         person.setPassword(newpass);
         assertEquals(person.getPassword(), newpass.hashCode());
+    }
+    
+    @Test
+    public void testRollback() {
+        fail("not yet tested");
     }
 
 }

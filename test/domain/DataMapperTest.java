@@ -91,13 +91,16 @@ public class DataMapperTest {
         Person test = mapper.get(Person.class, new PersonKey(0));
         assertNotNull(test);
         assertEquals(Uow.State.Loaded, test.getUnitOfWork().getState());
-
-        test.setName("Corey");
+        assertNotEquals("Corey", test.getUserName());
+        
+        test.setDisplayName("Corey");
         assertEquals(Uow.State.Changed, test.getUnitOfWork().getState());
-
+        assertEquals("Corey", test.getDisplayName());
+        
         mapper.persist(test);
 
         assertEquals(Uow.State.Loaded, test.getUnitOfWork().getState());
         assertEquals(test, mapper.get(Person.class, new PersonKey(0)));
+        assertEquals("Corey", mapper.get(Person.class, new PersonKey(0)).getDisplayName());
     }
 }

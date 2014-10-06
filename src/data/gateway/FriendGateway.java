@@ -61,14 +61,10 @@ public class FriendGateway extends Gateway<RealFriendList> {
 
             ArrayList<Friend> friends = object.getFriends();
             if (friends.size() > 0) {
-                Friend f = friends.get(0);
                 // sql += "(" + object.getUserID() + ", " + f.getID() + ")";
-                sql += "(" + object.getUserID() + ", " + ")";
+                sql += "(" + object.getUserID() + ")";
                 for (int i = 1; i < friends.size(); i++) {
-                    f = friends.get(i);
-                    // sql += ",(" + object.getUserID() + ", " + f.getID() +
-                    // ")";
-                    sql += ",(" + object.getUserID() + ", " + ")";
+                    sql += ",(" + object.getUserID() + ")";
                 }
             }
 

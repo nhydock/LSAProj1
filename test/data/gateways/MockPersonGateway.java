@@ -49,7 +49,7 @@ public class MockPersonGateway extends IPersonGateway {
     public Result<Person> insert(Person object) {
         PersonKey key = new PersonKey(nextID);
 
-        Person generated = new Person(object.getName(), object.getPassword(),
+        Person generated = new Person(object.getUserName(), object.getPassword(),
                 nextID);
 
         nextID++;

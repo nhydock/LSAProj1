@@ -2,6 +2,7 @@ package data.gateways;
 
 import data.gateway.interfaces.Gateway;
 import data.keys.Key;
+import domain.model.FriendList;
 import domain.model.RealFriendList;
 
 public class MockRealFriendGateway extends Gateway<RealFriendList> {

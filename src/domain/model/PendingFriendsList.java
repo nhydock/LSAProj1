@@ -22,4 +22,16 @@ public class PendingFriendsList extends DomainModelObject {
         return friends.remove(friend);
     }
 
+    @Override
+    protected void restoreValues() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected void saveValues() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

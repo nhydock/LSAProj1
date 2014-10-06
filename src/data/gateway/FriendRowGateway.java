@@ -40,7 +40,7 @@ public class FriendRowGateway extends Gateway<Friend> {
     }
 
     @Override
-    public data.gateway.interfaces.Gateway.Result<Friend> insert(Friend object) {
+    public Result<Friend> insert(Friend object) {
         // TODO Auto-generated method stub
         return null;
     }

@@ -59,8 +59,8 @@ public class Person extends User {
     /**
      * @return person name
      */
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
     /**
@@ -94,7 +94,7 @@ public class Person extends User {
      * @param newName
      *            - their new identity
      */
-    public void setName(String newName) {
+    public void setDisplayName(String newName) {
         displayName = newName;
         getUnitOfWork().markChanged();
     }
