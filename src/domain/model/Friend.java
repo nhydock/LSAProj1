@@ -11,10 +11,6 @@ import domain.DataMapper;
  */
 public class Friend extends User {
 
-    private String userName;
-    private String displayName;
-    private long id;
-
     public Friend(String userName, String displayName) {
         this.userName = userName;
         this.displayName = displayName;
@@ -46,5 +42,17 @@ public class Friend extends User {
 
     public static Friend findFriend(String name) {
         return DataMapper.get().get(Friend.class, new FriendKey(name));
+    }
+
+    @Override
+    protected void restoreValues() {
+        userName = (String)values.get("userName");
+        displayName = (String)values.get("displayName");
+    }
+
+    @Override
+    protected void saveValues() {
+        values.put("userName", userName);
+        values.put("displayName", displayName);
     }
 }

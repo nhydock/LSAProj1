@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import data.keys.FriendListKey;
 import domain.model.Friend;
 import domain.model.FriendList;
+import domain.model.LazyDomainObject;
 import domain.model.RealFriendList;
 
 public class FriendListProxy extends LazyDomainObject<RealFriendList> implements

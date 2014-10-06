@@ -37,4 +37,16 @@ public class RealFriendList extends DomainModelObject implements FriendList {
         return id;
     }
 
+    @Override
+    protected void restoreValues() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected void saveValues() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

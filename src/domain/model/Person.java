@@ -11,10 +11,7 @@ public class Person extends User {
     private FriendList friends;
     private PendingFriendsList pendingFriends;
 
-    private long id;
-    private String name;
     private long password;
-    private String displayName;
 
     /**
      * Construct a new person
@@ -22,12 +19,13 @@ public class Person extends User {
      * @param name
      */
     public Person(String name, String password, String displayName) {
-        this.name = name;
+        this.userName = name;
         this.id = -1;
         this.password = password.hashCode();
         this.displayName = displayName;
         friends = new FriendListProxy(id);
         pendingFriends = new PendingFriendsListProxy();
+        saveValues();
     }
 
     /**
@@ -38,7 +36,7 @@ public class Person extends User {
      */
     public Person(String name, long password, long id) {
         this.id = id;
-        this.name = name;
+        this.userName = name;
         this.password = password;
         friends = new FriendListProxy(id);
         pendingFriends = new PendingFriendsListProxy();
@@ -161,5 +159,19 @@ public class Person extends User {
         if (toRemove != null) {
             friends.removeFriend(toRemove);
         }
+    }
+
+    @Override
+    protected void restoreValues() {
+        userName = (String)values.get("name");
+        displayName = (String)values.get("displayName");
+        password = (long)values.get("password");
+    }
+
+    @Override
+    protected void saveValues() {
+        values.put("name", userName);
+        values.put("displayName", displayName);
+        values.put("password", password);
     }
 }

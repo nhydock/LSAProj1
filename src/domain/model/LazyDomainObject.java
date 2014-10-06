@@ -1,8 +1,7 @@
-package domain.model.proxies;
+package domain.model;
 
 import data.keys.Key;
 import domain.DataMapper;
-import domain.model.DomainModelObject;
 
 public class LazyDomainObject<Proxy extends DomainModelObject> extends
         DomainModelObject {
@@ -26,21 +25,7 @@ public class LazyDomainObject<Proxy extends DomainModelObject> extends
         this.cls = cls;
         this.key = key;
     }
-
-    /**
-     * Flags the domain object to be deleted from the system
-     */
-    public void delete() {
-        getUnitOfWork().markDeleted();
-    }
-
-    /**
-     * Flags the domain object that is has been loaded from the database
-     */
-    public void loaded() {
-        getUnitOfWork().markLoaded();
-    }
-
+    
     /**
      * Get the proper object that is loaded by this proxy. Makes sure value is
      * loaded before trying to grab it
@@ -51,5 +36,15 @@ public class LazyDomainObject<Proxy extends DomainModelObject> extends
             loaded = true;
         }
         return lazyObj;
+    }
+
+    @Override
+    protected void restoreValues() {
+        proxyObject().restoreValues();
+    }
+
+    @Override
+    protected void saveValues() {
+        proxyObject().saveValues();
     }
 }
