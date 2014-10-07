@@ -23,13 +23,13 @@ public class PendingFriendsList extends DomainModelObject {
     }
 
     @Override
-    protected void restoreValues() {
+    public void rollbackValues() {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    protected void saveValues() {
+    public void saveValues() {
         // TODO Auto-generated method stub
         
     }

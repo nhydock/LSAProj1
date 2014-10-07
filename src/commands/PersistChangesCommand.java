@@ -1,6 +1,6 @@
 package commands;
 
-import domain.model.Uow;
+import domain.UnitOfWork;
 
 /**
  * Tells the system to save any pending changes

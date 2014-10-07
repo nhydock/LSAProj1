@@ -45,13 +45,13 @@ public class Friend extends User {
     }
 
     @Override
-    protected void restoreValues() {
+    public void rollbackValues() {
         userName = (String)values.get("userName");
         displayName = (String)values.get("displayName");
     }
 
     @Override
-    protected void saveValues() {
+    public void saveValues() {
         values.put("userName", userName);
         values.put("displayName", displayName);
     }

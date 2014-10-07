@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import data.keys.PersonKey;
 import domain.DataMapper;
+import domain.UnitOfWork;
 import domain.model.proxies.*;
 
 public class Person extends User {
@@ -85,7 +86,7 @@ public class Person extends User {
      */
     public void setPassword(String newPass) {
         password = newPass.hashCode();
-        getUnitOfWork().markChanged();
+        UnitOfWork.get().markChanged(this);
     }
 
     /**
@@ -96,7 +97,7 @@ public class Person extends User {
      */
     public void setDisplayName(String newName) {
         displayName = newName;
-        getUnitOfWork().markChanged();
+        UnitOfWork.get().markChanged(this);
     }
 
     /**
@@ -162,14 +163,14 @@ public class Person extends User {
     }
 
     @Override
-    protected void restoreValues() {
+    public void rollbackValues() {
         userName = (String)values.get("name");
         displayName = (String)values.get("displayName");
         password = (long)values.get("password");
     }
 
     @Override
-    protected void saveValues() {
+    public void saveValues() {
         values.put("name", userName);
         values.put("displayName", displayName);
         values.put("password", password);

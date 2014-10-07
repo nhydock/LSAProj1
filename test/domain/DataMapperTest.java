@@ -7,7 +7,6 @@ import org.junit.Test;
 import data.gateways.MockPersonGateway;
 import data.keys.PersonKey;
 import domain.model.Person;
-import domain.model.Uow;
 
 public class DataMapperTest {
 
@@ -61,14 +60,14 @@ public class DataMapperTest {
 
         Person p = new Person("Jennifer", "hockeysticks", "lol");
         long id = p.getID();
-        assertEquals(Uow.State.Created, p.getUnitOfWork().getState());
+        assertEquals(UnitOfWork.State.Created, p.getUnitOfWork().getState());
 
         mapper.persist(p);
 
         Person loaded = mapper.get(Person.class, new PersonKey(
                 MockPersonGateway.getNextID() - 1));
         assertNotNull(loaded);
-        assertEquals(Uow.State.Loaded, loaded.getUnitOfWork().getState());
+        assertEquals(UnitOfWork.State.Loaded, loaded.getUnitOfWork().getState());
 
         // objects should not be equal because a new one is generated
         assertNotEquals(p, loaded);
@@ -90,16 +89,16 @@ public class DataMapperTest {
 
         Person test = mapper.get(Person.class, new PersonKey(0));
         assertNotNull(test);
-        assertEquals(Uow.State.Loaded, test.getUnitOfWork().getState());
+        assertEquals(UnitOfWork.State.Loaded, test.getUnitOfWork().getState());
         assertNotEquals("Corey", test.getUserName());
         
         test.setDisplayName("Corey");
-        assertEquals(Uow.State.Changed, test.getUnitOfWork().getState());
+        assertEquals(UnitOfWork.State.Changed, test.getUnitOfWork().getState());
         assertEquals("Corey", test.getDisplayName());
         
         mapper.persist(test);
 
-        assertEquals(Uow.State.Loaded, test.getUnitOfWork().getState());
+        assertEquals(UnitOfWork.State.Loaded, test.getUnitOfWork().getState());
         assertEquals(test, mapper.get(Person.class, new PersonKey(0)));
         assertEquals("Corey", mapper.get(Person.class, new PersonKey(0)).getDisplayName());
     }

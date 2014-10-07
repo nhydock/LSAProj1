@@ -2,6 +2,8 @@ package domain.model;
 
 import java.util.ArrayList;
 
+import domain.UnitOfWork;
+
 public class RealFriendList extends DomainModelObject implements FriendList {
 
     private long id;
@@ -21,12 +23,12 @@ public class RealFriendList extends DomainModelObject implements FriendList {
 
     public void insertFriend(Friend friend) {
         friends.add(friend);
-        getUnitOfWork().markChanged();
+        UnitOfWork.get().markChanged(this);
     }
 
     public void removeFriend(Friend friend) {
         friends.remove(friend);
-        getUnitOfWork().markChanged();
+        UnitOfWork.get().markChanged(this);
     }
 
     public ArrayList<Friend> getFriends() {
@@ -38,13 +40,13 @@ public class RealFriendList extends DomainModelObject implements FriendList {
     }
 
     @Override
-    protected void restoreValues() {
+    public void rollbackValues() {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    protected void saveValues() {
+    public void saveValues() {
         // TODO Auto-generated method stub
         
     }

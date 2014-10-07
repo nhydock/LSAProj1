@@ -39,12 +39,12 @@ public class LazyDomainObject<Proxy extends DomainModelObject> extends
     }
 
     @Override
-    protected void restoreValues() {
-        proxyObject().restoreValues();
+    public void rollbackValues() {
+        proxyObject().rollbackValues();
     }
 
     @Override
-    protected void saveValues() {
+    public void saveValues() {
         proxyObject().saveValues();
     }
 }

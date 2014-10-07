@@ -5,8 +5,8 @@ import java.util.HashMap;
 import data.gateway.interfaces.Gateway;
 import data.gateway.interfaces.Gateway.Result;
 import data.keys.Key;
+import domain.UnitOfWork.State;
 import domain.model.DomainModelObject;
-import domain.model.Uow;
 
 /**
  * Maps data objects that have been pulled in from the database
@@ -91,7 +91,7 @@ public class DataMapper {
                 T obj = gate.find(key);
                 identityMap.put(key, obj);
                 if (obj != null) {
-                    obj.loaded();
+                    obj.saveValues();
                 }
                 return obj;
             }
@@ -122,17 +122,17 @@ public class DataMapper {
      * 
      * @param obj
      */
-    public <T extends DomainModelObject> void persist(T object) {
+    protected <T extends DomainModelObject> void persist(T object, State state) {
         @SuppressWarnings("unchecked")
         Gateway<T> gate = (Gateway<T>) gatewayMap.get(object.getClass());
-        if (object.getUnitOfWork().getState() == Uow.State.Changed) {
+        if (state == UnitOfWork.State.Changed) {
             gate.update(object);
-            object.loaded();
-        } else if (object.getUnitOfWork().getState() == Uow.State.Created) {
+            object.saveValues();
+        } else if (state == UnitOfWork.State.Created) {
             Result<T> result = gate.insert(object);
-            result.object.loaded();
+            result.object.saveValues();
             identityRegistry.get(object.getClass()).put(result.key, result.object);
-        } else if (object.getUnitOfWork().getState() == Uow.State.Deleted) {
+        } else if (state == UnitOfWork.State.Deleted) {
             Key<T> key = gate.delete(object);
             identityRegistry.get(object.getClass()).remove(key);
         }

@@ -36,7 +36,7 @@ public class MockPersonGateway extends IPersonGateway {
 
     @Override
     public void update(Person object) {
-        object.loaded();
+        return;
     }
 
     @Override

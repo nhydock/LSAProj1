@@ -2,62 +2,90 @@ package domain.model;
 
 import static org.junit.Assert.*;
 
+import org.junit.After;
 import org.junit.Test;
 
-import domain.model.Uow.State;
+import data.gateways.MockPersonGateway;
+import data.keys.PersonKey;
+import domain.DataMapper;
+import domain.UnitOfWork;
 
 public class UowTest {
 
+    @After
+    public void reset() {
+        UnitOfWork.destroy();
+    }
+    
     @Test
     public void testIntialization() {
-        Uow work = new Uow();
-        assertEquals(work.getState(), Uow.State.Created);
+        UnitOfWork work = UnitOfWork.get();
+        assertNotNull(work);
     }
 
     @Test
     public void testChanging() {
-        Uow work = new Uow();
-        assertEquals(work.getState(), Uow.State.Created);
-
-        // should not effect if the unit of work is marked as to be created
-        work.markChanged();
-        assertNotEquals(work.getState(), Uow.State.Changed);
-
+        UnitOfWork work = UnitOfWork.get();
+        DataMapper dm = DataMapper.get();
+        dm.register(Person.class, new MockPersonGateway());
+        Person test = dm.get(Person.class, new PersonKey(0));
+        
+        //a person just loaded that hasn't had anything changed about it yet
+        //  should not be in the unit of work register 
+        assertNull(work.getState(test));
+        
+        test.setDisplayName("Bobbo");
+        
         // should work if it has been marked initially as loaded
-        work.markLoaded();
-        work.markChanged();
-        assertEquals(work.getState(), Uow.State.Changed);
-
+        assertEquals(UnitOfWork.State.Changed, work.getState(test));
     }
 
     @Test
     public void testMarkForDeletion() {
-        Uow work = new Uow();
-        work.markLoaded();
-        assertEquals(work.getState(), Uow.State.Loaded);
-
-        work.markDeleted();
-        assertEquals(work.getState(), Uow.State.Deleted);
-
-        // uow marked as deleted should not be able to be
-        // marked changed after being marked for deletion
-        work.markChanged();
-        assertEquals(work.getState(), Uow.State.Deleted);
+        UnitOfWork work = UnitOfWork.get();
+        DataMapper dm = DataMapper.get();
+        dm.register(Person.class, new MockPersonGateway());
+        Person test = dm.get(Person.class, new PersonKey(0));
+        
+        //a person just loaded that hasn't had anything changed about it yet
+        //  should not be in the unit of work register 
+        assertNull(work.getState(test));
+        
+        test.setDisplayName("Bobbo");
+        
+        // should work if it has been marked initially as loaded
+        assertEquals(UnitOfWork.State.Changed, work.getState(test));
     }
 
     @Test
     public void testReset() {
-        Uow work = new Uow();
-        work.markLoaded();
-        work.markChanged();
-        assertEquals(work.getState(), State.Changed);
-        work.markLoaded();
-        assertEquals(work.getState(), State.Loaded);
+        UnitOfWork work = UnitOfWork.get();
+        DataMapper dm = DataMapper.get();
+        dm.register(Person.class, new MockPersonGateway());
+        Person test = dm.get(Person.class, new PersonKey(0));
+        
+        String name = test.getDisplayName();
+        
+        //a person just loaded that hasn't had anything changed about it yet
+        //  should not be in the unit of work register 
+        assertNull(work.getState(test));
+        
+        test.setDisplayName("Bobbo");
+        
+        // should work if it has been marked initially as loaded
+        assertEquals(UnitOfWork.State.Changed, work.getState(test));
+        assertEquals("Bobbo", test.getDisplayName());
+        
+        //now we need to rollback changes
+        work.rollback();
+        
+        assertEquals(name, test.getDisplayName());
+        assertNull(work.getState(test));
     }
 
     @Test
     public void testPackage() throws ClassNotFoundException {
         // Class c = Class.forName("Uow.java");
-        assertEquals("domain.model.Uow", Uow.class.getName());
+        assertEquals("domain.UnitOfWork", UnitOfWork.class.getName());
     }
 }
