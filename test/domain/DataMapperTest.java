@@ -2,6 +2,7 @@ package domain;
 
 import static org.junit.Assert.*;
 
+import org.junit.After;
 import org.junit.Test;
 
 import data.gateways.MockPersonGateway;
@@ -10,12 +11,19 @@ import domain.model.Person;
 
 public class DataMapperTest {
 
+    @After
+    public void reset() {
+        DataMapper.destroy();
+        UnitOfWork.destroy();
+    }
+    
+    
     /**
      * Test registering gateways to the datamapper by class type
      */
     @Test
     public void testRegister() {
-        DataMapper mapper = new DataMapper();
+        DataMapper mapper = DataMapper.get();
 
         MockPersonGateway pGateway = new MockPersonGateway();
 
@@ -28,7 +36,7 @@ public class DataMapperTest {
      */
     @Test
     public void testGet() {
-        DataMapper mapper = new DataMapper();
+        DataMapper mapper = DataMapper.get();
         MockPersonGateway pGateway = new MockPersonGateway();
 
         mapper.register(Person.class, pGateway);
@@ -51,7 +59,8 @@ public class DataMapperTest {
      */
     @Test
     public void testPersistingNewObject() {
-        DataMapper mapper = new DataMapper();
+        DataMapper mapper = DataMapper.get();
+        UnitOfWork unitOfWork = UnitOfWork.get();
         MockPersonGateway pGateway = new MockPersonGateway();
         mapper.register(Person.class, pGateway);
 
@@ -60,21 +69,20 @@ public class DataMapperTest {
 
         Person p = new Person("Jennifer", "hockeysticks", "lol");
         long id = p.getID();
-        assertEquals(UnitOfWork.State.Created, p.getUnitOfWork().getState());
+        assertEquals(UnitOfWork.State.Created, unitOfWork.getState(p));
 
-        mapper.persist(p);
+        mapper.persist(p, UnitOfWork.State.Created);
 
         Person loaded = mapper.get(Person.class, new PersonKey(
                 MockPersonGateway.getNextID() - 1));
         assertNotNull(loaded);
-        assertEquals(UnitOfWork.State.Loaded, loaded.getUnitOfWork().getState());
+        assertNull(unitOfWork.getState(loaded));
 
         // objects should not be equal because a new one is generated
         assertNotEquals(p, loaded);
 
         assertNotEquals(id, loaded.getID());
         assertEquals(MockPersonGateway.getNextID() - 1, loaded.getID());
-
     }
 
     /**
@@ -83,22 +91,25 @@ public class DataMapperTest {
      */
     @Test
     public void testPersistingChanges() {
-        DataMapper mapper = new DataMapper();
+        DataMapper mapper = DataMapper.get();
+        UnitOfWork unitOfWork = UnitOfWork.get();
         MockPersonGateway pGateway = new MockPersonGateway();
         mapper.register(Person.class, pGateway);
 
         Person test = mapper.get(Person.class, new PersonKey(0));
         assertNotNull(test);
-        assertEquals(UnitOfWork.State.Loaded, test.getUnitOfWork().getState());
-        assertNotEquals("Corey", test.getUserName());
+        
+        assertNull(unitOfWork.getState(test));
         
         test.setDisplayName("Corey");
-        assertEquals(UnitOfWork.State.Changed, test.getUnitOfWork().getState());
+        assertEquals(UnitOfWork.State.Changed, unitOfWork.getState(test));
         assertEquals("Corey", test.getDisplayName());
         
-        mapper.persist(test);
+        mapper.persist(test, unitOfWork.getState(test));
 
-        assertEquals(UnitOfWork.State.Loaded, test.getUnitOfWork().getState());
+        //mapper itself will not clear unit of work, unit of work clears when
+        // using its own persist method
+        
         assertEquals(test, mapper.get(Person.class, new PersonKey(0)));
         assertEquals("Corey", mapper.get(Person.class, new PersonKey(0)).getDisplayName());
     }

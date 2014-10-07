@@ -27,6 +27,7 @@ public class Person extends User {
         friends = new FriendListProxy(id);
         pendingFriends = new PendingFriendsListProxy();
         saveValues();
+        UnitOfWork.get().markNew(this);
     }
 
     /**

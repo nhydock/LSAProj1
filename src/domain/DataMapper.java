@@ -32,7 +32,14 @@ public class DataMapper {
     public static DataMapper get() {
         return dataMapper.get();
     }
-
+    
+    /**
+     * Destroys the current unit of work by replacing it with a new one
+     */
+    public static void destroy() {
+        dataMapper.set(new DataMapper());
+    }
+    
     /**
      * Knows which gateway to use to fetch an object type
      */
@@ -47,8 +54,7 @@ public class DataMapper {
     /**
      * Constructor for data mapper should be hidden
      */
-    DataMapper() {
-    }
+    private DataMapper() {}
 
     /**
      * Links class domain objects with gateways

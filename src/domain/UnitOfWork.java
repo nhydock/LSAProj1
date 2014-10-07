@@ -31,13 +31,13 @@ public class UnitOfWork {
         return unitOfWork.get();
     }
     
-    
     /**
      * Destroys the current unit of work by replacing it with a new one
      */
     public static void destroy() {
         unitOfWork.set(new UnitOfWork());
     }
+    
     /**
      * Possible states of the unit of work
      */
@@ -53,7 +53,15 @@ public class UnitOfWork {
     }
     
     /**
-     * Marks a unit of work as changed. If the state is marked as deleted,
+     * Marks an object as newly created
+     * @param obj
+     */
+    public void markNew(DomainModelObject obj) {
+        register.put(obj, State.Created);
+    }
+    
+    /**
+     * Marks an object as changed. If the state is marked as deleted,
      * changes will not matter.
      */
     public void markChanged(DomainModelObject obj) {
