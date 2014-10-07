@@ -1,5 +1,7 @@
 package commands;
 
+import domain.UnitOfWork;
+
 /**
  * Tells the system to cancel any pending changes
  * 
@@ -14,8 +16,7 @@ public class CancelChangesCommand implements Command {
      */
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
-
+        UnitOfWork.get().rollback();
     }
 
     /**

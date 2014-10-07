@@ -16,7 +16,7 @@ public class PersistChangesCommand implements Command {
      */
     @Override
     public void execute() {
-
+        UnitOfWork.get().persist();
     }
 
     /**
