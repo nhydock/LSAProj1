@@ -1,8 +1,8 @@
 package data.keys;
 
-import domain.model.Friend;
+import domain.model.User;
 
-public class FriendKey implements Key<Friend> {
+public class FriendKey implements Key<User> {
 
     public final String name;
 

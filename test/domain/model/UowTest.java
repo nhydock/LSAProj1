@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Test;
 
-import data.gateways.MockPersonGateway;
+import data.gateways.MockUserGateway;
 import data.keys.PersonKey;
 import domain.DataMapper;
 import domain.UnitOfWork;
@@ -27,7 +27,7 @@ public class UowTest {
     public void testChanging() {
         UnitOfWork work = UnitOfWork.get();
         DataMapper dm = DataMapper.get();
-        dm.register(Person.class, new MockPersonGateway());
+        dm.register(Person.class, new MockUserGateway());
         Person test = dm.get(Person.class, new PersonKey(0));
         
         //a person just loaded that hasn't had anything changed about it yet
@@ -44,7 +44,7 @@ public class UowTest {
     public void testMarkForDeletion() {
         UnitOfWork work = UnitOfWork.get();
         DataMapper dm = DataMapper.get();
-        dm.register(Person.class, new MockPersonGateway());
+        dm.register(Person.class, new MockUserGateway());
         Person test = dm.get(Person.class, new PersonKey(0));
         
         //a person just loaded that hasn't had anything changed about it yet
@@ -61,7 +61,7 @@ public class UowTest {
     public void testReset() {
         UnitOfWork work = UnitOfWork.get();
         DataMapper dm = DataMapper.get();
-        dm.register(Person.class, new MockPersonGateway());
+        dm.register(Person.class, new MockUserGateway());
         Person test = dm.get(Person.class, new PersonKey(0));
         
         String name = test.getDisplayName();

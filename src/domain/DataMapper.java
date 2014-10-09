@@ -66,12 +66,15 @@ public class DataMapper {
      * @return boolean - false if class has already been registered with a
      *         gateway
      */
-    public <T extends DomainModelObject> boolean register(Class<T> cls, Gateway<T> gate) {
+    public <T extends DomainModelObject> boolean register(Class<T> cls, Gateway<?> gate) {
         if (gatewayMap.containsKey(cls)) {
             return false;
         }
         gatewayMap.put(cls, gate);
-        identityRegistry.put(cls, new IdentityMap(cls));
+        if (!identityRegistry.containsKey(gate.getType()))
+        {
+            identityRegistry.put(gate.getType(), new IdentityMap(gate.getType()));
+        }
         return true;
     }
 
@@ -86,15 +89,15 @@ public class DataMapper {
      * @throws NullPointerException
      *             if a gateway for the cls has not be registered
      */
-    public <T extends DomainModelObject> T get(Class<T> cls, Key<T> key) {
-        if (identityRegistry.containsKey(cls)) {
-            IdentityMap identityMap = identityRegistry.get(cls);
+    public <T extends DomainModelObject> T get(Class<T> cls, Key<?> key) {
+        Gateway<?> gate = getGateway(cls);
+        if (gate != null)
+        {
+            IdentityMap identityMap = identityRegistry.get(gate.getType());
             if (identityMap.containsKey(key)) {
                 return cls.cast(identityMap.get(key));
             } else {
-                @SuppressWarnings("unchecked")
-                Gateway<T> gate = (Gateway<T>) gatewayMap.get(cls);
-                T obj = gate.find(key);
+                T obj = cls.cast(gate.find(key));
                 identityMap.put(key, obj);
                 if (obj != null) {
                     obj.saveValues();
@@ -120,7 +123,29 @@ public class DataMapper {
             identityMap.put(key, obj);
         }
         throw new NullPointerException("Gateway not registered for class type " + cls.getName());
-
+    }
+    
+    /**
+     * Get the gateway for a class type.  If a class is not registered explicitly,
+     * but its superclass is, return that
+     * @param cls
+     * @return
+     */
+    public Gateway<?> getGateway(Class<? extends DomainModelObject> cls)
+    {
+        Class<?> c = cls;
+        Gateway<?> gate;
+        do
+        {
+            gate = gatewayMap.get(c);
+            c = c.getSuperclass();
+        } while (gate == null && c != null);
+        
+        if (gate == null)
+        {
+            throw (new NullPointerException("Gateway not found for class " + cls.getName()));
+        }
+        return gate;
     }
 
     /**
@@ -128,19 +153,21 @@ public class DataMapper {
      * 
      * @param obj
      */
-    protected <T extends DomainModelObject> void persist(T object, State state) {
-        @SuppressWarnings("unchecked")
-        Gateway<T> gate = (Gateway<T>) gatewayMap.get(object.getClass());
+    protected <T extends DomainModelObject> boolean persist(T object, State state) {
+        Gateway<?> gate = getGateway(object.getClass());
+        IdentityMap imap = identityRegistry.get(gate.getType());
         if (state == UnitOfWork.State.Changed) {
-            gate.update(object);
+            gate.update(gate.getType().cast(object));
             object.saveValues();
+            return true;
         } else if (state == UnitOfWork.State.Created) {
-            Result<T> result = gate.insert(object);
+            Result<?> result = gate.insert(gate.getType().cast(object));
             result.object.saveValues();
-            identityRegistry.get(object.getClass()).put(result.key, result.object);
+            return imap.put(result.key, result.object);
         } else if (state == UnitOfWork.State.Deleted) {
-            Key<T> key = gate.delete(object);
-            identityRegistry.get(object.getClass()).remove(key);
+            Key<?> key = gate.delete(object);
+            return imap.remove(key);
         }
+        return false;
     }
 }

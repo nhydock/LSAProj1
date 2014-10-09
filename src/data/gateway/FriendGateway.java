@@ -10,13 +10,14 @@ import data.keys.FriendKey;
 import data.keys.FriendListKey;
 import data.keys.Key;
 import domain.DataMapper;
+import domain.model.DomainModelObject;
 import domain.model.Friend;
 import domain.model.RealFriendList;
 
 public class FriendGateway extends Gateway<RealFriendList> {
 
     @Override
-    public RealFriendList find(Key<RealFriendList> key) {
+    public RealFriendList find(Key<?> key) {
         if (key instanceof FriendListKey) {
             FriendListKey link = (FriendListKey) key;
             try {
@@ -49,7 +50,8 @@ public class FriendGateway extends Gateway<RealFriendList> {
     }
 
     @Override
-    public void update(RealFriendList object) {
+    public void update(DomainModelObject dmo) {
+        RealFriendList object = (RealFriendList)dmo;
         try {
             String sql = "DELETE FROM friend_map WHERE pid = ?";
 
@@ -78,21 +80,23 @@ public class FriendGateway extends Gateway<RealFriendList> {
     }
 
     @Override
-    public Result<RealFriendList> insert(RealFriendList object) {
+    public Result<?> insert(DomainModelObject object) {
+        RealFriendList list = (RealFriendList) object;
         // can not insert entire maps, updating handles insertion of new
         // relations
         return null;
     }
 
     @Override
-    public Key<RealFriendList> delete(RealFriendList object) {
+    public Key<RealFriendList> delete(DomainModelObject object) {
+        RealFriendList list = (RealFriendList) object;
         // can not delete friend maps, just remove values from map and persist
         // the changes
         try {
             String sql = "DELETE FROM friend_map WHERE pid = ?";
 
             PreparedStatement stmt = getConnection().prepareStatement(sql);
-            stmt.setLong(1, object.getUserID());
+            stmt.setLong(1, list.getUserID());
             stmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -101,6 +105,11 @@ public class FriendGateway extends Gateway<RealFriendList> {
         }
 
         return null;
+    }
+
+    @Override
+    public Class<RealFriendList> getType() {
+        return RealFriendList.class;
     }
 
 }

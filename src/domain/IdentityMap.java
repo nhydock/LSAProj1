@@ -34,7 +34,7 @@ public class IdentityMap {
      *         inserted
      */
     public boolean put(Key<?> key, Object obj) {
-        if (obj == null || obj.getClass() == cls) {
+        if (obj == null || cls.isAssignableFrom(obj.getClass())) {
             registry.put(key, obj);
             return true;
         }
@@ -54,8 +54,8 @@ public class IdentityMap {
      * 
      * @param key
      */
-    public void remove(Key<?> key) {
-        registry.remove(key);
+    public boolean remove(Key<?> key) {
+        return registry.remove(key) != null;
     }
 
     /**

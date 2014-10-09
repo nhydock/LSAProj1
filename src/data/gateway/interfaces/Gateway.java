@@ -14,14 +14,16 @@ import domain.model.DomainModelObject;
  * @param
  */
 public abstract class Gateway<T extends DomainModelObject> {
-    abstract public T find(Key<T> key);
+    abstract public DomainModelObject find(Key<?> key);
 
-    abstract public void update(T object);
+    abstract public void update(DomainModelObject object);
 
-    abstract public Result<T> insert(T object);
+    abstract public Result<?> insert(DomainModelObject object);
 
-    abstract public Key<T> delete(T object);
-
+    abstract public Key<?> delete(DomainModelObject object);
+    
+    abstract public Class<T> getType();
+    
     private static final ThreadLocal<Connection> dbConnection = new ThreadLocal<Connection>() {
         public Connection initialValue() {
             // attempt to connect to the ODBC database
