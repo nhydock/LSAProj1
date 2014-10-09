@@ -1,5 +1,7 @@
 package commands;
 
+import system.Session;
+import data.keys.PersonKey;
 import domain.model.Person;
 
 /**
@@ -32,8 +34,7 @@ public class AcceptFriendRequest implements Command {
      */
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
-        Person p = Person.findPerson(userIDOfRequestee);
+        Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userIDOfRequestee));
         p.acceptFriendRequest(userNameOfRequester);
     }
 

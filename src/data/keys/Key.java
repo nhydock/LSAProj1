@@ -8,7 +8,7 @@ import domain.model.DomainModelObject;
  * 
  * @author nhydock
  */
-public interface Key<T extends DomainModelObject> {
+public interface Key {
     @Override
     public boolean equals(Object key);
 

@@ -3,6 +3,7 @@ package domain;
 import java.util.HashMap;
 
 import data.keys.Key;
+import domain.model.DomainModelObject;
 
 /**
  * Wrapped hashmap for mapping keys to the domain model objects loaded by the
@@ -11,18 +12,18 @@ import data.keys.Key;
  * @author nhydock
  *
  */
-public class IdentityMap {
+public class IdentityMap<T extends DomainModelObject> {
 
     /**
      * Class this identity map is registered for
      */
-    Class<?> cls;
+    Class<T> cls;
 
-    HashMap<Key<?>, Object> registry;
+    HashMap<Key, T> registry;
 
-    public IdentityMap(Class<?> cls) {
+    public IdentityMap(Class<T> cls) {
         this.cls = cls;
-        this.registry = new HashMap<Key<?>, Object>();
+        this.registry = new HashMap<Key, T>();
     }
 
     /**
@@ -33,19 +34,19 @@ public class IdentityMap {
      * @return false if the object is of the wrong type or if it's already been
      *         inserted
      */
-    public boolean put(Key<?> key, Object obj) {
+    public boolean put(Key key, Object obj) {
         if (obj == null || cls.isAssignableFrom(obj.getClass())) {
-            registry.put(key, obj);
+            registry.put(key, cls.cast(obj));
             return true;
         }
         return false;
     }
 
-    public boolean containsKey(Key<?> key) {
+    public boolean containsKey(Key key) {
         return registry.containsKey(key);
     }
 
-    public Object get(Key<?> key) {
+    public T get(Key key) {
         return registry.get(key);
     }
 
@@ -54,14 +55,14 @@ public class IdentityMap {
      * 
      * @param key
      */
-    public boolean remove(Key<?> key) {
+    public boolean remove(Key key) {
         return registry.remove(key) != null;
     }
 
     /**
      * @return the type of object that this identity map follows
      */
-    public Class<?> getType() {
+    public Class<T> getType() {
         return cls;
     }
 }

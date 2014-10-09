@@ -2,8 +2,8 @@ package domain.model.proxies;
 
 import java.util.ArrayList;
 
+import system.Session;
 import data.keys.FriendListKey;
-import domain.UnitOfWork;
 import domain.model.Friend;
 import domain.model.FriendList;
 import domain.model.LazyDomainObject;
@@ -24,12 +24,12 @@ public class FriendListProxy extends LazyDomainObject<RealFriendList> implements
 
     public void insertFriend(Friend friend) {
         proxyObject().insertFriend(friend);
-        UnitOfWork.get().markChanged(proxyObject());
+        Session.getUnitOfWork().markChanged(proxyObject());
     }
 
     public void removeFriend(Friend friend) {
         proxyObject().removeFriend(friend);
-        UnitOfWork.get().markChanged(proxyObject());
+        Session.getUnitOfWork().markChanged(proxyObject());
     }
 
     public ArrayList<Friend> getFriends() {

@@ -2,6 +2,8 @@ package domain;
 
 import java.util.HashMap;
 
+import system.Session;
+import domain.mappers.DataMapper;
 import domain.model.DomainModelObject;
 
 /**
@@ -11,32 +13,6 @@ import domain.model.DomainModelObject;
  *
  */
 public class UnitOfWork {
-
-    /**
-     * Handle assigning unit of work per thread
-     */
-    private static final ThreadLocal<UnitOfWork> unitOfWork = new ThreadLocal<UnitOfWork>() {
-        /**
-         * Generate a new unit of work per thread
-         */
-        public UnitOfWork initialValue() {
-            return new UnitOfWork();
-        }
-    };
-
-    /**
-     * Get the current unit of work for the thread
-     */
-    public static UnitOfWork get() {
-        return unitOfWork.get();
-    }
-    
-    /**
-     * Destroys the current unit of work by replacing it with a new one
-     */
-    public static void destroy() {
-        unitOfWork.set(new UnitOfWork());
-    }
     
     /**
      * Possible states of the unit of work
@@ -45,11 +21,19 @@ public class UnitOfWork {
         Created, Loaded, Deleted, Changed;
     }
 
-    private HashMap<DomainModelObject, State> register;
+    private HashMap<Class<? extends DomainModelObject>, HashMap<DomainModelObject, State>> register;
     
-    private UnitOfWork()
+    public UnitOfWork()
     {
-        register = new HashMap<DomainModelObject, State>();
+        register = new HashMap<Class<? extends DomainModelObject>, HashMap<DomainModelObject, State>>();
+    }
+    
+    private void ensureTypeExists(Class<? extends DomainModelObject> cls)
+    {
+        if (!register.containsKey(cls))
+        {
+            register.put(cls, new HashMap<DomainModelObject, State>());
+        }
     }
     
     /**
@@ -57,7 +41,8 @@ public class UnitOfWork {
      * @param obj
      */
     public void markNew(DomainModelObject obj) {
-        register.put(obj, State.Created);
+        ensureTypeExists(obj.getClass());
+        register.get(obj.getClass()).put(obj, State.Created);
     }
     
     /**
@@ -65,10 +50,11 @@ public class UnitOfWork {
      * changes will not matter.
      */
     public void markChanged(DomainModelObject obj) {
-        State s = register.get(obj);
+        ensureTypeExists(obj.getClass());
+        State s = register.get(obj.getClass()).get(obj);
         if (s == null)
         {
-            register.put(obj, State.Changed);
+            register.get(obj.getClass()).put(obj, State.Changed);
         }
     }
 
@@ -77,20 +63,39 @@ public class UnitOfWork {
      * priority
      */
     public void markDeleted(DomainModelObject obj) {
-        State s = register.get(obj);
+        ensureTypeExists(obj.getClass());
+        State s = register.get(obj.getClass()).get(obj);
         if (s == null)
         {
-            register.put(obj, State.Deleted);
+            register.get(obj.getClass()).put(obj, State.Deleted);
         }
     }
     
     /**
      * Attempts to persist all objects registered in the Unit of Work
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void persist() {
-        for (DomainModelObject o : register.keySet())
+        for (Class<? extends DomainModelObject> type : register.keySet())
         {
-            DataMapper.get().persist(o, register.get(o));
+            DataMapper mapper = Session.getMapper(type);
+            HashMap<DomainModelObject, State> objects = register.get(type);
+            for (DomainModelObject obj : objects.keySet())
+            {
+                State state = objects.get(obj);
+                if (state == State.Changed)
+                {
+                    mapper.update(obj);
+                }
+                else if (state == State.Deleted)
+                {
+                    mapper.delete(obj);
+                }
+                else if (state == State.Created)
+                {
+                    mapper.insert(obj);
+                }
+            }
         }
         register.clear();
     }
@@ -99,14 +104,17 @@ public class UnitOfWork {
      * Rollbacks all objects that have been registered in the unit of work
      */
     public void rollback() {
-        for (DomainModelObject o : register.keySet())
+        for (HashMap<DomainModelObject, State> objects : register.values())
         {
-            o.rollbackValues();
+            for (DomainModelObject obj : objects.keySet())
+            {
+                obj.rollbackValues();
+            }
         }
         register.clear();
     }
     
     public State getState(DomainModelObject key) {
-        return register.get(key);
+        return register.get(key.getClass()).get(key);
     }
 }

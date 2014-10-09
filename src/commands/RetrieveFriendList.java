@@ -2,6 +2,8 @@ package commands;
 
 import java.util.ArrayList;
 
+import system.Session;
+import data.keys.PersonKey;
 import domain.model.Friend;
 import domain.model.Person;
 
@@ -34,7 +36,8 @@ public class RetrieveFriendList implements Command {
     @Override
     public void execute() {
         // TODO Auto-generated method stub
-        list = Person.findPerson(userID).getFriends();
+        Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userID));
+        list = p.getFriends();
     }
 
     /**

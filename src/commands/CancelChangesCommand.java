@@ -1,6 +1,6 @@
 package commands;
 
-import domain.UnitOfWork;
+import system.Session;
 
 /**
  * Tells the system to cancel any pending changes
@@ -16,7 +16,7 @@ public class CancelChangesCommand implements Command {
      */
     @Override
     public void execute() {
-        UnitOfWork.get().rollback();
+        Session.getUnitOfWork().rollback();
     }
 
     /**

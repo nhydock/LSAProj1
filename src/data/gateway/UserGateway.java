@@ -1,17 +1,17 @@
 package data.gateway;
 
+import java.security.InvalidParameterException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import system.Session;
+import data.containers.DataContainer;
+import data.containers.PersonData;
 import data.gateway.interfaces.IUserGateway;
 import data.keys.FriendKey;
 import data.keys.Key;
 import data.keys.PersonKey;
-import domain.model.DomainModelObject;
-import domain.model.Friend;
-import domain.model.Person;
-import domain.model.User;
 
 public class UserGateway extends IUserGateway {
 
@@ -21,16 +21,14 @@ public class UserGateway extends IUserGateway {
      * @param key
      * @return a person, if one was found
      */
-    private Person find(PersonKey key) {
+    protected ResultSet find(PersonKey key) {
         try {
             String sql = "SELECT * FROM persons p WHERE p.id = ?";
-            PreparedStatement stmt = getConnection().prepareStatement(sql);
+            PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
             stmt.setLong(1, key.id);
             ResultSet result = stmt.executeQuery();
-
-            Person person = new Person(result.getString("name"),
-                    result.getLong("password"), result.getInt("id"));
-            return person;
+            result.next();
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -44,17 +42,15 @@ public class UserGateway extends IUserGateway {
      * @param key
      * @return a person, if one was found
      */
-    private Friend find(FriendKey key) {
+    protected ResultSet find(FriendKey key) {
         try {
             String sql = "SELECT * FROM friend_map f JOIN persons p ON f.fid = p.id WHERE p.name = ?";
-            PreparedStatement stmt = getConnection().prepareStatement(sql);
+            PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
             stmt.setString(1, key.name);
             ResultSet result = stmt.executeQuery();
             result.next();
 
-            Friend friend = new Friend(result.getString("p.name"),
-                    result.getString("p.name"));
-            return friend;
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -66,20 +62,20 @@ public class UserGateway extends IUserGateway {
      * Updates the data values of an existing person
      */
     @Override
-    public void update(DomainModelObject dmo) {
-        if (!(dmo instanceof Person))
+    public void update(DataContainer data) {
+        if (!(data instanceof PersonData))
         {
             return;
         }
         
-        Person object = (Person)dmo;
+        PersonData object = (PersonData)data;
         
         try {
             String sql = "UPDATE persons SET name=?,password=? WHERE id=?";
-            PreparedStatement stmt = getConnection().prepareStatement(sql);
-            stmt.setString(1, object.getUserName());
-            stmt.setLong(2, object.getPassword());
-            stmt.setLong(3, object.getID());
+            PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
+            stmt.setString(1, object.name);
+            stmt.setLong(2, object.password);
+            stmt.setLong(3, object.id);
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -92,19 +88,19 @@ public class UserGateway extends IUserGateway {
      * Inserst a new person into the database
      */
     @Override
-    public Result<?> insert(DomainModelObject dmo) {
-        if (!(dmo instanceof Person))
+    public ResultSet insert(DataContainer data) {
+        if (!(data instanceof PersonData))
         {
             return null;
         }
-        
-        Person object = (Person)dmo;
+
+        PersonData object = (PersonData)data;
         
         try {
             String sql = "INSERT INTO persons (name, password) VALUES (?, ?)";
-            PreparedStatement stmt = getConnection().prepareStatement(sql);
-            stmt.setString(1, object.getUserName());
-            stmt.setLong(2, object.getPassword());
+            PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
+            stmt.setString(1, object.name);
+            stmt.setLong(2, object.password);
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -114,19 +110,7 @@ public class UserGateway extends IUserGateway {
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    long id = generatedKeys.getLong(1);
-
-                    // create a new person with the generated id to be put into
-                    // our datamapper
-                    Person generated = new Person(object.getUserName(),
-                            object.getPassword(), id);
-                    // update the object reference to now be the newly generated
-                    // one
-                    object = generated;
-
-                    PersonKey key = new PersonKey(id);
-                    Result<User> result = new Result<User>(generated, key);
-                    return result;
+                    return generatedKeys;
                 } else {
                     throw new SQLException(
                             "Creating Person failed, no ID obtained.");
@@ -144,45 +128,25 @@ public class UserGateway extends IUserGateway {
      * Deletes a person from the database
      */
     @Override
-    public Key<?> delete(DomainModelObject dmo) {
-        if (!(dmo instanceof User))
+    public boolean delete(Key key) {
+        if (!(key instanceof PersonKey))
         {
-            return null;
+            throw (new InvalidParameterException("You can only delete users by using Person Keys"));
         }
         
-        User object = (User)dmo;
+        PersonKey person = (PersonKey)key;
         
         try {
             String sql = "DELETE FROM persons WHERE id=?";
-            PreparedStatement stmt = getConnection().prepareStatement(sql);
-            stmt.setLong(1, object.getID());
+            PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
+            stmt.setLong(1, person.id);
             stmt.executeUpdate();
-
-            PersonKey key = new PersonKey(object.getID());
-            return key;
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-1);
         }
-        return null;
+        return false;
     }
 
-    /**
-     * Delegating method for finding a person dependent on the type of key given
-     */
-    @Override
-    public DomainModelObject find(Key<?> key) {
-        if (key instanceof PersonKey) {
-            return find((PersonKey) key);
-        }
-        if (key instanceof FriendKey) {
-            return find((FriendKey) key);
-        }
-        return null;
-    }
-
-    @Override
-    public Class<User> getType() {
-        return User.class;
-    }
 }

@@ -2,7 +2,7 @@ package domain.model;
 
 import java.util.ArrayList;
 
-import domain.UnitOfWork;
+import system.Session;
 
 public class RealFriendList extends DomainModelObject implements FriendList {
 
@@ -23,12 +23,12 @@ public class RealFriendList extends DomainModelObject implements FriendList {
 
     public void insertFriend(Friend friend) {
         friends.add(friend);
-        UnitOfWork.get().markChanged(this);
+        Session.getUnitOfWork().markChanged(this);
     }
 
     public void removeFriend(Friend friend) {
         friends.remove(friend);
-        UnitOfWork.get().markChanged(this);
+        Session.getUnitOfWork().markChanged(this);
     }
 
     public ArrayList<Friend> getFriends() {

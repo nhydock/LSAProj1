@@ -5,30 +5,28 @@ import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Test;
 
-import data.gateways.MockUserGateway;
+import system.Session;
 import data.keys.PersonKey;
-import domain.DataMapper;
 import domain.UnitOfWork;
 
 public class UowTest {
 
     @After
     public void reset() {
-        UnitOfWork.destroy();
+        Session.kill();
     }
     
     @Test
     public void testIntialization() {
-        UnitOfWork work = UnitOfWork.get();
+        UnitOfWork work = Session.getUnitOfWork();
+        //TODO set person mapper to mock person mapper
         assertNotNull(work);
     }
 
     @Test
     public void testChanging() {
-        UnitOfWork work = UnitOfWork.get();
-        DataMapper dm = DataMapper.get();
-        dm.register(Person.class, new MockUserGateway());
-        Person test = dm.get(Person.class, new PersonKey(0));
+        UnitOfWork work = new UnitOfWork();
+        Person test = (Person)Session.getMapper(Person.class).find(new PersonKey(0));
         
         //a person just loaded that hasn't had anything changed about it yet
         //  should not be in the unit of work register 
@@ -42,10 +40,8 @@ public class UowTest {
 
     @Test
     public void testMarkForDeletion() {
-        UnitOfWork work = UnitOfWork.get();
-        DataMapper dm = DataMapper.get();
-        dm.register(Person.class, new MockUserGateway());
-        Person test = dm.get(Person.class, new PersonKey(0));
+        UnitOfWork work = Session.getUnitOfWork();
+        Person test = (Person)Session.getMapper(Person.class).find(new PersonKey(0));
         
         //a person just loaded that hasn't had anything changed about it yet
         //  should not be in the unit of work register 
@@ -59,10 +55,8 @@ public class UowTest {
 
     @Test
     public void testReset() {
-        UnitOfWork work = UnitOfWork.get();
-        DataMapper dm = DataMapper.get();
-        dm.register(Person.class, new MockUserGateway());
-        Person test = dm.get(Person.class, new PersonKey(0));
+        UnitOfWork work = Session.getUnitOfWork();
+        Person test = (Person)Session.getMapper(Person.class).find(new PersonKey(0));
         
         String name = test.getDisplayName();
         
@@ -83,9 +77,4 @@ public class UowTest {
         assertNull(work.getState(test));
     }
 
-    @Test
-    public void testPackage() throws ClassNotFoundException {
-        // Class c = Class.forName("Uow.java");
-        assertEquals("domain.UnitOfWork", UnitOfWork.class.getName());
-    }
 }

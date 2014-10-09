@@ -1,5 +1,8 @@
 package commands;
 
+import system.Session;
+import data.keys.FriendKey;
+import data.keys.PersonKey;
 import domain.model.Friend;
 import domain.model.Person;
 
@@ -33,8 +36,9 @@ public class RejectFriendRequest implements Command {
      */
     @Override
     public void execute() {
-        Person p = Person.findPerson(userIDOfRequestee);
-        p.declineFriendRequest(Friend.findFriend(userNameOfRequester));
+        Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userIDOfRequestee));
+        Friend f = (Friend)Session.getMapper(Friend.class).find(new FriendKey(userNameOfRequester));
+        p.declineFriendRequest(f);
     }
 
     /**

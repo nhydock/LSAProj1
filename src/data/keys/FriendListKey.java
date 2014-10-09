@@ -1,8 +1,6 @@
 package data.keys;
 
-import domain.model.RealFriendList;
-
-public class FriendListKey implements Key<RealFriendList> {
+public class FriendListKey implements Key {
 
     public final long id;
 

@@ -1,5 +1,7 @@
 package commands;
 
+import system.Session;
+import data.keys.PersonKey;
 import domain.model.Person;
 
 /**
@@ -32,7 +34,7 @@ public class ModifyUserCommand implements Command {
      */
     @Override
     public void execute() {
-        Person p = Person.findPerson(userID);
+        Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userID));
         p.setDisplayName(newDisplayName);
     }
 

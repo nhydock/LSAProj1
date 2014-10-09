@@ -1,7 +1,7 @@
 package domain.model;
 
+import system.Session;
 import data.keys.Key;
-import domain.DataMapper;
 
 public class LazyDomainObject<Proxy extends DomainModelObject> extends
         DomainModelObject {
@@ -9,7 +9,7 @@ public class LazyDomainObject<Proxy extends DomainModelObject> extends
     private Proxy lazyObj;
     private boolean loaded;
 
-    private final Key<Proxy> key;
+    private final Key key;
     private final Class<Proxy> cls;
 
     /**
@@ -21,7 +21,7 @@ public class LazyDomainObject<Proxy extends DomainModelObject> extends
      * @param key
      *            - key identifying the relational identity of the lazy object
      */
-    protected LazyDomainObject(Class<Proxy> cls, Key<Proxy> key) {
+    protected LazyDomainObject(Class<Proxy> cls, Key key) {
         this.cls = cls;
         this.key = key;
     }
@@ -30,9 +30,10 @@ public class LazyDomainObject<Proxy extends DomainModelObject> extends
      * Get the proper object that is loaded by this proxy. Makes sure value is
      * loaded before trying to grab it
      */
+    @SuppressWarnings("unchecked")
     protected final Proxy proxyObject() {
         if (!loaded) {
-            lazyObj = DataMapper.get().get(cls, key);
+            lazyObj = (Proxy)Session.getMapper(cls).find(key);
             loaded = true;
         }
         return lazyObj;

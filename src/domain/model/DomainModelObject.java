@@ -2,7 +2,7 @@ package domain.model;
 
 import java.util.HashMap;
 
-import domain.UnitOfWork;
+import system.Session;
 
 public abstract class DomainModelObject {
 
@@ -12,7 +12,7 @@ public abstract class DomainModelObject {
      * Flags the domain object to be deleted from the system
      */
     public void delete() {
-        UnitOfWork.get().markDeleted(this);
+        Session.getUnitOfWork().markDeleted(this);
     }
 
     /**

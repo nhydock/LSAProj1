@@ -2,6 +2,8 @@ package commands;
 
 import java.util.ArrayList;
 
+import system.Session;
+import data.keys.PersonKey;
 import domain.model.Friend;
 import domain.model.Person;
 
@@ -34,7 +36,7 @@ public class PendingIncomingFriendList implements Command {
      */
     @Override
     public void execute() {
-        Person p = Person.findPerson(userID);
+        Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userID));
         pendingFriendsList = p.getPendingFriends().getAsArrayList();
     }
 

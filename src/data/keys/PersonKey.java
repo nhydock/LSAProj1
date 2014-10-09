@@ -1,14 +1,12 @@
 package data.keys;
 
-import domain.model.User;
-
 /**
  * Primary key identified with people
  * 
  * @author nhydock
  *
  */
-public class PersonKey implements Key<User> {
+public class PersonKey implements Key {
     public final long id;
 
     public PersonKey(long id) {

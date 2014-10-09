@@ -1,8 +1,5 @@
 package domain.model;
 
-import data.keys.FriendKey;
-import domain.DataMapper;
-
 /**
  * Holds enough information about a user to have them in a friend list
  * 
@@ -38,10 +35,6 @@ public class Friend extends User {
      */
     public String getDisplayName() {
         return displayName;
-    }
-
-    public static Friend findFriend(String name) {
-        return DataMapper.get().get(Friend.class, new FriendKey(name));
     }
 
     @Override

@@ -2,9 +2,7 @@ package domain.model;
 
 import java.util.ArrayList;
 
-import data.keys.PersonKey;
-import domain.DataMapper;
-import domain.UnitOfWork;
+import system.Session;
 import domain.model.proxies.*;
 
 public class Person extends User {
@@ -27,7 +25,7 @@ public class Person extends User {
         friends = new FriendListProxy(id);
         pendingFriends = new PendingFriendsListProxy();
         saveValues();
-        UnitOfWork.get().markNew(this);
+        Session.getUnitOfWork().markNew(this);
     }
 
     /**
@@ -87,7 +85,7 @@ public class Person extends User {
      */
     public void setPassword(String newPass) {
         password = newPass.hashCode();
-        UnitOfWork.get().markChanged(this);
+        Session.getUnitOfWork().markChanged(this);
     }
 
     /**
@@ -98,7 +96,7 @@ public class Person extends User {
      */
     public void setDisplayName(String newName) {
         displayName = newName;
-        UnitOfWork.get().markChanged(this);
+        Session.getUnitOfWork().markChanged(this);
     }
 
     /**
@@ -137,12 +135,6 @@ public class Person extends User {
 
     public PendingFriendsList getPendingFriends() {
         return pendingFriends;
-    }
-
-    public static Person findPerson(long id) {
-        Person p = DataMapper.get().get(Person.class, new PersonKey(id));
-
-        return p;
     }
 
     public void requestFriend(String username) {

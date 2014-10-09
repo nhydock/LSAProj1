@@ -1,7 +1,7 @@
 package commands;
 
+import system.Session;
 import data.keys.PersonKey;
-import domain.DataMapper;
 import domain.model.Person;
 
 /**
@@ -34,7 +34,7 @@ public class MakeFriendRequest implements Command {
      */
     @Override
     public void execute() {
-        Person p = Person.findPerson(userIDOfRequester);
+        Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userIDOfRequester));
         p.requestFriend(userNameOfRequestee);
     }
 
