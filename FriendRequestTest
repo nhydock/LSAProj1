@@ -1,0 +1,53 @@
+CommandToCreateUser fred pw1 happyFred; fred:pw1:happyFred 
+CommandToCreateUser henry pw2 sadHenry; henry:pw2:sadHenry
+CommandToSelectUser fred pw1;
+CommandToMakeFriendRequest <userID> henry;
+CommandToGetPendingOutgoingFriendList <userID>; henry
+CommandToPersistChanges;
+CommandToSelectUser henry pw2;
+CommandToGetPendingIncomingFriendList <userID>; fred
+CommandToAcceptFriendRequest <userID> fred;
+CommandToGetPendingIncomingFriendList <userID>;
+CommandToRetrieveFriendList <userID>; fred
+CommandToPersistChanges;
+CommandToSelectUser fred pw1;
+CommandToRetrieveFriendList <userID>; henry
+
+// Test multiple creations and multiple friendRequests.
+CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
+CommandToCreateUser tom tomspass tommy; null
+CommandToCreateUser frank frankspass frakenstein; frank:frankspass:frankenstein
+CommandToSelectUser tom tomspass;
+CommandToMakeFriendRequest <userId> frank;
+CommandToGetPendingOutgoingFriendList <userID>; frank
+CommandToMakeFriendRequest <userId> frank;
+CommandToGetPendingOutgoingFriendList <userID>; frank
+CommandToSelectUser frank frankspass;
+CommandToAcceptFriendRequest <userID>; tom
+CommandToRetrieveFriendList <userID>; tom
+
+// Test unfriending
+CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
+CommandToCreateUser frank frankspass frakenstein; frank:frankspass:frankenstein
+CommandToSelectUser tom tomspass;
+CommandToMakeFriendRequest <userId> frank;
+CommandToSelectUser frank frankspass;
+CommandToAcceptFriendRequest <userID>; tom
+CommandToPersistChanges;
+CommandToSelectUser tom tomspass;
+CommandToUnFriend <userID>; frank
+CommandToPersistChanges;
+CommandToSelectUser frank frankspass;
+CommandToRetrieveFriendList <userID>;
+
+// Test Rejecting
+CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
+CommandToCreateUser frank frankspass frakenstein; frank:frankspass:frankenstein
+CommandToSelectUser tom tomspass;
+CommandToMakeFriendRequest <userId> frank;
+CommandToGetPendingOutgoingFriendList <userId>; frank
+CommandToRejectFriendRequest <userID>; frank
+CommandToGetPendingOutgoingFriendList <userId>;
+CommandToPersistChanges;
+CommandToSelectUser frank frankspass;
+CommandToRetrieveFriendList <userID>;
