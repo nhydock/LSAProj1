@@ -8,7 +8,7 @@ import system.Session;
  * @author merlin
  *
  */
-public class PersistChangesCommand implements Command {
+public class CommandToPersistChanges implements Command {
 
     /**
      * 

@@ -1,16 +1,18 @@
 package commands;
 
 import system.Session;
+import data.keys.FriendKey;
 import data.keys.PersonKey;
+import domain.model.Friend;
 import domain.model.Person;
 
 /**
- * Accept a friend request from one user to another
+ * Reject a friend request from one user to another
  * 
  * @author merlin
  *
  */
-public class AcceptFriendRequest implements Command {
+public class CommandToRejectFriendRequest implements Command {
 
     private int userIDOfRequestee;
     private String userNameOfRequester;
@@ -22,7 +24,7 @@ public class AcceptFriendRequest implements Command {
      * @param userNameOfRequester
      *            the User Name of the user who initiated the friend request
      */
-    public AcceptFriendRequest(int userIDOfRequestee, String userNameOfRequester) {
+    public CommandToRejectFriendRequest(int userIDOfRequestee, String userNameOfRequester) {
         this.userIDOfRequestee = userIDOfRequestee;
         this.userNameOfRequester = userNameOfRequester;
 
@@ -35,7 +37,8 @@ public class AcceptFriendRequest implements Command {
     @Override
     public void execute() {
         Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userIDOfRequestee));
-        p.acceptFriendRequest(userNameOfRequester);
+        Friend f = (Friend)Session.getMapper(Friend.class).find(new FriendKey(userNameOfRequester));
+        p.declineFriendRequest(f);
     }
 
     /**

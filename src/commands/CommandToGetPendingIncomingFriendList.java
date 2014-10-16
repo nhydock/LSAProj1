@@ -15,7 +15,7 @@ import domain.model.Person;
  * @author merlin
  *
  */
-public class PendingIncomingFriendList implements Command {
+public class CommandToGetPendingIncomingFriendList implements Command {
 
     private int userID;
     ArrayList<Friend> pendingFriendsList;
@@ -26,7 +26,7 @@ public class PendingIncomingFriendList implements Command {
      * @param userID
      *            unique
      */
-    public PendingIncomingFriendList(int userID) {
+    public CommandToGetPendingIncomingFriendList(int userID) {
         this.userID = userID;
     }
 

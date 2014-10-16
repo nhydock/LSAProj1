@@ -8,7 +8,7 @@ import domain.model.Person;
  * @author merlin
  *
  */
-public class CreateUserCommand implements Command {
+public class CommandToCreateUser implements Command {
 
     private String userName;
     private String password;
@@ -25,7 +25,7 @@ public class CreateUserCommand implements Command {
      * @param displayName
      *            the name by which the user wants to be referred
      */
-    public CreateUserCommand(String userName, String password,
+    public CommandToCreateUser(String userName, String password,
             String displayName) {
         this.userName = userName;
         this.password = password;

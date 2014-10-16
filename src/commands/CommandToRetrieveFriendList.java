@@ -14,7 +14,7 @@ import domain.model.Person;
  * @author merlin
  *
  */
-public class RetrieveFriendList implements Command {
+public class CommandToRetrieveFriendList implements Command {
 
     private int userID;
     private ArrayList<Friend> list;
@@ -25,7 +25,7 @@ public class RetrieveFriendList implements Command {
      * @param userID
      *            unique
      */
-    public RetrieveFriendList(int userID) {
+    public CommandToRetrieveFriendList(int userID) {
         this.userID = userID;
     }
 

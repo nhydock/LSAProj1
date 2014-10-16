@@ -8,7 +8,7 @@ import system.Session;
  * @author merlin
  *
  */
-public class CancelChangesCommand implements Command {
+public class CommandToCancelChanges implements Command {
 
     /**
      * 

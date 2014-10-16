@@ -10,7 +10,7 @@ import domain.model.Person;
  * @author merlin
  *
  */
-public class MakeFriendRequest implements Command {
+public class CommandToMakeFriendRequest implements Command {
 
     private int userIDOfRequester;
     private String userNameOfRequestee;
@@ -22,7 +22,7 @@ public class MakeFriendRequest implements Command {
      * @param userNameOfRequestee
      *            the User Name of the user being friended
      */
-    public MakeFriendRequest(int userIDOfRequester, String userNameOfRequestee) {
+    public CommandToMakeFriendRequest(int userIDOfRequester, String userNameOfRequestee) {
         this.userIDOfRequester = userIDOfRequester;
         this.userNameOfRequestee = userNameOfRequestee;
 

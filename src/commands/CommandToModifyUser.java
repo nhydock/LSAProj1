@@ -11,7 +11,7 @@ import domain.model.Person;
  * @author merlin
  *
  */
-public class ModifyUserCommand implements Command {
+public class CommandToModifyUser implements Command {
 
     private int userID;
     private String newDisplayName;
@@ -23,7 +23,7 @@ public class ModifyUserCommand implements Command {
      * @param newDisplayName
      *            the name this user wants to be known by
      */
-    public ModifyUserCommand(int userID, String newDisplayName) {
+    public CommandToModifyUser(int userID, String newDisplayName) {
         this.userID = userID;
         this.newDisplayName = newDisplayName;
     }

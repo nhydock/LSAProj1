@@ -5,7 +5,7 @@ import domain.model.Person;
 /**
  * Retrieve a specified user from the database into the domain model
  */
-public class SelectUserCommand implements Command {
+public class CommandToSelectUser implements Command {
     private String userName;
     private String password;
 
@@ -15,7 +15,7 @@ public class SelectUserCommand implements Command {
      * @param password
      *            the password from the user's credentials
      */
-    public SelectUserCommand(String userName, String password) {
+    public CommandToSelectUser(String userName, String password) {
         this.userName = userName;
         this.password = password;
     }
