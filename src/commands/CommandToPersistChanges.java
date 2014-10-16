@@ -16,7 +16,7 @@ public class CommandToPersistChanges implements Command {
      */
     @Override
     public void execute() {
-        Session.getUnitOfWork().persist();
+        Session.getUnitOfWork().commit();
     }
 
     /**

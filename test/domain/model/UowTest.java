@@ -1,12 +1,13 @@
 package domain.model;
 
 import static org.junit.Assert.*;
+import mock.MockDomainModel;
+import mock.MockKey;
 
 import org.junit.After;
 import org.junit.Test;
 
 import system.Session;
-import data.keys.PersonKey;
 import domain.UnitOfWork;
 
 public class UowTest {
@@ -26,13 +27,13 @@ public class UowTest {
     @Test
     public void testChanging() {
         UnitOfWork work = new UnitOfWork();
-        Person test = (Person)Session.getMapper(Person.class).find(new PersonKey(0));
+        MockDomainModel test = (MockDomainModel)Session.getMapper(MockDomainModel.class).find(new MockKey("Bob"));
         
         //a person just loaded that hasn't had anything changed about it yet
         //  should not be in the unit of work register 
         assertNull(work.getState(test));
         
-        test.setDisplayName("Bobbo");
+        work.markChanged(test);
         
         // should work if it has been marked initially as loaded
         assertEquals(UnitOfWork.State.Changed, work.getState(test));
@@ -41,22 +42,22 @@ public class UowTest {
     @Test
     public void testMarkForDeletion() {
         UnitOfWork work = Session.getUnitOfWork();
-        Person test = (Person)Session.getMapper(Person.class).find(new PersonKey(0));
+        MockDomainModel test = (MockDomainModel)Session.getMapper(MockDomainModel.class).find(new MockKey("Bob"));
         
         //a person just loaded that hasn't had anything changed about it yet
         //  should not be in the unit of work register 
         assertNull(work.getState(test));
         
-        test.setDisplayName("Bobbo");
+        work.markDeleted(test);
         
         // should work if it has been marked initially as loaded
-        assertEquals(UnitOfWork.State.Changed, work.getState(test));
+        assertEquals(UnitOfWork.State.Deleted, work.getState(test));
     }
 
     @Test
     public void testReset() {
         UnitOfWork work = Session.getUnitOfWork();
-        Person test = (Person)Session.getMapper(Person.class).find(new PersonKey(0));
+        MockDomainModel test = (MockDomainModel)Session.getMapper(MockDomainModel.class).find(new MockKey("Bob"));
         
         String name = test.getDisplayName();
         

@@ -62,22 +62,27 @@ public class UserGateway extends IUserGateway {
      * Updates the data values of an existing person
      */
     @Override
-    public void update(DataContainer data) {
-        if (!(data instanceof PersonData))
+    public void update(DataContainer[] data) {
+        if (!(data instanceof PersonData[]))
         {
             return;
         }
         
-        PersonData object = (PersonData)data;
+        PersonData[] objects = (PersonData[])data;
         
         try {
-            String sql = "UPDATE persons SET name=?,password=? WHERE id=?";
-            PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
-            stmt.setString(1, object.name);
-            stmt.setLong(2, object.password);
-            stmt.setLong(3, object.id);
+            for (int i = 0; i < data.length; i++)
+            {
+                PersonData object = objects[i];
+                
+                String sql = "UPDATE persons SET name=?,password=? WHERE id=?";
+                PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
+                stmt.setString(1, object.name);
+                stmt.setLong(2, object.password);
+                stmt.setLong(3, object.id);
 
-            stmt.executeUpdate();
+                stmt.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -88,20 +93,30 @@ public class UserGateway extends IUserGateway {
      * Inserst a new person into the database
      */
     @Override
-    public ResultSet insert(DataContainer data) {
-        if (!(data instanceof PersonData))
+    public ResultSet insert(DataContainer[] data) {
+        if (!(data instanceof PersonData[]))
         {
             return null;
         }
 
-        PersonData object = (PersonData)data;
+        PersonData[] objects = (PersonData[])data;
         
         try {
-            String sql = "INSERT INTO persons (name, password) VALUES (?, ?)";
+            String sql = "INSERT INTO persons (name, password) VALUES ";
+            sql += "(?, ?)";
+            for (int i = 1; i < data.length; i++)
+            {
+                sql += ",(?,?)";
+            }
+            
             PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
-            stmt.setString(1, object.name);
-            stmt.setLong(2, object.password);
-
+            
+            for (int i = 0, x = 1; i < data.length; i++, x += 2)
+            {
+                stmt.setString(x, objects[i].name);
+                stmt.setLong(x+1, objects[i].password);
+            }
+            
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException(
@@ -128,18 +143,24 @@ public class UserGateway extends IUserGateway {
      * Deletes a person from the database
      */
     @Override
-    public boolean delete(Key key) {
-        if (!(key instanceof PersonKey))
+    public boolean delete(Key[] key) {
+        if (!(key instanceof PersonKey[]))
         {
             throw (new InvalidParameterException("You can only delete users by using Person Keys"));
         }
         
-        PersonKey person = (PersonKey)key;
+        PersonKey[] persons = (PersonKey[])key;
         
         try {
-            String sql = "DELETE FROM persons WHERE id=?";
+            String sql = "DELETE FROM persons WHERE id IN (?";
+            
+            for (int i = 1; i < key.length; i++){ sql += ",?"; }
+            sql += ")";
+            
             PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
-            stmt.setLong(1, person.id);
+            for (int i = 0, n = 1; i < persons.length; i++, n++) {
+                stmt.setLong(n, persons[i].id);
+            }
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {

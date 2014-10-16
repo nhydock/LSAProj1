@@ -33,29 +33,43 @@ public class FriendGateway extends Gateway {
     }
 
     @Override
-    public void update(DataContainer data) {
-        FriendListData object = (FriendListData)data;
-        
+    public void update(DataContainer[] data) {
+        FriendListData[] object = (FriendListData[]) data;
+
         try {
-            String sql = "DELETE FROM friend_map WHERE pid = ?";
+            String sql = "DELETE FROM friend_map WHERE pid IN (";
+
+            sql += object[0].id;
+            for (int i = 1; i < object.length; i++) {
+                sql += "," + object[i].id;
+            }
+            sql += ")";
 
             PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
-            stmt.setLong(1, object.id);
             stmt.executeUpdate();
 
             sql = "INSERT INTO friend_map f (pid, fid) VALUES ";
 
-            long[] friends = object.friends;
-            if (friends.length > 0) {
-                // sql += "(" + object.getUserID() + ", " + f.getID() + ")";
-                sql += "(" + friends[0] + ")";
-                for (int i = 1; i < friends.length; i++) {
-                    sql += ",(" + friends[i] + ")";
+            for (int i = 0; i < object.length; i++) {
+                if (i > 0) {
+                    sql += ",";
                 }
-            }
+                sql += "(";
+                FriendListData d = object[i];
+                long[] friends = d.friends;
+                if (friends.length > 0) {
+                    // sql += "(" + object.getUserID() + ", " + f.getID() + ")";
+                    sql += "(" + d.id + "," + friends[0] + ")";
+                    for (int n = 1; n < friends.length; n++) {
+                        sql += ",(" + d.id + "," + friends[n] + ")";
+                    }
+                }
 
-            stmt = Session.getConnection().prepareStatement(sql);
-            stmt.executeUpdate();
+                sql += ")";
+
+                stmt = Session.getConnection().prepareStatement(sql);
+                stmt.executeUpdate();
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,22 +78,29 @@ public class FriendGateway extends Gateway {
     }
 
     @Override
-    public ResultSet insert(DataContainer data) {
+    public ResultSet insert(DataContainer[] data) {
         // can not insert entire maps, updating handles insertion of new
         // relations
         return null;
     }
 
     @Override
-    public boolean delete(Key key) {
-        FriendListKey list = (FriendListKey) key;
+    public boolean delete(Key[] key) {
+        FriendListKey[] list = (FriendListKey[]) key;
         // can not delete friend maps, just remove values from map and persist
         // the changes
         try {
-            String sql = "DELETE FROM friend_map WHERE pid = ?";
+            String sql = "DELETE FROM friend_map WHERE pid IN (?";
+
+            for (int i = 1; i < key.length; i++) {
+                sql += ",?";
+            }
+            sql += ")";
 
             PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
-            stmt.setLong(1, list.id);
+            for (int i = 0, n = 1; i < list.length; i++, n++) {
+                stmt.setLong(n, list[i].id);
+            }
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {

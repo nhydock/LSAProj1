@@ -15,9 +15,9 @@ import data.keys.Key;
 public abstract class Gateway {
     abstract public ResultSet find(Key key);
 
-    abstract public void update(DataContainer data);
+    abstract public void update(DataContainer[] data);
 
-    abstract public ResultSet insert(DataContainer data);
+    abstract public ResultSet insert(DataContainer[] data);
 
-    abstract public boolean delete(Key object);
+    abstract public boolean delete(Key[] object);
 }

@@ -49,32 +49,44 @@ public class FriendsMapper implements DataMapper<RealFriendList> {
     }
 
     @Override
-    public void update(RealFriendList obj) {
-        ArrayList<Friend> list = obj.getFriends();
-        long[] friends = new long[list.size()];
-        for (int i = 0; i < friends.length; i++)
-        {
-            friends[i] = list.get(i).getID();
-        }
+    public void update(RealFriendList[] obj) {
         
-        long id = obj.getUserID();
-        FriendListData data = new FriendListData(id, friends);
         FriendGateway gate = Session.getGateway(FriendGateway.class);
+        FriendListData[] data = new FriendListData[obj.length];
+        for (int i = 0; i < obj.length; i++)
+        {
+            RealFriendList list = obj[i];
+            ArrayList<Friend> friends = list.getFriends();
+            long[] friendIDs = new long[friends.size()];
+            for (int n = 0; n < friends.size(); n++)
+            {
+                friendIDs[n] = friends.get(n).getID();
+            }
+            data[i] = new FriendListData(list.getUserID(), friendIDs);
+        }
         gate.update(data);
     }
 
     @Override
-    public void insert(RealFriendList obj) {
+    public void insert(RealFriendList[] obj) {
         update(obj);
         
     }
 
     @Override
-    public void delete(RealFriendList obj) {
-        long id = obj.getUserID();
-        FriendListKey key = new FriendListKey(id);
+    public void delete(RealFriendList[] obj) {
+        
+        Key[] keys = new Key[obj.length];
+        
+        for (int i = 0; i < obj.length; i++)
+        {
+            RealFriendList list = obj[i];
+            FriendListKey key = new FriendListKey(list.getUserID());
+            keys[i] = key;
+        }
+        
         FriendGateway gate = Session.getGateway(FriendGateway.class);
-        gate.delete(key);
+        gate.delete(keys);
     }
 
     @Override

@@ -8,6 +8,7 @@ import data.gateway.interfaces.Gateway;
 import domain.IdentityMap;
 import domain.UnitOfWork;
 import domain.mappers.DataMapper;
+import domain.mappers.UserMapper;
 import domain.model.DomainModelObject;
 
 public class Session {
@@ -28,16 +29,21 @@ public class Session {
             connection = DriverManager.getConnection("jdbc:odbc:" + db);
         } catch (Exception ex) {
             // if not successful, quit
-            System.out
-                    .println("Cannot open database -- make sure ODBC is configured properly.");
-            System.exit(1);
+            System.out.println("Cannot open database -- make sure ODBC is configured properly.");
+            connection = null;
         }
         
         mappers = new HashMap<Class<? extends DataMapper<?>>, DataMapper<?>>();
         identityMaps = new HashMap<Class<? extends DomainModelObject>, IdentityMap<?>>();
         unitOfWork = new UnitOfWork();
+        
+        addMappers();
     }
     
+    private void addMappers() {
+        mappers.put(UserMapper.class, new UserMapper());
+    }
+
     private static final ThreadLocal<Session> session = new ThreadLocal<Session>() {
         public Session initialValue() {
             return new Session();
@@ -60,19 +66,24 @@ public class Session {
     {
         if (DomainModelObject.class.isAssignableFrom(cls))
         {
-            Class<?> c = cls.getClass();
-            DataMapper<?> mapper;
-            do
+            for (DataMapper<?> mapper : Session.get().mappers.values())
             {
-                mapper = Session.get().mappers.get(c);
-                c = c.getSuperclass();
-            } while (mapper == null && c != null);
-            
-            if (mapper == null)
-            {
-                throw (new NullPointerException("No mapper for type " + cls.getClass().getName() + " exists"));
+                if (mapper.getType() == cls)
+                {
+                    return mapper;
+                }
             }
-            return mapper;
+            
+            //try again looking for super types
+            for (DataMapper<?> mapper : Session.get().mappers.values())
+            {
+                if (mapper.getType().isAssignableFrom(cls))
+                {
+                    return mapper;
+                }
+            }
+            
+            throw (new NullPointerException("No mapper for type " + cls.getName() + " exists"));
         }
         else if (DataMapper.class.isAssignableFrom(cls))
         {
@@ -87,6 +98,16 @@ public class Session {
     }
 
     public static <T extends Gateway> T getGateway(Class<T> cls) {
+        if (!Session.get().gateways.containsKey(cls))
+        {
+            try {
+                T gate = cls.newInstance();
+                Session.get().gateways.put(cls, gate);
+                return gate;
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
         return cls.cast(Session.get().gateways.get(cls));
     }
     

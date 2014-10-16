@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import system.Session;
@@ -75,27 +76,33 @@ public class UnitOfWork {
      * Attempts to persist all objects registered in the Unit of Work
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void persist() {
+    public void commit() {
         for (Class<? extends DomainModelObject> type : register.keySet())
         {
             DataMapper mapper = Session.getMapper(type);
             HashMap<DomainModelObject, State> objects = register.get(type);
+            ArrayList<DomainModelObject> changed = new ArrayList<DomainModelObject>();
+            ArrayList<DomainModelObject> created = new ArrayList<DomainModelObject>();
+            ArrayList<DomainModelObject> deleted = new ArrayList<DomainModelObject>();
             for (DomainModelObject obj : objects.keySet())
             {
                 State state = objects.get(obj);
                 if (state == State.Changed)
                 {
-                    mapper.update(obj);
+                    changed.add(obj);
                 }
                 else if (state == State.Deleted)
                 {
-                    mapper.delete(obj);
+                    created.add(obj);
                 }
                 else if (state == State.Created)
                 {
-                    mapper.insert(obj);
+                    deleted.add(obj);
                 }
             }
+            mapper.update(changed.toArray(new DomainModelObject[changed.size()]));
+            mapper.insert(created.toArray(new DomainModelObject[created.size()]));
+            mapper.delete(deleted.toArray(new DomainModelObject[deleted.size()]));
         }
         register.clear();
     }

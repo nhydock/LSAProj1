@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import data.gateways.MockRealFriendGateway;
+import data.gateway.MockRealFriendGateway;
 import domain.DataMapper;
 
 public class TestPendingFriendsList {

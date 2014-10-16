@@ -44,28 +44,40 @@ public class UserMapper implements DataMapper<User> {
         return null;
     }
 
-    public void update(User user) {
-        if (user instanceof Person) {
-            Person person = (Person) user;
-            DataContainer data = new PersonData(person.getID(), person.getUserName(), person.getDisplayName(), person.getPassword());
+    public void update(User[] user) {
+        if (user instanceof Person[]) {
+            DataContainer[] data = new PersonData[user.length];
+            for (int i = 0; i < user.length; i++)
+            {
+                Person person = (Person)user[i];
+                data[i] = new PersonData(-1, person.getUserName(), person.getDisplayName(), person.getPassword());
+            }
             Session.getGateway(UserGateway.class).update(data);
         }
     }
 
-    public void insert(User user) {
-        if (user instanceof Person) {
-            Person person = (Person) user;
-            DataContainer data = new PersonData(-1, person.getUserName(), person.getDisplayName(), person.getPassword());
+    public void insert(User[] user) {
+        if (user instanceof Person[]) {
+            DataContainer[] data = new PersonData[user.length];
+            for (int i = 0; i < user.length; i++)
+            {
+                Person person = (Person)user[i];
+                data[i] = new PersonData(-1, person.getUserName(), person.getDisplayName(), person.getPassword());
+            }
             Session.getGateway(UserGateway.class).insert(data);
         }
     }
 
     @Override
-    public void delete(User user) {
-        if (user instanceof Person) {
-            Person person = (Person) user;
-            PersonKey key = new PersonKey(person.getID());
-            Session.getGateway(UserGateway.class).delete(key);
+    public void delete(User[] user) {
+        if (user instanceof Person[]) {
+            Key[] keys = new PersonKey[user.length];
+            for (int i = 0; i < user.length; i++)
+            {
+                User u = user[i];
+                keys[i] = new PersonKey(u.getID());
+            }
+            Session.getGateway(UserGateway.class).delete(keys);
         }
     }
 
