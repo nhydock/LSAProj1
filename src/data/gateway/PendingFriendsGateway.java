@@ -6,10 +6,11 @@ import java.sql.SQLException;
 
 import system.Session;
 import data.containers.DataContainer;
-import data.containers.FriendListData;
+import data.containers.PendingFriendsListData;
 import data.gateway.interfaces.Gateway;
-import data.keys.FriendListKey;
 import data.keys.Key;
+import data.keys.PendingFriendsListKey;
+import data.keys.SpecificPendingFriendsListKey;
 
 /**
  * Gateway for fetching result sets from the pending_friends table in our
@@ -24,8 +25,8 @@ public class PendingFriendsGateway extends Gateway {
 
     @Override
     public ResultSet find(Key key) {
-        if (key instanceof PendingFriendListKey) {
-            PendingFriendListKey link = (PendingFriendListKey) key;
+        if (key instanceof PendingFriendsListKey) {
+            PendingFriendsListKey link = (PendingFriendsListKey) key;
             try {
                 String sql = "SELECT * FROM pending_friends f WHERE f.pid = ? OR f.fid = ?";
                 PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
@@ -50,13 +51,17 @@ public class PendingFriendsGateway extends Gateway {
     @Override
     public ResultSet insert(DataContainer[] data) {
         // insert new pending friends into the list
-        PendingFriendListData pfldata = (PendingFriendListData) data;
+        PendingFriendsListData[] pfldata = (PendingFriendsListData[]) data;
 
         try {
-            String sql = "INSERT INTO pending_friends f (pid, fid) VALUES ";
+            String sql = "INSERT IGNORE INTO pending_friends f (pid, fid) VALUES ";
 
             for (int i = 0; i < pfldata.length; i++) {
-                sql += String.format(((i > 0) ? "," : "") + "(%d, %d)", pfldata.userID, pfldata.friendID);
+                PendingFriendsListData set = pfldata[i];
+                for (int n = 0; n < set.outgoingRequests.length; n++)
+                {
+                    sql += String.format(((i > 0) ? "," : "") + "(%d, %d)", set.userID, set.outgoingRequests[n]);
+                }
             }
 
             PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
@@ -96,9 +101,6 @@ public class PendingFriendsGateway extends Gateway {
             }
 
             PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
-            for (int i = 0, n = 1; i < list.length; i++, n++) {
-                stmt.setLong(n, list[i].id);
-            }
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {

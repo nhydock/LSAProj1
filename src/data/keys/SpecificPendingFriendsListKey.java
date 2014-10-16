@@ -2,14 +2,16 @@ package data.keys;
 
 public class SpecificPendingFriendsListKey implements Key {
     
-    public final long id;
+    public final long userID;
+    public final long friendID;
 
     /**
      * @param id
      *            - person we want the list of friends from
      */
-    public SpecificPendingFriendsListKey(long id) {
-        this.id = id;
+    public SpecificPendingFriendsListKey(long userID, long friendID) {
+        this.userID = userID;
+        this.friendID = friendID;
     }
 
     public boolean equals(Object obj) {
@@ -26,7 +28,8 @@ public class SpecificPendingFriendsListKey implements Key {
 
         // value matching
         boolean eq = true;
-        eq = eq && (key.id == this.id);
+        eq = eq && (key.userID == this.userID);
+        eq = eq && (key.friendID == this.friendID);
         return eq;
     }
 
@@ -34,7 +37,8 @@ public class SpecificPendingFriendsListKey implements Key {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (id ^ (id >>> 32));
+        result = prime * result + (int) (userID ^ (userID >>> 32));
+        result = prime * result + (int) (friendID ^ (friendID >>> 32));
         return result;
     }
 }
