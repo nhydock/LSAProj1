@@ -8,7 +8,7 @@ import domain.model.proxies.*;
 public class Person extends User {
 
     private FriendList friends;
-    private PendingFriendsList pendingFriends;
+    private IPendingFriendsList pendingFriends;
 
     private long password;
 
@@ -23,7 +23,7 @@ public class Person extends User {
         this.password = password.hashCode();
         this.displayName = displayName;
         friends = new FriendListProxy(id);
-        pendingFriends = new PendingFriendsListProxy();
+        pendingFriends = new PendingFriendsListProxy(id);
         saveValues();
         Session.getUnitOfWork().markNew(this);
     }
@@ -39,7 +39,7 @@ public class Person extends User {
         this.userName = name;
         this.password = password;
         friends = new FriendListProxy(id);
-        pendingFriends = new PendingFriendsListProxy();
+        pendingFriends = new PendingFriendsListProxy(id);
     }
 
     // public Person(long id) {
@@ -134,7 +134,7 @@ public class Person extends User {
     }
 
     public PendingFriendsList getPendingFriends() {
-        return pendingFriends;
+        return (PendingFriendsList) pendingFriends;
     }
 
     public void requestFriend(String username) {
