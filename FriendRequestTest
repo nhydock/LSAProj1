@@ -13,9 +13,12 @@ CommandToPersistChanges;
 CommandToSelectUser fred pw1;
 CommandToRetrieveFriendList <userID>; henry
 
-// Test multiple creations and multiple friendRequests.
+// Test multiple creations
 CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
 CommandToCreateUser tom tomspass tommy; null
+
+// Test multiple friend requests
+CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
 CommandToCreateUser frank frankspass frakenstein; frank:frankspass:frankenstein
 CommandToSelectUser tom tomspass;
 CommandToMakeFriendRequest <userId> frank;
@@ -51,3 +54,32 @@ CommandToGetPendingOutgoingFriendList <userId>;
 CommandToPersistChanges;
 CommandToSelectUser frank frankspass;
 CommandToRetrieveFriendList <userID>;
+
+// Test selecting user multiple times
+CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
+CommandToCreateUser frank frankspass frakenstein; frank:frankspass:frankenstein
+CommandToSelectUser tom tomspass;
+    NEED TO ADD SOMETHING TO CHECK WHICH USER IS "IN FOCUS"
+
+// Test modify user
+CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
+CommandToSelectUser tom tomspass;
+CommandToModifyUser <userID>; timothy
+CommandToPersistChanges;
+    NEED TO ADD SOMETHING TO CHECK DISPLAY NAME
+
+// Test canceling changes
+CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
+CommandToSelectUser tom tomspass;
+CommandToModifyUser <userID>; timothy
+CommandToCancelChanges;
+    NEED TO ADD SOMETHING TO CHECK DISPLAY NAME
+
+// Test persisting changed data, then trying to cancel it
+CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
+CommandToSelectUser tom tomspass;
+CommandToModifyUser <userID>; timothy
+CommandToPersistChanges;
+CommandToCancelChanges;
+    NEED TO ADD SOMETHING TO CHECK DISPLAY NAME
+
