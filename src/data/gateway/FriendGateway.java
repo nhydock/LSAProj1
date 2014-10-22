@@ -18,7 +18,7 @@ public class FriendGateway extends Gateway {
         if (key instanceof FriendListKey) {
             FriendListKey link = (FriendListKey) key;
             try {
-                String sql = "SELECT * FROM friend_map f JOIN persons p ON f.fid = p.id WHERE f.pid = ?";
+                String sql = "SELECT * FROM friend_map f JOIN persons p ON f.fid = p.id WHERE f.pid = ? AND f.accepted = 1";
                 PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
                 stmt.setLong(1, link.id);
                 ResultSet result = stmt.executeQuery();

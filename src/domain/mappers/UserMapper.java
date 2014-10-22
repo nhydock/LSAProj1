@@ -1,7 +1,6 @@
 package domain.mappers;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import system.Session;
 import data.containers.DataContainer;
@@ -9,6 +8,7 @@ import data.containers.PersonData;
 import data.gateway.UserGateway;
 import data.keys.FriendKey;
 import data.keys.Key;
+import data.keys.LoginKey;
 import data.keys.PersonKey;
 import domain.mappers.DataMapper;
 import domain.model.Friend;
@@ -23,23 +23,32 @@ public class UserMapper implements DataMapper<User> {
             return Session.getIdentityMap(User.class).get(key);
         }
         
-        try {
-            if ((key instanceof PersonKey) || (key instanceof FriendKey)) {
-                ResultSet result = Session.getGateway(UserGateway.class).find(key);
-                User obj = null;
+        if ((key instanceof PersonKey) || (key instanceof FriendKey) || (key instanceof LoginKey)) {
+            User obj = null;
+            
+            try (ResultSet result = Session.getGateway(UserGateway.class).find(key))
+            {
+                result.next();
                 if (key instanceof PersonKey)
                 {
                     obj = new Person(result.getString("name"), result.getLong("password"), result.getLong("id"));
+                }
+                //make sure person getting mapped in is good to go
+                else if (key instanceof LoginKey)
+                {
+                    obj = new Person(result.getString("name"), result.getLong("password"), result.getLong("id"));
+                    key = new PersonKey(obj.getID());
                 }
                 else
                 {
                     obj = new Friend(result.getString("name"), result.getString("name"));
                 }
                 Session.getIdentityMap(User.class).put(key, obj);
-                return obj; 
+            } catch (Exception e)
+            {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return obj;
         }
         return null;
     }

@@ -37,7 +37,7 @@ public class CommandToGetPendingIncomingFriendList implements Command {
     @Override
     public void execute() {
         Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userID));
-        pendingFriendsList = p.getPendingFriends().getIncomingAsArrayList();
+        pendingFriendsList = p.getPendingFriends().getIncomingRequests();
     }
 
     /**
@@ -47,7 +47,6 @@ public class CommandToGetPendingIncomingFriendList implements Command {
      */
     @Override
     public ArrayList<Friend> getResult() {
-        // TODO Auto-generated method stub
         return pendingFriendsList;
     }
 

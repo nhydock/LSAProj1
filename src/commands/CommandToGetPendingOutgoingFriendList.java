@@ -16,9 +16,8 @@ import domain.model.Person;
  *
  */
 public class CommandToGetPendingOutgoingFriendList implements Command {
-
+    private ArrayList<Friend> pendingFriendsList;
     private int userID;
-    private ArrayList<Friend> friendsList;
 
     /**
      * The userID of the current user
@@ -36,8 +35,9 @@ public class CommandToGetPendingOutgoingFriendList implements Command {
      */
     @Override
     public void execute() {
-    	Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userID));
-    	friendsList = p.getPendingFriends().getOutgoingFriends();
+        Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userID));
+        pendingFriendsList = p.getPendingFriends().getOutgoingRequests();
+    
     }
 
     /**
@@ -47,8 +47,7 @@ public class CommandToGetPendingOutgoingFriendList implements Command {
      */
     @Override
     public ArrayList<Friend> getResult() {
-        // TODO Auto-generated method stub
-        return friendsList;
+        return pendingFriendsList;
     }
 
 }

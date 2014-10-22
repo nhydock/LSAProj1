@@ -4,37 +4,29 @@ import java.util.ArrayList;
 
 public class PendingFriendsList extends DomainModelObject implements IPendingFriendsList{
 
-    private ArrayList<Friend> incomingFriendsList;
-    private ArrayList<Friend> outgoingFriendsList;
-
-    public PendingFriendsList() {
-        incomingFriendsList = new ArrayList<Friend>();
-        outgoingFriendsList = new ArrayList<Friend>();
-    }
-
-    @Override
-    public void insert(Friend friend) {
-        outgoingFriendsList.add(friend);
-    }
-
-    @Override
-    public ArrayList<Friend> getIncomingAsArrayList() {
-        return incomingFriendsList;
-    }
+    private int id;
+    private ArrayList<Friend> requests;
+    private ArrayList<Friend> incomingRequests;
+    private ArrayList<Friend> outgoingRequests;
     
-    @Override
-    public ArrayList<Friend> getOutgoingAsArrayList() {
-        return outgoingFriendsList;
+    public PendingFriendsList(long id, ArrayList<Friend> in, ArrayList<Friend> out) {
+        requests = new ArrayList<Friend>();
+        requests.addAll(in);
+        requests.addAll(out);
+        incomingRequests = in;
+        outgoingRequests = out;
     }
 
     @Override
-    public boolean removeIncoming(Friend friend) {
-        return incomingFriendsList.remove(friend);
+    public ArrayList<Friend> getAllRequests() {
+        return requests;
     }
-    
+
     @Override
-    public boolean removeOutgoing(Friend friend) {
-        return outgoingFriendsList.remove(friend);
+    public boolean requestFriend(Friend friend) {
+        boolean added = outgoingRequests.add(friend);
+        added = added && requests.add(friend);
+        return added;
     }
 
     @Override
@@ -50,19 +42,23 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
     }
 
     @Override
-    public ArrayList<Friend> getIncomingFriends() {
-        return incomingFriendsList;
-    }
-    
-    @Override
-    public ArrayList<Friend> getOutgoingFriends() {
-        return outgoingFriendsList;
+    public long getUserID() {
+        return id;
     }
 
     @Override
-    public long getUserID() {
-        // TODO Auto-generated method stub
-        return 0;
+    public ArrayList<Friend> getIncomingRequests() {
+        return incomingRequests;
+    }
+
+    @Override
+    public ArrayList<Friend> getOutgoingRequests() {
+        return outgoingRequests;
+    }
+
+    @Override
+    public boolean denyFriend(Friend friend) {
+        return incomingRequests.remove(friend);
     }
 
 }

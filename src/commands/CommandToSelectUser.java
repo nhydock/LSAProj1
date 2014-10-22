@@ -1,18 +1,18 @@
 package commands;
 
 import system.Session;
-import data.keys.FriendKey;
+import data.keys.LoginKey;
 import domain.model.Person;
 
 /**
  * Retrieve a specified user from the database into the domain model
  */
 public class CommandToSelectUser implements Command {
-    
     private String userName;
     private String password;
-    private Person person;
 
+    private Person loaded;
+    
     /**
      * @param userName
      *            the username from the user's credentials
@@ -32,10 +32,8 @@ public class CommandToSelectUser implements Command {
      */
     @Override
     public void execute() {
-        Person p = (Person) Session.getMapper(Person.class).find(new FriendKey(userName));
-        if(person.getPassword() == password.hashCode()) {
-            this.person = p;
-        }
+        LoginKey person = new LoginKey(userName, password);
+        loaded = (Person) Session.getMapper(Person.class).find(person);
     }
 
     /**
@@ -46,7 +44,7 @@ public class CommandToSelectUser implements Command {
      */
     @Override
     public Person getResult() {
-        return person;
+        return loaded;
     }
 
 }
