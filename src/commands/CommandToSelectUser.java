@@ -1,13 +1,17 @@
 package commands;
 
+import system.Session;
+import data.keys.FriendKey;
 import domain.model.Person;
 
 /**
  * Retrieve a specified user from the database into the domain model
  */
 public class CommandToSelectUser implements Command {
+    
     private String userName;
     private String password;
+    private Person person;
 
     /**
      * @param userName
@@ -28,7 +32,10 @@ public class CommandToSelectUser implements Command {
      */
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
+        Person p = (Person) Session.getMapper(Person.class).find(new FriendKey(userName));
+        if(person.getPassword() == password.hashCode()) {
+            this.person = p;
+        }
     }
 
     /**
@@ -39,8 +46,7 @@ public class CommandToSelectUser implements Command {
      */
     @Override
     public Person getResult() {
-        // TODO Auto-generated method stub
-        return null;
+        return person;
     }
 
 }
