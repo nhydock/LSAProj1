@@ -1,5 +1,7 @@
 package commands;
 
+import system.Session;
+import data.keys.LoginKey;
 import domain.model.Person;
 
 /**
@@ -9,6 +11,8 @@ public class CommandToSelectUser implements Command {
     private String userName;
     private String password;
 
+    private Person loaded;
+    
     /**
      * @param userName
      *            the username from the user's credentials
@@ -28,7 +32,8 @@ public class CommandToSelectUser implements Command {
      */
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
+        LoginKey person = new LoginKey(userName, password);
+        loaded = (Person) Session.getMapper(Person.class).find(person);
     }
 
     /**
@@ -39,8 +44,7 @@ public class CommandToSelectUser implements Command {
      */
     @Override
     public Person getResult() {
-        // TODO Auto-generated method stub
-        return null;
+        return loaded;
     }
 
 }

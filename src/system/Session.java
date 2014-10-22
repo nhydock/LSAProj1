@@ -10,6 +10,7 @@ import domain.UnitOfWork;
 import domain.mappers.DataMapper;
 import domain.mappers.UserMapper;
 import domain.model.DomainModelObject;
+import domain.model.User;
 
 public class Session {
 
@@ -19,17 +20,25 @@ public class Session {
     HashMap<Class<? extends DomainModelObject>, IdentityMap<?>> identityMaps;
     UnitOfWork unitOfWork;
     
+    //logged in user of the session
+    User user;
+    
     private Session()
     {
         // attempt to connect to the ODBC database
-        String db = "myDatabase"; // ODBC database name
+        String db = "fitness5"; // ODBC database name
+        String host = "lsagroup5.cbzhjl6tpflt.us-east-1.rds.amazonaws.com";
+        String user = "lsagroup5";
+        String pass = "lsagroupt5";
         System.out.println("Attempting to open database " + db + "...");
         try {
-            Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-            connection = DriverManager.getConnection("jdbc:odbc:" + db);
+            String connectFormat = "jdbc:mysql:%s?user=%s&password=%s";
+            
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection(String.format(connectFormat, host, user, pass));
         } catch (Exception ex) {
             // if not successful, quit
-            System.out.println("Cannot open database -- make sure ODBC is configured properly.");
+            System.out.println("Cannot open database -- make sure MySQL JDBC is configured properly.");
             connection = null;
         }
         
@@ -127,5 +136,9 @@ public class Session {
      */
     public static void kill() {
         session.set(new Session());
+    }
+    
+    public static void setUser(User user) {
+        session.get().user = user;
     }
 }

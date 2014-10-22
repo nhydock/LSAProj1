@@ -11,6 +11,7 @@ import data.containers.PersonData;
 import data.gateway.interfaces.IUserGateway;
 import data.keys.FriendKey;
 import data.keys.Key;
+import data.keys.LoginKey;
 import data.keys.PersonKey;
 
 public class UserGateway extends IUserGateway {
@@ -27,7 +28,6 @@ public class UserGateway extends IUserGateway {
             PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
             stmt.setLong(1, key.id);
             ResultSet result = stmt.executeQuery();
-            result.next();
             return result;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,8 +48,26 @@ public class UserGateway extends IUserGateway {
             PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
             stmt.setString(1, key.name);
             ResultSet result = stmt.executeQuery();
-            result.next();
-
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        return null;
+    }
+    
+    /**
+     * Finds a person using login credentials
+     * @param key
+     * @return
+     */
+    protected ResultSet find(LoginKey key) {
+        try {
+            String sql = "SELECT * FROM persons p WHERE p.name = ? AND p.password = ?";
+            PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
+            stmt.setString(1, key.username);
+            stmt.setLong(2, key.password);
+            ResultSet result = stmt.executeQuery();
             return result;
         } catch (SQLException e) {
             e.printStackTrace();
