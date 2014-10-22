@@ -1,0 +1,5 @@
+CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
+CommandToSelectUser tom tomspass;
+CommandToModifyUser <userID>; timothy
+CommandToPersistChanges;
+CommandToCancelChanges;
