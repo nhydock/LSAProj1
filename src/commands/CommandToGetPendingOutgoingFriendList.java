@@ -2,7 +2,10 @@ package commands;
 
 import java.util.ArrayList;
 
+import system.Session;
+import data.keys.PersonKey;
 import domain.model.Friend;
+import domain.model.Person;
 
 /**
  * Cause the list of pending friend requests from this user to other users to be
@@ -13,7 +16,7 @@ import domain.model.Friend;
  *
  */
 public class CommandToGetPendingOutgoingFriendList implements Command {
-
+    private ArrayList<Friend> pendingFriendsList;
     private int userID;
 
     /**
@@ -32,7 +35,9 @@ public class CommandToGetPendingOutgoingFriendList implements Command {
      */
     @Override
     public void execute() {
-
+        Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userID));
+        pendingFriendsList = p.getPendingFriends().getOutgoingRequests();
+    
     }
 
     /**
@@ -42,8 +47,7 @@ public class CommandToGetPendingOutgoingFriendList implements Command {
      */
     @Override
     public ArrayList<Friend> getResult() {
-        // TODO Auto-generated method stub
-        return null;
+        return pendingFriendsList;
     }
 
 }

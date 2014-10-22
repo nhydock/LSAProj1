@@ -2,11 +2,13 @@ package domain.model.proxies;
 
 import java.util.ArrayList;
 
-import system.Session;
 import data.keys.PendingFriendsListKey;
 import domain.model.*;
 
 public class PendingFriendsListProxy extends LazyDomainObject<PendingFriendsList> implements IPendingFriendsList {
+    
+    private long id;
+    
     /**
      * @param id
      *            - user this list belongs to
@@ -15,43 +17,37 @@ public class PendingFriendsListProxy extends LazyDomainObject<PendingFriendsList
      */
     public PendingFriendsListProxy(long id) {
         super(PendingFriendsList.class, new PendingFriendsListKey(id));
-    }
-
-    public void insertFriend(Friend friend) {
-        proxyObject().insert(friend);
-        Session.getUnitOfWork().markChanged(proxyObject());
-    }
-
-    public void removeFriend(Friend friend) {
-        proxyObject().remove(friend);
-        Session.getUnitOfWork().markChanged(proxyObject());
-    }
-
-    public ArrayList<Friend> getFriends() {
-        return proxyObject().getFriends();
+        this.id = id;
     }
 
     @Override
     public long getUserID() {
-        return 0;
+        return id;
     }
 
     @Override
-    public void insert(Friend friend) {
-        // TODO Auto-generated method stub
-        
+    public ArrayList<Friend> getAllRequests() {
+        return proxyObject().getAllRequests();
     }
 
     @Override
-    public ArrayList<Friend> getAsArrayList() {
-        // TODO Auto-generated method stub
-        return null;
+    public boolean requestFriend(Friend friend) {
+        return proxyObject().requestFriend(friend);
     }
 
     @Override
-    public boolean remove(Friend friend) {
-        // TODO Auto-generated method stub
-        return false;
+    public ArrayList<Friend> getIncomingRequests() {
+        return proxyObject().getIncomingRequests();
+    }
+
+    @Override
+    public ArrayList<Friend> getOutgoingRequests() {
+        return proxyObject().getOutgoingRequests();
+    }
+
+    @Override
+    public boolean denyFriend(Friend friend) {
+        return proxyObject().denyFriend(friend);
     }
 
 }

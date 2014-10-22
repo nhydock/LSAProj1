@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 public interface IPendingFriendsList {
 
-    public void insert(Friend friend);
-    public ArrayList<Friend> getAsArrayList();
-    public boolean remove(Friend friend);
+    public ArrayList<Friend> getAllRequests();
+    public ArrayList<Friend> getIncomingRequests();
+    public ArrayList<Friend> getOutgoingRequests();
+    public boolean requestFriend(Friend friend);
+    public boolean denyFriend(Friend friend);
     public void rollbackValues();
-    public ArrayList<Friend> getFriends();
     public long getUserID();
 }

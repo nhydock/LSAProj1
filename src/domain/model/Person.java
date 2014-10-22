@@ -115,7 +115,7 @@ public class Person extends User {
 
     public void acceptFriendRequest(Friend friend) {
 
-        boolean removed = pendingFriends.remove(friend);
+        boolean removed = pendingFriends.requestFriend(friend);
         if (removed) {
             friends.insertFriend(friend);
         }
@@ -130,7 +130,7 @@ public class Person extends User {
     }
 
     public void declineFriendRequest(Friend friend) {
-        pendingFriends.remove(friend);
+        pendingFriends.requestFriend(friend);
     }
 
     public PendingFriendsList getPendingFriends() {

@@ -26,13 +26,13 @@ public class TestPendingFriendsList {
 
     @Test
     public void testInitialization() {
-        assertNotNull(person.getPendingFriends().getAsArrayList());
+        assertNotNull(person.getPendingFriends().getAllRequests());
     }
 
     @Test
     public void testInsertingFriend() {
         person.getPendingFriends().insert(friend);
-        assertEquals(person.getPendingFriends().getAsArrayList().size(), 1);
+        assertEquals(person.getPendingFriends().getAllRequests().size(), 1);
     }
 
     @Test
@@ -46,14 +46,14 @@ public class TestPendingFriendsList {
     public void testAcceptingRequest() {
         person.getPendingFriends().insert(friend);
         person.acceptFriendRequest(friend);
-        assertEquals(person.getPendingFriends().getAsArrayList().size(), 0);
+        assertEquals(person.getPendingFriends().getAllRequests().size(), 0);
         assertEquals(person.getFriends().get(0).getDisplayName(), "Athena");
     }
 
     @Test
     public void testAcceptingRequestNonExistant() {
         person.acceptFriendRequest(friend);
-        assertEquals(person.getPendingFriends().getAsArrayList().size(), 0);
+        assertEquals(person.getPendingFriends().getAllRequests().size(), 0);
         assertEquals(person.getFriends().size(), 0);
     }
 

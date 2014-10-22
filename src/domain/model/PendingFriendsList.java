@@ -4,25 +4,29 @@ import java.util.ArrayList;
 
 public class PendingFriendsList extends DomainModelObject implements IPendingFriendsList{
 
-    private ArrayList<Friend> friends;
-
-    public PendingFriendsList() {
-        friends = new ArrayList<Friend>();
+    private int id;
+    private ArrayList<Friend> requests;
+    private ArrayList<Friend> incomingRequests;
+    private ArrayList<Friend> outgoingRequests;
+    
+    public PendingFriendsList(long id, ArrayList<Friend> in, ArrayList<Friend> out) {
+        requests = new ArrayList<Friend>();
+        requests.addAll(in);
+        requests.addAll(out);
+        incomingRequests = in;
+        outgoingRequests = out;
     }
 
     @Override
-    public void insert(Friend friend) {
-        friends.add(friend);
+    public ArrayList<Friend> getAllRequests() {
+        return requests;
     }
 
     @Override
-    public ArrayList<Friend> getAsArrayList() {
-        return friends;
-    }
-
-    @Override
-    public boolean remove(Friend friend) {
-        return friends.remove(friend);
+    public boolean requestFriend(Friend friend) {
+        boolean added = outgoingRequests.add(friend);
+        added = added && requests.add(friend);
+        return added;
     }
 
     @Override
@@ -38,14 +42,23 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
     }
 
     @Override
-    public ArrayList<Friend> getFriends() {
-        return friends;
+    public long getUserID() {
+        return id;
     }
 
     @Override
-    public long getUserID() {
-        // TODO Auto-generated method stub
-        return 0;
+    public ArrayList<Friend> getIncomingRequests() {
+        return incomingRequests;
+    }
+
+    @Override
+    public ArrayList<Friend> getOutgoingRequests() {
+        return outgoingRequests;
+    }
+
+    @Override
+    public boolean denyFriend(Friend friend) {
+        return incomingRequests.remove(friend);
     }
 
 }

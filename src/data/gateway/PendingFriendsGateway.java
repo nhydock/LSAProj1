@@ -28,7 +28,7 @@ public class PendingFriendsGateway extends Gateway {
         if (key instanceof PendingFriendsListKey) {
             PendingFriendsListKey link = (PendingFriendsListKey) key;
             try {
-                String sql = "SELECT * FROM pending_friends f WHERE f.pid = ? OR f.fid = ?";
+                String sql = "SELECT * FROM friend_map f JOIN persons p1 on f.fid = p1.id JOIN persons p2 on f.fid = p2.id WHERE f.pid = ? OR f.fid = ? where f.accepted = 0";
                 PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
                 stmt.setLong(1, link.id);
                 stmt.setLong(2, link.id);
