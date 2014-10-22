@@ -1,0 +1,6 @@
+CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
+CommandToCreateUser frank frankspass frakenstein; frank:frankspass:frankenstein
+CommandToSelectUser tom tomspass;
+CommandToMakeFriendRequest <userId> frank;
+CommandToSelectUser frank frankspass;
+CommandToGetPendingIncomingFriendList <userId>; tom

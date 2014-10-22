@@ -130,7 +130,7 @@ public class Person extends User {
     }
 
     public void declineFriendRequest(Friend friend) {
-        pendingFriends.requestFriend(friend);
+        pendingFriends.denyFriend(friend);
     }
 
     public PendingFriendsList getPendingFriends() {
