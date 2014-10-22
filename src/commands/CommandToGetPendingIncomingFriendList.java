@@ -37,7 +37,7 @@ public class CommandToGetPendingIncomingFriendList implements Command {
     @Override
     public void execute() {
         Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userID));
-        pendingFriendsList = p.getPendingFriends().getAsArrayList();
+        pendingFriendsList = p.getPendingFriends().getIncomingAsArrayList();
     }
 
     /**

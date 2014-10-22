@@ -17,18 +17,23 @@ public class PendingFriendsListProxy extends LazyDomainObject<PendingFriendsList
         super(PendingFriendsList.class, new PendingFriendsListKey(id));
     }
 
-    public void insertFriend(Friend friend) {
+    @Override
+    public void insert(Friend friend) {
         proxyObject().insert(friend);
         Session.getUnitOfWork().markChanged(proxyObject());
     }
 
-    public void removeFriend(Friend friend) {
-        proxyObject().remove(friend);
+    @Override
+    public boolean removeIncoming(Friend friend) {
+        boolean removed = proxyObject().removeIncoming(friend);
         Session.getUnitOfWork().markChanged(proxyObject());
+        
+        return removed;
     }
 
-    public ArrayList<Friend> getFriends() {
-        return proxyObject().getFriends();
+    @Override
+    public ArrayList<Friend> getIncomingFriends() {
+        return proxyObject().getIncomingFriends();
     }
 
     @Override
@@ -36,22 +41,31 @@ public class PendingFriendsListProxy extends LazyDomainObject<PendingFriendsList
         return 0;
     }
 
+
     @Override
-    public void insert(Friend friend) {
-        // TODO Auto-generated method stub
+    public ArrayList<Friend> getIncomingAsArrayList() {
+        return proxyObject().getIncomingAsArrayList();
+    }
+
+	@Override
+	public ArrayList<Friend> getOutgoingAsArrayList()
+	{
+		return proxyObject().getOutgoingAsArrayList();
+	}
+
+	@Override
+	public boolean removeOutgoing(Friend friend)
+	{
+		boolean removed = proxyObject().removeOutgoing(friend);
+        Session.getUnitOfWork().markChanged(proxyObject());
         
-    }
+        return removed;
+	}
 
-    @Override
-    public ArrayList<Friend> getAsArrayList() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public boolean remove(Friend friend) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	@Override
+	public ArrayList<Friend> getOutgoingFriends()
+	{
+		return proxyObject().getOutgoingFriends();
+	}
 
 }
