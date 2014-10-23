@@ -10,7 +10,7 @@ public class Person extends User {
     private FriendList friends;
     private IPendingFriendsList pendingFriends;
 
-    private long password;
+    private String password;
 
     /**
      * Construct a new person
@@ -20,7 +20,7 @@ public class Person extends User {
     public Person(String name, String password, String displayName) {
         this.userName = name;
         this.id = -1;
-        this.password = password.hashCode();
+        this.password = password;
         this.displayName = displayName;
         friends = new FriendListProxy(id);
         pendingFriends = new PendingFriendsListProxy(id);
@@ -34,7 +34,7 @@ public class Person extends User {
      * @param name
      * @param id
      */
-    public Person(String name, long password, long id) {
+    public Person(String name, String password, long id) {
         this.id = id;
         this.userName = name;
         this.password = password;
@@ -66,7 +66,7 @@ public class Person extends User {
     /**
      * @return the person's hashed password
      */
-    public long getPassword() {
+    public String getPassword() {
         return password;
     }
 
@@ -84,7 +84,7 @@ public class Person extends User {
      *            - text version of the new password
      */
     public void setPassword(String newPass) {
-        password = newPass.hashCode();
+        password = newPass;
         Session.getUnitOfWork().markChanged(this);
     }
 
@@ -159,7 +159,7 @@ public class Person extends User {
     public void rollbackValues() {
         userName = (String)values.get("name");
         displayName = (String)values.get("displayName");
-        password = (long)values.get("password");
+        password = (String)values.get("password");
     }
 
     @Override
