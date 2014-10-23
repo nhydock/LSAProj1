@@ -10,7 +10,7 @@ public class TestPerson {
     public void testInitialization() {
         long id = 0;
         String name = "Leonidas";
-        long password = 12384319L;
+        String password = "mypwd";
         Person person = new Person(name, password, id);
         Person person2 = new Person(name, "pass", "test");
         assertEquals(person.getID(), id);
@@ -24,7 +24,7 @@ public class TestPerson {
     public void testChangePassword() {
         long id = 0;
         String name = "Leonidas";
-        long password = 12384319L;
+        String password = "mypwd";
         Person person = new Person(name, password, id);
         String newpass = "qwerty";
 

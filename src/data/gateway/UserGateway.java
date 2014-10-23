@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import system.Session;
 import data.containers.DataContainer;
@@ -96,7 +97,7 @@ public class UserGateway extends IUserGateway {
                 String sql = "UPDATE persons SET name=?,password=? WHERE id=?";
                 PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
                 stmt.setString(1, object.name);
-                stmt.setLong(2, object.password);
+                stmt.setString(2, object.password);
                 stmt.setLong(3, object.id);
 
                 stmt.executeUpdate();
@@ -118,7 +119,6 @@ public class UserGateway extends IUserGateway {
         }
 
         PersonData[] objects = (PersonData[])data;
-        
         try {
             String sql = "INSERT INTO persons (name, password) VALUES ";
             sql += "(?, ?)";
@@ -127,12 +127,11 @@ public class UserGateway extends IUserGateway {
                 sql += ",(?,?)";
             }
             
-            PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
-            
+            PreparedStatement stmt = Session.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             for (int i = 0, x = 1; i < data.length; i++, x += 2)
             {
                 stmt.setString(x, objects[i].name);
-                stmt.setLong(x+1, objects[i].password);
+                stmt.setString(x+1, objects[i].password);
             }
             
             int affectedRows = stmt.executeUpdate();
