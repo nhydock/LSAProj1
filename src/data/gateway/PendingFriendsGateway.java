@@ -3,6 +3,7 @@ package data.gateway;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import system.Session;
 import data.containers.DataContainer;
@@ -64,7 +65,7 @@ public class PendingFriendsGateway extends Gateway {
                 }
             }
 
-            PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
+            PreparedStatement stmt = Session.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
