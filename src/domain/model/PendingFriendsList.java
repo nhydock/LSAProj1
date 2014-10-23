@@ -29,16 +29,21 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
         return added;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void rollbackValues() {
-        // TODO Auto-generated method stub
-        
+        this.id = (int) values.get("id");
+        this.requests = (ArrayList<Friend>) values.get("requests");
+        this.incomingRequests = (ArrayList<Friend>) values.get("incomingRequests");
+        this.outgoingRequests = (ArrayList<Friend>) values.get("outgoingRequests");
     }
 
     @Override
     public void saveValues() {
-        // TODO Auto-generated method stub
-        
+        values.put("int", id);
+        values.put("requests", requests);
+        values.put("incomingRequests", incomingRequests);
+        values.put("outgoingRequests", outgoingRequests);
     }
 
     @Override
