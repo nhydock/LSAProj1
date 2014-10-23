@@ -1,5 +1,6 @@
 package domain;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -81,9 +82,9 @@ public class UnitOfWork {
         {
             DataMapper mapper = Session.getMapper(type);
             HashMap<DomainModelObject, State> objects = register.get(type);
-            ArrayList<DomainModelObject> changed = new ArrayList<DomainModelObject>();
-            ArrayList<DomainModelObject> created = new ArrayList<DomainModelObject>();
-            ArrayList<DomainModelObject> deleted = new ArrayList<DomainModelObject>();
+            ArrayList<DomainModelObject> changed = new ArrayList();
+            ArrayList<DomainModelObject> created = new ArrayList();
+            ArrayList<DomainModelObject> deleted = new ArrayList();
             for (DomainModelObject obj : objects.keySet())
             {
                 State state = objects.get(obj);
@@ -93,16 +94,26 @@ public class UnitOfWork {
                 }
                 else if (state == State.Deleted)
                 {
-                    created.add(obj);
+                    deleted.add(obj);
                 }
                 else if (state == State.Created)
                 {
-                    deleted.add(obj);
+                    created.add(obj);
                 }
             }
-            mapper.update(changed.toArray(new DomainModelObject[changed.size()]));
-            mapper.insert(created.toArray(new DomainModelObject[created.size()]));
-            mapper.delete(deleted.toArray(new DomainModelObject[deleted.size()]));
+            if (changed.size() > 0)
+            {
+                mapper.update(changed.toArray((DomainModelObject[])Array.newInstance(type, changed.size())));
+            }
+            if (created.size() > 0)
+            {
+                System.err.println("Created: " + created.size());
+                mapper.insert(created.toArray((DomainModelObject[])Array.newInstance(type, created.size())));
+            }
+            if (deleted.size() > 0)
+            {
+                mapper.delete(deleted.toArray((DomainModelObject[])Array.newInstance(type, deleted.size())));
+            }
         }
         register.clear();
     }
