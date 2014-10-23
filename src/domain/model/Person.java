@@ -168,4 +168,10 @@ public class Person extends User {
         values.put("displayName", displayName);
         values.put("password", password);
     }
+    
+    @Override
+    public String toString()
+    {
+    	return userName + ":" + password + ":" + displayName;
+    }
 }
