@@ -1,5 +1,6 @@
 package commands;
 
+import system.Session;
 import domain.model.Person;
 
 /**
@@ -39,6 +40,7 @@ public class CommandToCreateUser implements Command {
     public void execute() {
         Person person = new Person(userName, password, displayName);
         this.person = person;
+        Session.getUnitOfWork().commit();
     }
 
     /**
