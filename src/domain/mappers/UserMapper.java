@@ -31,17 +31,17 @@ public class UserMapper implements DataMapper<User> {
                 result.next();
                 if (key instanceof PersonKey)
                 {
-                    obj = new Person(result.getString("name"), result.getString("password"), result.getLong("id"));
+                    obj = new Person(result.getString("name"), result.getString("display_name"), result.getString("password"), result.getLong("id"));
                 }
                 //make sure person getting mapped in is good to go
                 else if (key instanceof LoginKey)
                 {
-                    obj = new Person(result.getString("name"), result.getString("password"), result.getLong("id"));
+                    obj = new Person(result.getString("name"), result.getString("display_name"), result.getString("password"), result.getLong("id"));
                     key = new PersonKey(obj.getID());
                 }
                 else
                 {
-                    obj = new Friend(result.getString("name"), result.getString("name"));
+                    obj = new Friend(result.getString("name"), result.getString("display_name"));
                 }
                 Session.getIdentityMap(User.class).put(key, obj);
             } catch (Exception e)

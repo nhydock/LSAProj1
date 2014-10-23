@@ -120,11 +120,11 @@ public class UserGateway extends IUserGateway {
 
         PersonData[] objects = (PersonData[])data;
         try {
-            String sql = "INSERT INTO persons (name, password) VALUES ";
-            sql += "(?, ?)";
+            String sql = "INSERT INTO persons (name, password, display_name) VALUES ";
+            sql += "(?, ?, ?)";
             for (int i = 1; i < data.length; i++)
             {
-                sql += ",(?,?)";
+                sql += ",(?,?,?)";
             }
             
             PreparedStatement stmt = Session.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -132,6 +132,7 @@ public class UserGateway extends IUserGateway {
             {
                 stmt.setString(x, objects[i].name);
                 stmt.setString(x+1, objects[i].password);
+                stmt.setString(x+2, objects[i].displayName);
             }
             
             int affectedRows = stmt.executeUpdate();

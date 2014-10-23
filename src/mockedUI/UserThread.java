@@ -188,12 +188,12 @@ public class UserThread implements Runnable
 		cmd.execute();
 		if (parts.length == 2)
 		{
-			String result = (String) cmd.getResult();
-			if (result == null)
+			Object result = cmd.getResult();
+			if (result != null)
 			{
-				return false;
+			    return result.toString().equals(parts[1]);
 			}
-			return (result.equals(parts[1]));
+			return false;
 		}
 		return true;
 	}
