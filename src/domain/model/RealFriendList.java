@@ -39,16 +39,17 @@ public class RealFriendList extends DomainModelObject implements FriendList {
         return id;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void rollbackValues() {
-        // TODO Auto-generated method stub
-        
+        this.id = (long) values.get("id");
+        this.friends = (ArrayList<Friend>) values.get("friends");
     }
 
     @Override
     public void saveValues() {
-        // TODO Auto-generated method stub
-        
+        values.put("id", id);
+        values.put("friends", friends);
     }
 
 }
