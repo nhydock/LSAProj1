@@ -67,7 +67,7 @@ public class UserGateway extends IUserGateway {
             String sql = "SELECT * FROM persons p WHERE p.name = ? AND p.password = ?";
             PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
             stmt.setString(1, key.username);
-            stmt.setLong(2, key.password);
+            stmt.setString(2, key.password);
             ResultSet result = stmt.executeQuery();
             return result;
         } catch (SQLException e) {

@@ -34,6 +34,8 @@ public class CommandToSelectUser implements Command {
     public void execute() {
         LoginKey person = new LoginKey(userName, password);
         loaded = (Person) Session.getMapper(Person.class).find(person);
+        
+        System.err.println("Loaded Person: " + loaded.getDisplayName());
     }
 
     /**

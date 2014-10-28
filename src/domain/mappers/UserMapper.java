@@ -29,6 +29,13 @@ public class UserMapper implements DataMapper<User> {
             try (ResultSet result = Session.getGateway(UserGateway.class).find(key))
             {
                 result.next();
+                if (result.getRow() == 0)
+                {
+                    System.err.println("No person found");
+                    return null;
+                }
+                
+                System.out.println(result.getRow());
                 if (key instanceof PersonKey)
                 {
                     obj = new Person(result.getString("name"), result.getString("display_name"), result.getString("password"), result.getLong("id"));
