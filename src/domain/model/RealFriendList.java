@@ -1,6 +1,7 @@
 package domain.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import system.Session;
 
@@ -43,13 +44,15 @@ public class RealFriendList extends DomainModelObject implements FriendList {
 	@Override
     public void rollbackValues() {
         this.id = (long) values.get("id");
-        this.friends = (ArrayList<Friend>) values.get("friends");
+        friends.clear();
+        friends.addAll((ArrayList<Friend>) values.get("friends"));
     }
 
     @Override
     public void saveValues() {
         values.put("id", id);
-        values.put("friends", friends);
+        ArrayList<Friend> clonedList = new ArrayList<>(friends);
+        values.put("friends", clonedList);
     }
 
 }

@@ -1,6 +1,8 @@
 package domain.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 import system.Session;
 
@@ -36,17 +38,24 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
 	@Override
     public void rollbackValues() {
         this.id = (int) values.get("id");
-        this.requests = (ArrayList<Friend>) values.get("requests");
-        this.incomingRequests = (ArrayList<Friend>) values.get("incomingRequests");
-        this.outgoingRequests = (ArrayList<Friend>) values.get("outgoingRequests");
+        requests.clear();
+        incomingRequests.clear();
+        outgoingRequests.clear();
+        requests.addAll((ArrayList<Friend>) values.get("requests"));
+        incomingRequests.addAll((ArrayList<Friend>) values.get("incomingRequests"));
+        outgoingRequests.addAll((ArrayList<Friend>) values.get("outgoingRequests"));
+
     }
 
     @Override
     public void saveValues() {
         values.put("int", id);
-        values.put("requests", requests);
-        values.put("incomingRequests", incomingRequests);
-        values.put("outgoingRequests", outgoingRequests);
+        ArrayList<Friend> clonedList = new ArrayList<>(requests);
+        values.put("requests", clonedList);
+        clonedList = new ArrayList<>(incomingRequests);
+        values.put("incomingRequests", clonedList);
+        clonedList = new ArrayList<>(outgoingRequests);
+        values.put("outgoingRequests", clonedList);
     }
 
     @Override
