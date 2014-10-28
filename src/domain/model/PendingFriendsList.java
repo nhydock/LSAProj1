@@ -2,6 +2,8 @@ package domain.model;
 
 import java.util.ArrayList;
 
+import system.Session;
+
 public class PendingFriendsList extends DomainModelObject implements IPendingFriendsList{
 
     private int id;
@@ -26,6 +28,7 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
     public boolean requestFriend(Friend friend) {
         boolean added = outgoingRequests.add(friend);
         added = added && requests.add(friend);
+        Session.getUnitOfWork().markChanged(this);
         return added;
     }
 
@@ -63,7 +66,12 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
 
     @Override
     public boolean denyFriend(Friend friend) {
-        return incomingRequests.remove(friend);
+        boolean removed = incomingRequests.remove(friend);
+        if (removed)
+        {
+            Session.getUnitOfWork().markChanged(this);
+        }
+        return removed;
     }
 
 }
