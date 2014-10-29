@@ -2,6 +2,7 @@ package system;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 import data.gateway.*;
@@ -34,12 +35,11 @@ public class Session {
         try {
             String connectFormat = "jdbc:mysql://%s/%s?user=%s&password=%s";
             String connectURL = String.format(connectFormat, host, db, user, pass);
-            System.out.println(connectURL);
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(connectURL);
         } catch (Exception ex) {
             // if not successful, quit
-            System.out.println("Cannot open database -- make sure MySQL JDBC is configured properly.");
+            System.err.println("Cannot open database -- make sure MySQL JDBC is configured properly.");
             connection = null;
         }
         
@@ -147,6 +147,13 @@ public class Session {
      * Destroy the current session by replacing it with a new one
      */
     public static void kill() {
+    	session.get().unitOfWork.commit();
+    	try {
+			session.get().connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
         session.set(new Session());
     }
     

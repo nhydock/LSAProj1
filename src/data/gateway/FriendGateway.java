@@ -18,9 +18,10 @@ public class FriendGateway extends Gateway {
         if (key instanceof FriendListKey) {
             FriendListKey link = (FriendListKey) key;
             try {
-                String sql = "SELECT * FROM friend_map f JOIN persons p ON f.fid = p.id WHERE f.pid = ? AND f.accepted = 1";
+                String sql = "SELECT * FROM friend_map f JOIN persons p1 on f.pid = p1.id JOIN persons p2 on f.fid = p2.id WHERE f.pid = ? OR f.fid = ? and f.accepted = 1";
                 PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
                 stmt.setLong(1, link.id);
+                stmt.setLong(2, link.id);
                 ResultSet result = stmt.executeQuery();
 
                 return result;
@@ -34,43 +35,48 @@ public class FriendGateway extends Gateway {
 
     @Override
     public void update(DataContainer[] data) {
-        FriendListData[] object = (FriendListData[]) data;
+        FriendListData[] objects = (FriendListData[]) data;
 
         try {
-            String sql = "DELETE FROM friend_map WHERE pid IN (";
-
-            sql += object[0].id;
-            for (int i = 1; i < object.length; i++) {
-                sql += "," + object[i].id;
-            }
-            sql += ")";
-
-            PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
-            stmt.executeUpdate();
-
-            sql = "INSERT INTO friend_map f (pid, fid) VALUES ";
-
-            for (int i = 0; i < object.length; i++) {
-                if (i > 0) {
-                    sql += ",";
-                }
-                sql += "(";
-                FriendListData d = object[i];
-                long[] friends = d.friends;
-                if (friends.length > 0) {
-                    // sql += "(" + object.getUserID() + ", " + f.getID() + ")";
-                    sql += "(" + d.id + "," + friends[0] + ")";
-                    for (int n = 1; n < friends.length; n++) {
-                        sql += ",(" + d.id + "," + friends[n] + ")";
-                    }
-                }
-
-                sql += ")";
-
-                stmt = Session.getConnection().prepareStatement(sql);
-                stmt.executeUpdate();
+        	for (int i = 0; i < objects.length; i++)
+            {
+        		FriendListData list = objects[i];
+        		for (long friendID : list.friends)
+        		{
+        			String sql = "UPDATE friend_map SET accepted=1 WHERE (pid=? AND fid=?) OR (pid=? AND fid=?)";
+                    PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
+                    stmt.setLong(1, list.id);
+                    stmt.setLong(2, friendID);
+                    stmt.setLong(3, friendID);
+                    stmt.setLong(4, list.id);
+                    stmt.executeUpdate();
+                    System.out.println(stmt.toString());
+        		}
             }
 
+            String sql = "DELETE FROM friend_map WHERE ";
+            boolean remove = false;
+            for (int i = 0; i < objects.length; i++)
+            {
+        		FriendListData list = objects[i];
+        		remove = remove || list.toRemove.length > 0;
+        		for (int n = 0; n < list.toRemove.length; n++)
+        		{
+        			sql += String.format("(pid=%d AND fid=%d)", list.id, list.toRemove[n]);
+        			if (n + 1 < list.toRemove.length)
+        			{
+        				sql += " OR ";
+        			}
+        		}
+        		if (i + 1 < objects.length)
+        		{
+        			sql += " OR ";
+        		}
+            }
+            if (remove) {
+	            PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
+	            stmt.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-1);

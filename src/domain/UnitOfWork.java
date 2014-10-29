@@ -107,7 +107,6 @@ public class UnitOfWork {
             }
             if (created.size() > 0)
             {
-                System.err.println("Created: " + created.size());
                 mapper.insert(created.toArray((DomainModelObject[])Array.newInstance(type, created.size())));
             }
             if (deleted.size() > 0)

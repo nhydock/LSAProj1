@@ -2,6 +2,7 @@ package commands;
 
 import system.Session;
 import data.keys.LoginKey;
+import data.keys.PersonKey;
 import domain.model.Person;
 
 /**
@@ -34,8 +35,8 @@ public class CommandToSelectUser implements Command {
     public void execute() {
         LoginKey person = new LoginKey(userName, password);
         loaded = (Person) Session.getMapper(Person.class).find(person);
-        
-        System.err.println("Loaded Person: " + loaded.getDisplayName());
+        Session.kill();
+        Session.getIdentityMap(Person.class).put(new PersonKey(loaded.getID()), loaded);
     }
 
     /**

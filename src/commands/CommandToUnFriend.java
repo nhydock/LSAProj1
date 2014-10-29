@@ -1,7 +1,9 @@
 package commands;
 
 import system.Session;
+import data.keys.FriendKey;
 import data.keys.PersonKey;
+import domain.model.Friend;
 import domain.model.Person;
 
 /**
@@ -34,9 +36,9 @@ public class CommandToUnFriend implements Command {
      */
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
         Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userIDOfRequester));
-        p.removeFriend(userNameOfRequestee);
+        Friend f = (Friend)Session.getMapper(Person.class).find(new FriendKey(userNameOfRequestee));
+        p.removeFriend(f);
     }
 
     /**

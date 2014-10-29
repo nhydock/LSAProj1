@@ -13,6 +13,7 @@ import data.keys.Key;
 import domain.IdentityMap;
 import domain.model.Friend;
 import domain.model.RealFriendList;
+import domain.model.User;
 
 public class FriendsMapper implements DataMapper<RealFriendList> {
 
@@ -26,13 +27,20 @@ public class FriendsMapper implements DataMapper<RealFriendList> {
         try {
             ResultSet result = Session.getGateway(FriendGateway.class).find(key);
             FriendListKey link = (FriendListKey)key;
-            ArrayList<Friend> friends = new ArrayList<Friend>();
+            ArrayList<User> friends = new ArrayList<User>();
 
             while (result.next()) {
-                Friend friend = new Friend(result.getString("p.name"),
-                        result.getString("p.name"));
+            	Friend friend;
+            	if (result.getLong("f.pid") == link.id)
+                {
+                    friend = new Friend(result.getString("p2.name"), result.getString("p2.name"), result.getLong("p2.id"));
+                }
+                else
+                {
+                    friend = new Friend(result.getString("p1.name"), result.getString("p1.name"), result.getLong("p1.id"));
+                }
                 friends.add(friend);
-
+                
                 // insert into the data mapper the loaded friends
                 String name = friend.getUserName();
                 FriendKey fkey = new FriendKey(name);
@@ -56,13 +64,19 @@ public class FriendsMapper implements DataMapper<RealFriendList> {
         for (int i = 0; i < obj.length; i++)
         {
             RealFriendList list = obj[i];
-            ArrayList<Friend> friends = list.getFriends();
+            ArrayList<User> friends = list.getFriends();
+            ArrayList<User> removed = list.getRemovedFriends();
             long[] friendIDs = new long[friends.size()];
+            long[] removeIDs = new long[removed.size()];
             for (int n = 0; n < friends.size(); n++)
             {
                 friendIDs[n] = friends.get(n).getID();
             }
-            data[i] = new FriendListData(list.getUserID(), friendIDs);
+            for (int n = 0; n < removed.size(); n++)
+            {
+            	removeIDs[n] = removed.get(n).getID();
+            }
+            data[i] = new FriendListData(list.getUserID(), friendIDs, removeIDs);
         }
         gate.update(data);
     }
@@ -70,7 +84,6 @@ public class FriendsMapper implements DataMapper<RealFriendList> {
     @Override
     public void insert(RealFriendList[] obj) {
         update(obj);
-        
     }
 
     @Override

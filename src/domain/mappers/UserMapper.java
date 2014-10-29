@@ -18,13 +18,18 @@ import domain.model.User;
 public class UserMapper implements DataMapper<User> {
     
     public User find(Key key) {
-        if (Session.getIdentityMap(User.class).containsKey(key))
-        {
-            return Session.getIdentityMap(User.class).get(key);
-        }
-        
+    	
         if ((key instanceof PersonKey) || (key instanceof FriendKey) || (key instanceof LoginKey)) {
             User obj = null;
+
+            if (key instanceof PersonKey && Session.getIdentityMap(Person.class).containsKey(key))
+            {
+                return Session.getIdentityMap(Person.class).get(key);
+            }
+            else if (key instanceof FriendKey && Session.getIdentityMap(Friend.class).containsKey(key))
+            {
+            	return Session.getIdentityMap(Friend.class).get(key);
+            }
             
             try (ResultSet result = Session.getGateway(UserGateway.class).find(key))
             {
@@ -35,22 +40,26 @@ public class UserMapper implements DataMapper<User> {
                     return null;
                 }
                 
-                System.out.println(result.getRow());
                 if (key instanceof PersonKey)
                 {
                     obj = new Person(result.getString("name"), result.getString("display_name"), result.getString("password"), result.getLong("id"));
+
+                    Session.getIdentityMap(Person.class).put(key, obj);
                 }
                 //make sure person getting mapped in is good to go
                 else if (key instanceof LoginKey)
                 {
                     obj = new Person(result.getString("name"), result.getString("display_name"), result.getString("password"), result.getLong("id"));
                     key = new PersonKey(obj.getID());
+
+                    Session.getIdentityMap(Person.class).put(key, obj);
                 }
                 else
                 {
-                    obj = new Friend(result.getString("name"), result.getString("display_name"));
+                    obj = new Friend(result.getString("name"), result.getString("display_name"), result.getLong("id"));
+                    
+                    Session.getIdentityMap(Friend.class).put(key, obj);
                 }
-                Session.getIdentityMap(User.class).put(key, obj);
             } catch (Exception e)
             {
                 e.printStackTrace();

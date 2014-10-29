@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import system.Session;
 import data.keys.PersonKey;
-import domain.model.Friend;
 import domain.model.Person;
+import domain.model.User;
 
 /**
  * Cause the list of pending friend requests from this user to other users to be
@@ -16,7 +16,7 @@ import domain.model.Person;
  *
  */
 public class CommandToGetPendingOutgoingFriendList implements Command {
-    private ArrayList<Friend> pendingFriendsList;
+    private ArrayList<User> pendingFriendsList;
     private int userID;
 
     /**
@@ -37,7 +37,6 @@ public class CommandToGetPendingOutgoingFriendList implements Command {
     public void execute() {
         Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userID));
         pendingFriendsList = p.getPendingFriends().getOutgoingRequests();
-    
     }
 
     /**
@@ -48,7 +47,7 @@ public class CommandToGetPendingOutgoingFriendList implements Command {
     @Override
     public String getResult() {
     	String string = "";
-    	for(Friend f : pendingFriendsList) {
+    	for(User f : pendingFriendsList) {
     		if(string.equals("")) {
         		string = f.getUserName();
     		} else {

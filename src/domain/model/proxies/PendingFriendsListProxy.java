@@ -26,28 +26,33 @@ public class PendingFriendsListProxy extends LazyDomainObject<PendingFriendsList
     }
 
     @Override
-    public ArrayList<Friend> getAllRequests() {
+    public ArrayList<User> getAllRequests() {
         return proxyObject().getAllRequests();
     }
 
     @Override
-    public boolean requestFriend(Friend friend) {
+    public boolean requestFriend(User friend) {
         return proxyObject().requestFriend(friend);
     }
 
     @Override
-    public ArrayList<Friend> getIncomingRequests() {
+    public ArrayList<User> getIncomingRequests() {
         return proxyObject().getIncomingRequests();
     }
 
     @Override
-    public ArrayList<Friend> getOutgoingRequests() {
+    public ArrayList<User> getOutgoingRequests() {
         return proxyObject().getOutgoingRequests();
     }
 
     @Override
-    public boolean denyFriend(Friend friend) {
+    public boolean denyFriend(User friend) {
         return proxyObject().denyFriend(friend);
     }
+
+	@Override
+	public boolean removeRequest(User friend) {
+		return proxyObject().removeRequest(friend);
+	}
 
 }

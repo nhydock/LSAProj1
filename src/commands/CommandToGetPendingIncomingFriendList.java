@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import system.Session;
 import data.keys.PersonKey;
-import domain.model.Friend;
 import domain.model.Person;
+import domain.model.User;
 
 /**
  * Cause the list of friend requests from other user to this user to be fetched
@@ -18,7 +18,7 @@ import domain.model.Person;
 public class CommandToGetPendingIncomingFriendList implements Command {
 
     private int userID;
-    ArrayList<Friend> pendingFriendsList;
+    ArrayList<User> pendingFriendsList;
 
     /**
      * The userID of the current user
@@ -46,8 +46,16 @@ public class CommandToGetPendingIncomingFriendList implements Command {
      * @see Command#getResult()
      */
     @Override
-    public ArrayList<Friend> getResult() {
-        return pendingFriendsList;
+    public String getResult() {
+    	String string = "";
+    	for(User f : pendingFriendsList) {
+    		if(string.equals("")) {
+        		string = f.getUserName();
+    		} else {
+        		string += " " + f.getUserName();
+    		}
+    	}
+        return string;
     }
 
 }

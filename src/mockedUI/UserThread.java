@@ -47,17 +47,7 @@ public class UserThread implements Runnable
 	private static final String INSERT_USER_ID = "<userID>";
 	private Scanner commandReader;
 	private int currentUserID;
-	private boolean running;
-
-	/**
-	 * Checks to see if this thread is currently running
-	 * @return true if we are still working
-	 */
-	public boolean isRunning()
-	{
-		return running;
-	}
-
+	
 	/**
 	 * 
 	 * @param fileTitle
@@ -191,7 +181,9 @@ public class UserThread implements Runnable
 		if(cmd instanceof CommandToSelectUser) {
 			Person personResult = (Person) cmd.getResult();
 			this.currentUserID = (int) personResult.getID();
+			System.out.println("current user: " + personResult.getUserName());
 		}
+		System.out.println("ran command " + cmd);
 		if (parts.length == 2)
 		{
 			Object result = cmd.getResult();
@@ -212,8 +204,7 @@ public class UserThread implements Runnable
 	 */
 	@Override
 	public void run()
-	{
-		this.running = true;  
+	{ 
 		String input = commandReader.nextLine();
 		boolean allIsWell = true;
 		while (allIsWell && input != null)
@@ -228,14 +219,14 @@ public class UserThread implements Runnable
 				if (commandReader.hasNextLine())
 				{
 					input = commandReader.nextLine();
+					System.out.println(input);
 				} else
 				{
 					input = null;
 				}
 			}
 		}
-		this.running = false;
-
+		commandReader.close();
 	}
 
 	/**

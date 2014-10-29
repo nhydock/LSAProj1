@@ -6,6 +6,7 @@ import system.Session;
 import data.keys.PersonKey;
 import domain.model.Friend;
 import domain.model.Person;
+import domain.model.User;
 
 /**
  * Cause a user's friend list to be fetched from the domain model (may or may
@@ -17,7 +18,7 @@ import domain.model.Person;
 public class CommandToRetrieveFriendList implements Command {
 
     private int userID;
-    private ArrayList<Friend> list;
+    private ArrayList<User> list;
 
     /**
      * The userID of the current user
@@ -46,9 +47,16 @@ public class CommandToRetrieveFriendList implements Command {
      * @see Command#getResult()
      */
     @Override
-    public ArrayList<Friend> getResult() {
-        // TODO Auto-generated method stub
-        return list;
+    public String getResult() {
+    	String output = "";
+    	for (int i = 0; i < list.size(); i++)
+    	{
+    		output += list.get(i).getUserName();
+    		if (i + 1 < list.size()) {
+    			output += " ";
+    		}
+    	}
+        return output;
     }
 
 }

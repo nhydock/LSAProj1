@@ -8,6 +8,7 @@ import domain.model.Friend;
 import domain.model.FriendList;
 import domain.model.LazyDomainObject;
 import domain.model.RealFriendList;
+import domain.model.User;
 
 public class FriendListProxy extends LazyDomainObject<RealFriendList> implements
         FriendList {
@@ -21,21 +22,19 @@ public class FriendListProxy extends LazyDomainObject<RealFriendList> implements
     public FriendListProxy(long id) {
         super(RealFriendList.class, new FriendListKey(id));
     }
-
-    public void insertFriend(Friend friend) {
+    @Override
+    public void insertFriend(User friend) {
         proxyObject().insertFriend(friend);
-        Session.getUnitOfWork().markChanged(proxyObject());
     }
-
-    public void removeFriend(Friend friend) {
+    @Override
+    public void removeFriend(User friend) {
         proxyObject().removeFriend(friend);
-        Session.getUnitOfWork().markChanged(proxyObject());
     }
-
-    public ArrayList<Friend> getFriends() {
+    @Override
+    public ArrayList<User> getFriends() {
         return proxyObject().getFriends();
     }
-
+    @Override
     public long getUserID() {
         return proxyObject().getUserID();
     }

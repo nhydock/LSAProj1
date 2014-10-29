@@ -45,7 +45,7 @@ public class UserGateway extends IUserGateway {
      */
     protected ResultSet find(FriendKey key) {
         try {
-            String sql = "SELECT * FROM friend_map f JOIN persons p ON f.fid = p.id WHERE p.name = ?";
+            String sql = "SELECT * FROM persons p WHERE p.name = ?";
             PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
             stmt.setString(1, key.name);
             ResultSet result = stmt.executeQuery();

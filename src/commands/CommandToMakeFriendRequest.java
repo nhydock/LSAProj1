@@ -1,7 +1,9 @@
 package commands;
 
 import system.Session;
+import data.keys.FriendKey;
 import data.keys.PersonKey;
+import domain.model.Friend;
 import domain.model.Person;
 
 /**
@@ -25,7 +27,6 @@ public class CommandToMakeFriendRequest implements Command {
     public CommandToMakeFriendRequest(int userIDOfRequester, String userNameOfRequestee) {
         this.userIDOfRequester = userIDOfRequester;
         this.userNameOfRequestee = userNameOfRequestee;
-
     }
 
     /**
@@ -35,7 +36,8 @@ public class CommandToMakeFriendRequest implements Command {
     @Override
     public void execute() {
         Person p = (Person)Session.getMapper(Person.class).find(new PersonKey(userIDOfRequester));
-        p.requestFriend(userNameOfRequestee);
+        Friend f = (Friend)Session.getMapper(Friend.class).find(new FriendKey(userNameOfRequestee));
+        p.requestFriend(f);
     }
 
     /**

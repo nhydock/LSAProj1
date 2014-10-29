@@ -22,7 +22,7 @@ public class MultiThreadRunner
 	public static void main(String[] args) throws FileNotFoundException,
 			InterruptedException
 	{
-		ArrayList<Thread> threads = new ArrayList<Thread>();
+		final ArrayList<Thread> threads = new ArrayList<Thread>();
 		ArrayList<UserThread> uThreads = new ArrayList<UserThread>();
 		Scanner inputScanner = new Scanner(System.in);
 		String input = inputScanner.nextLine();
@@ -32,24 +32,33 @@ public class MultiThreadRunner
 			System.out.println("Creating Thread for " + title.trim());
 			UserThread target = new UserThread(title.trim());
 			uThreads.add(target);
-			Thread t = new Thread(target);
-			threads.add(t);
+			threads.add(new Thread(target));
 		}
 		inputScanner.close();
 		
-		for (Thread t : threads)
-		{
-			t.start();
-		}
-		for (UserThread t : uThreads)
-		{
-			while (t.isRunning())
-			{
-				System.out.println("Still waiting...");
-				Thread.sleep(100);  
+		new Thread(){
+			public void run() {
+				for (Thread t : threads)
+				{
+					t.start();
+				}
+				boolean running = true;
+				while (running) {
+					running = false;
+					for (Thread t : threads) {
+						running = running || t.isAlive();
+					}
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				System.out.println("Finished!");
 			}
-		}
-
-		System.out.println("Finished!");
+		}.start();
+		
+	
 	}
 }

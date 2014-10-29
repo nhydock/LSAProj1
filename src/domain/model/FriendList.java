@@ -3,11 +3,11 @@ package domain.model;
 import java.util.ArrayList;
 
 public interface FriendList {
-    public void insertFriend(Friend friend);
+    public void insertFriend(User friend);
 
-    public void removeFriend(Friend friend);
+    public void removeFriend(User friend);
 
-    public ArrayList<Friend> getFriends();
+    public ArrayList<User> getFriends();
 
     public long getUserID();
 }

@@ -29,7 +29,7 @@ public class PendingFriendsGateway extends Gateway {
         if (key instanceof PendingFriendsListKey) {
             PendingFriendsListKey link = (PendingFriendsListKey) key;
             try {
-                String sql = "SELECT * FROM friend_map f JOIN persons p1 on f.fid = p1.id JOIN persons p2 on f.fid = p2.id WHERE f.pid = ? OR f.fid = ? and f.accepted = 0";
+                String sql = "SELECT * FROM friend_map f JOIN persons p1 on f.pid = p1.id JOIN persons p2 on f.fid = p2.id WHERE f.pid = ? OR f.fid = ? and f.accepted = 0";
                 PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
                 stmt.setLong(1, link.id);
                 stmt.setLong(2, link.id);
@@ -46,44 +46,42 @@ public class PendingFriendsGateway extends Gateway {
 
     @Override
     public void update(DataContainer[] data) {
-        // pending friends are not "updated", we only ever insert or delete them
-    }
-
-    @Override
-    public ResultSet insert(DataContainer[] data) {
-        // insert new pending friends into the list
-        PendingFriendsListData[] pfldata = (PendingFriendsListData[]) data;
+    	PendingFriendsListData[] pfldata = (PendingFriendsListData[]) data;
 
         try {
-            String sql = "INSERT IGNORE INTO pending_friends f (pid, fid) VALUES ";
-
+            String sql = "INSERT IGNORE INTO friend_map (pid, fid, accepted) VALUES ";
+            
+            boolean newRelations = false;
             for (int i = 0; i < pfldata.length; i++) {
                 PendingFriendsListData set = pfldata[i];
+                newRelations = newRelations || set.outgoingRequests.length > 0;
+                
                 for (int n = 0; n < set.outgoingRequests.length; n++)
                 {
-                    sql += String.format(((i > 0) ? "," : "") + "(%d, %d)", set.userID, set.outgoingRequests[n]);
+                    sql += String.format(((n > 0) ? "," : "") + "(%d, %d, 0)", set.userID, set.outgoingRequests[n]);
                 }
             }
-
-            PreparedStatement stmt = Session.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Creating pending friend relation failed, no rows affected.");
-            }
-
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys;
-                } else {
-                    throw new SQLException("Creating pending friend relation failed, no ID obtained.");
-                }
+            
+            if (newRelations)
+            {
+	            PreparedStatement stmt = Session.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+	            System.out.println(stmt.toString());
+	            int affectedRows = stmt.executeUpdate();
+	            if (affectedRows == 0) {
+	                throw new SQLException("Creating pending friend relation failed, no rows affected.");
+	            }
             }
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-1);
         }
+    
+    
+    }
 
+    @Override
+    public ResultSet insert(DataContainer[] data) {
+        // pending friend relations are only ever considered "changed"
         return null;
     }
 

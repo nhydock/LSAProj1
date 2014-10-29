@@ -43,13 +43,6 @@ public class Person extends User {
         pendingFriends = new PendingFriendsListProxy(id);
     }
 
-    // public Person(long id) {
-    // this.id = id;
-    // DataMapper.get().get(Person.class, new PersonKey(id));
-    // friends = new FriendListProxy();
-    // pendingFriends = new PendingFriendsListProxy();
-    // }
-
     /**
      * @return person id
      */
@@ -103,7 +96,7 @@ public class Person extends User {
     /**
      * @return data representation of a friends list
      */
-    public ArrayList<Friend> getFriends() {
+    public ArrayList<User> getFriends() {
         return friends.getFriends();
     }
 
@@ -114,22 +107,17 @@ public class Person extends User {
         return friends;
     }
 
-    public void acceptFriendRequest(Friend friend) {
-
-        boolean removed = pendingFriends.requestFriend(friend);
+    public void acceptFriendRequest(User friend) {
+        boolean removed = pendingFriends.removeRequest(friend);
         if (removed) {
             friends.insertFriend(friend);
         }
     }
 
-    public void acceptFriendRequest(String friendUsername) {
-        // TODO fix this also
-        // boolean removed = pendingFriends.remove(friend);
-        // if (removed) {
-        // friends.insert(friend);
-        // }
-    }
-
+	public void removeFriend(Friend friend) {
+		friends.removeFriend(friend);
+	}
+	
     public void declineFriendRequest(Friend friend) {
         pendingFriends.denyFriend(friend);
     }
@@ -138,21 +126,8 @@ public class Person extends User {
         return (IPendingFriendsList) pendingFriends;
     }
 
-    public void requestFriend(String username) {
-        pendingFriends.insert(friend);
-    }
-
-    public void removeFriend(String friendUserName) {
-        // TODO Auto-generated method stub
-        Friend toRemove = null;
-        for (Friend f : friends.getFriends()) {
-            if (f.getUserName() == friendUserName) {
-                toRemove = f;
-            }
-        }
-        if (toRemove != null) {
-            friends.removeFriend(toRemove);
-        }
+    public void requestFriend(Friend friend) {
+    	pendingFriends.requestFriend(friend);
     }
 
     @Override

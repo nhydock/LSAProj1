@@ -1,14 +1,14 @@
 package domain.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import system.Session;
 
 public class RealFriendList extends DomainModelObject implements FriendList {
 
     private long id;
-    private ArrayList<Friend> friends;
+    private ArrayList<User> friends;
+    private ArrayList<User> removed;
 
     /**
      * @param id
@@ -16,26 +16,30 @@ public class RealFriendList extends DomainModelObject implements FriendList {
      * @param friends
      *            - friends of the user
      */
-    public RealFriendList(long id, ArrayList<Friend> friends) {
+    public RealFriendList(long id, ArrayList<User> friends) {
         super();
         this.id = id;
         this.friends = friends;
+        removed = new ArrayList<User>();
     }
 
-    public void insertFriend(Friend friend) {
+    @Override
+    public void insertFriend(User friend) {
         friends.add(friend);
         Session.getUnitOfWork().markChanged(this);
     }
-
-    public void removeFriend(Friend friend) {
-        friends.remove(friend);
-        Session.getUnitOfWork().markChanged(this);
+    @Override
+    public void removeFriend(User friend) {
+        if (friends.remove(friend)) {
+        	removed.add(friend);
+        	Session.getUnitOfWork().markChanged(this);
+        }
     }
-
-    public ArrayList<Friend> getFriends() {
+    @Override
+    public ArrayList<User> getFriends() {
         return friends;
     }
-
+    @Override
     public long getUserID() {
         return id;
     }
@@ -43,16 +47,24 @@ public class RealFriendList extends DomainModelObject implements FriendList {
     @SuppressWarnings("unchecked")
 	@Override
     public void rollbackValues() {
-        this.id = (long) values.get("id");
         friends.clear();
-        friends.addAll((ArrayList<Friend>) values.get("friends"));
+        removed.clear();
+        friends.addAll((ArrayList<User>) values.get("friends"));
     }
 
     @Override
     public void saveValues() {
-        values.put("id", id);
-        ArrayList<Friend> clonedList = new ArrayList<>(friends);
+        ArrayList<User> clonedList = new ArrayList<User>(friends);
         values.put("friends", clonedList);
+        removed.clear();
     }
-
+    
+    /**
+     * Get the tmp array of removed friends.
+     * Should only be referenced by tightly coupled systems, such as data mappers
+     * @return
+     */
+    public ArrayList<User> getRemovedFriends() {
+    	return removed;
+    }
 }
