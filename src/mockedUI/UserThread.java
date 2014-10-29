@@ -6,6 +6,8 @@ import java.lang.reflect.Constructor;
 import java.util.Scanner;
 
 import commands.Command;
+import commands.CommandToSelectUser;
+import domain.model.Person;
 
 /**
  * Reads a file of instructions, executes them, and verifies the results as it
@@ -186,11 +188,16 @@ public class UserThread implements Runnable
 		String[] parts = splitInstruction(instruction);
 		Command cmd = buildCommand(parts[0]);
 		cmd.execute();
+		if(cmd instanceof CommandToSelectUser) {
+			Person personResult = (Person) cmd.getResult();
+			this.currentUserID = (int) personResult.getID();
+		}
 		if (parts.length == 2)
 		{
 			Object result = cmd.getResult();
 			if (result != null)
 			{
+				System.err.println(result.toString());
 			    return result.toString().equals(parts[1]);
 			}
 			return false;

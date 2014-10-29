@@ -134,13 +134,12 @@ public class Person extends User {
         pendingFriends.denyFriend(friend);
     }
 
-    public PendingFriendsList getPendingFriends() {
-        return (PendingFriendsList) pendingFriends;
+    public IPendingFriendsList getPendingFriends() {
+        return (IPendingFriendsList) pendingFriends;
     }
 
     public void requestFriend(String username) {
-        // TODO fix this shit
-        // pendingFriends.insert(friend);
+        pendingFriends.insert(friend);
     }
 
     public void removeFriend(String friendUserName) {

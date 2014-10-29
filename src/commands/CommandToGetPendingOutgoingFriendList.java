@@ -46,8 +46,16 @@ public class CommandToGetPendingOutgoingFriendList implements Command {
      * @see Command#getResult()
      */
     @Override
-    public ArrayList<Friend> getResult() {
-        return pendingFriendsList;
+    public String getResult() {
+    	String string = "";
+    	for(Friend f : pendingFriendsList) {
+    		if(string.equals("")) {
+        		string = f.getUserName();
+    		} else {
+        		string += " " + f.getUserName();
+    		}
+    	}
+        return string;
     }
 
 }
