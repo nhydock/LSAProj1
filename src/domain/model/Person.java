@@ -41,6 +41,7 @@ public class Person extends User {
         this.password = password;
         friends = new FriendListProxy(id);
         pendingFriends = new PendingFriendsListProxy(id);
+        saveValues();
     }
 
     /**

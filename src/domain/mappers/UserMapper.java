@@ -1,6 +1,7 @@
 package domain.mappers;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import system.Session;
 import data.containers.DataContainer;
@@ -78,6 +79,11 @@ public class UserMapper implements DataMapper<User> {
                 data[i] = new PersonData(-1, person.getUserName(), person.getDisplayName(), person.getPassword());
             }
             Session.getGateway(UserGateway.class).update(data);
+            for (int i = 0; i < user.length; i++)
+            {
+                Person person = (Person)user[i];
+                person.saveValues();
+            }
         }
     }
 
@@ -89,7 +95,20 @@ public class UserMapper implements DataMapper<User> {
                 Person person = (Person)user[i];
                 data[i] = new PersonData(-1, person.getUserName(), person.getDisplayName(), person.getPassword());
             }
-            Session.getGateway(UserGateway.class).insert(data);
+            
+            try (ResultSet result = Session.getGateway(UserGateway.class).insert(data))
+            {
+            	while (result.next())
+            	{
+            	    Person obj = new Person(result.getString("name"), result.getString("display_name"), result.getString("password"), result.getLong("id"));
+				    PersonKey key = new PersonKey(result.getLong("id"));
+				    Session.getIdentityMap(Person.class).put(key, obj);
+				}
+            }
+            catch (SQLException e)
+            {
+            	e.printStackTrace();
+            }
         }
     }
 

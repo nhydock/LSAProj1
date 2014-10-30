@@ -1,4 +1,4 @@
 CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
-CommandToCreateUser frank frankspass frakenstein; frank:frankspass:frankenstein
+CommandToCreateUser frank frankspass frankenstein; frank:frankspass:frankenstein
 CommandToSelectUser tom tomspass;
 CommandToSelectUser tom tomspass;

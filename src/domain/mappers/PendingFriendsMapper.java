@@ -72,6 +72,11 @@ public class PendingFriendsMapper implements DataMapper<PendingFriendsList> {
         	data[i] = new PendingFriendsListData(p.getUserID(), ids);
         }
     	Session.getGateway(PendingFriendsGateway.class).update(data);
+    	for (int i = 0; i < obj.length; i++)
+    	{
+    		PendingFriendsList p = obj[i];
+        	p.saveValues();
+    	}
     }
 
     @Override

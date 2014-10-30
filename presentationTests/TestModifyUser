@@ -1,4 +1,4 @@
 CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
 CommandToSelectUser tom tomspass;
-CommandToModifyUser <userID>; timothy
+CommandToModifyUser <userID> timothy;
 CommandToPersistChanges;

@@ -22,6 +22,7 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
         incomingRequests = in;
         outgoingRequests = out;
         parentKey = new PersonKey(id);
+        saveValues();
     }
 
     @Override

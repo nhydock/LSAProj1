@@ -1,6 +1,9 @@
 package commands;
 
+import java.sql.SQLException;
+
 import system.Session;
+import data.keys.FriendKey;
 import domain.model.Person;
 
 /**
@@ -38,9 +41,15 @@ public class CommandToCreateUser implements Command {
      */
     @Override
     public void execute() {
-        Person person = new Person(userName, password, displayName);
-        this.person = person;
-        Session.getUnitOfWork().commit();
+    	if (Session.getMapper(Person.class).find(new FriendKey(userName)) == null)
+    	{
+    	    Person person = new Person(userName, password, displayName);
+            this.person = person;
+            Session.getUnitOfWork().commit();
+    	} else {
+    		System.err.println("Duplicate entry found for user: " + userName);
+    	}
+    	
     }
 
     /**

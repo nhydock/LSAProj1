@@ -79,6 +79,11 @@ public class FriendsMapper implements DataMapper<RealFriendList> {
             data[i] = new FriendListData(list.getUserID(), friendIDs, removeIDs);
         }
         gate.update(data);
+        for (int i = 0; i < obj.length; i++)
+        {
+            RealFriendList list = obj[i];
+            list.saveValues();
+        }
     }
 
     @Override

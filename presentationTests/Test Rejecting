@@ -1,10 +1,10 @@
 CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
-CommandToCreateUser frank frankspass frakenstein; frank:frankspass:frankenstein
+CommandToCreateUser frank frankspass frankenstein; frank:frankspass:frankenstein
 CommandToSelectUser tom tomspass;
-CommandToMakeFriendRequest <userId> frank;
-CommandToGetPendingOutgoingFriendList <userId>; frank
-CommandToRejectFriendRequest <userID>; frank
-CommandToGetPendingOutgoingFriendList <userId>;
+CommandToMakeFriendRequest <userID> frank;
+CommandToGetPendingOutgoingFriendList <userID>; frank
+CommandToRejectFriendRequest <userID> frank;
+CommandToGetPendingOutgoingFriendList <userID>;
 CommandToPersistChanges;
 CommandToSelectUser frank frankspass;
 CommandToRetrieveFriendList <userID>;

@@ -141,13 +141,12 @@ public class UserGateway extends IUserGateway {
                         "Creating person failed, no rows affected.");
             }
 
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys;
-                } else {
-                    throw new SQLException(
-                            "Creating Person failed, no ID obtained.");
-                }
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            
+            if (generatedKeys.next()) {
+                return generatedKeys;
+            } else {
+                throw new SQLException("Creating Person failed, no ID obtained.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
