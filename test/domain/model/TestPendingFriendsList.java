@@ -5,9 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import data.gateway.MockRealFriendGateway;
-import domain.DataMapper;
-
 public class TestPendingFriendsList {
 
     private Person person;
@@ -16,12 +13,9 @@ public class TestPendingFriendsList {
 
     @Before
     public void setup() {
-        friend = new Friend("asd", "Athena");
-        newFriend = new Friend("dfsadfsad", "Dinosaur");
+        friend = new Friend("asd", "Athena", 2);
+        newFriend = new Friend("dfsadfsad", "Dinosaur", 3);
         person = new Person("qwertyyuiop", "Velociraptor", "Frank");
-
-        DataMapper.get().register(RealFriendList.class,
-                new MockRealFriendGateway());
     }
 
     @Test
@@ -31,20 +25,20 @@ public class TestPendingFriendsList {
 
     @Test
     public void testInsertingFriend() {
-        person.getPendingFriends().insert(friend);
+        person.getPendingFriends().requestFriend(friend);
         assertEquals(person.getPendingFriends().getAllRequests().size(), 1);
     }
 
     @Test
     public void testDecliningRequest() {
-        person.getPendingFriends().insert(friend);
+        person.getPendingFriends().requestFriend(friend);
         person.declineFriendRequest(friend);
         assertEquals(person.getFriendList().getFriends().size(), 0);
     }
 
     @Test
     public void testAcceptingRequest() {
-        person.getPendingFriends().insert(friend);
+        person.getPendingFriends().requestFriend(friend);
         person.acceptFriendRequest(friend);
         assertEquals(person.getPendingFriends().getAllRequests().size(), 0);
         assertEquals(person.getFriends().get(0).getDisplayName(), "Athena");

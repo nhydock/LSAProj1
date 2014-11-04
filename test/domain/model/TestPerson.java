@@ -8,10 +8,11 @@ public class TestPerson {
 
     @Test
     public void testInitialization() {
-        String id = "0";
+        long id = 0;
         String name = "Leonidas";
         String password = "mypwd";
-        Person person = new Person(name, password, id);
+        String displayName = "Leo";
+        Person person = new Person(name, password, displayName, id);
         Person person2 = new Person(name, "pass", "test");
         assertEquals(person.getID(), id);
         assertEquals(person.getUserName(), name);
@@ -25,7 +26,8 @@ public class TestPerson {
         long id = 0;
         String name = "Leonidas";
         String password = "mypwd";
-        Person person = new Person(name, password, id);
+        String displayName = "Leo";
+        Person person = new Person(name, password, displayName, id);
         String newpass = "qwerty";
 
         person.setPassword(newpass);
