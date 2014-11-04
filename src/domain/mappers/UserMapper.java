@@ -76,7 +76,7 @@ public class UserMapper implements DataMapper<User> {
             for (int i = 0; i < user.length; i++)
             {
                 Person person = (Person)user[i];
-                data[i] = new PersonData(-1, person.getUserName(), person.getDisplayName(), person.getPassword());
+                data[i] = new PersonData(person.getID(), person.getUserName(), person.getDisplayName(), person.getPassword());
             }
             Session.getGateway(UserGateway.class).update(data);
             for (int i = 0; i < user.length; i++)

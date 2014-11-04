@@ -15,18 +15,37 @@ import domain.model.User;
 
 public class Session {
     
-    Connection connection;
-    HashMap<Class<? extends DataMapper<?>>, DataMapper<?>> mappers;
-    HashMap<Class<? extends Gateway>, Gateway> gateways;
-    HashMap<Class<? extends DomainModelObject>, IdentityMap<?>> identityMaps;
-    UnitOfWork unitOfWork;
+    protected Connection connection;
+    protected HashMap<Class<? extends DataMapper<?>>, DataMapper<?>> mappers;
+    protected HashMap<Class<? extends Gateway>, Gateway> gateways;
+    protected HashMap<Class<? extends DomainModelObject>, IdentityMap<?>> identityMaps;
+    protected UnitOfWork unitOfWork;
     
-    //logged in user of the session
-    User user;
+    protected Session() {
+    	mappers = new HashMap<Class<? extends DataMapper<?>>, DataMapper<?>>();
+        gateways = new HashMap<Class<? extends Gateway>, Gateway>();
+        identityMaps = new HashMap<Class<? extends DomainModelObject>, IdentityMap<?>>();
+        unitOfWork = new UnitOfWork();
+        
+        prepareMappers();
+        prepareGateways();
+		prepareConnection();
+    }
     
-    private Session()
-    {
-        // attempt to connect to the ODBC database
+    protected void prepareMappers() {
+    	mappers.put(UserMapper.class, new UserMapper());
+        mappers.put(FriendsMapper.class, new FriendsMapper());
+        mappers.put(PendingFriendsMapper.class, new PendingFriendsMapper());
+    }
+    
+    protected void prepareGateways() {
+    	gateways.put(FriendGateway.class, new FriendGateway());
+        gateways.put(PendingFriendsGateway.class, new PendingFriendsGateway());
+        gateways.put(UserGateway.class, new UserGateway());
+    }
+    
+    protected void prepareConnection() {
+    	// attempt to connect to the ODBC database
         String db = "fitness5"; // ODBC database name
         String host = "lsagroup5.cbzhjl6tpflt.us-east-1.rds.amazonaws.com";
         String user = "lsagroup5";
@@ -42,27 +61,6 @@ public class Session {
             System.err.println("Cannot open database -- make sure MySQL JDBC is configured properly.");
             connection = null;
         }
-        
-        mappers = new HashMap<Class<? extends DataMapper<?>>, DataMapper<?>>();
-        gateways = new HashMap<Class<? extends Gateway>, Gateway>();
-        identityMaps = new HashMap<Class<? extends DomainModelObject>, IdentityMap<?>>();
-        unitOfWork = new UnitOfWork();
-        
-        addMappers();
-        addGateways();
-    }
-    
-    private void addMappers() {
-        mappers.put(UserMapper.class, new UserMapper());
-        mappers.put(FriendsMapper.class, new FriendsMapper());
-        mappers.put(PendingFriendsMapper.class, new PendingFriendsMapper());
-    }
-    
-    private void addGateways() {
-        gateways.put(FriendGateway.class, new FriendGateway());
-        gateways.put(PendingFriendsGateway.class, new PendingFriendsGateway());
-        gateways.put(UserGateway.class, new UserGateway());
-        
     }
 
     private static final ThreadLocal<Session> session = new ThreadLocal<Session>() {
@@ -148,16 +146,33 @@ public class Session {
      */
     public static void kill() {
     	session.get().unitOfWork.commit();
-    	try {
-			session.get().connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+    	if (session.get().connection != null) {
+	    	try {
+				session.get().connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.exit(-1);
+			}
+    	}
         session.set(new Session());
     }
     
-    public static void setUser(User user) {
-        session.get().user = user;
+    /**
+     * Replace a session object with a new one
+     * <p/>
+     * Primarily used for testing
+     * @param replace
+     */
+    public static void replaceSession(Session replace) {
+    	session.get().unitOfWork.commit();
+    	if (session.get().connection != null) {
+	    	try {
+				session.get().connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.exit(-1);
+			}
+    	}
+        session.set(replace);
     }
 }
