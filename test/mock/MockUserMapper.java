@@ -96,7 +96,7 @@ public class MockUserMapper implements DataMapper<User> {
             	Person person = (Person)user[i];
                 PersonData data = new PersonData(mockData.size()+1, person.getUserName(), person.getDisplayName(), person.getPassword());
             
-                Person obj = new Person(data.name, data.displayName, data.password, data.id);
+                Person obj = new Person(data.name, data.password, data.displayName, data.id);
 			    
             	PersonKey key = new PersonKey(data.id);
             	LoginKey lKey = new LoginKey(data.name, data.password);
@@ -104,7 +104,7 @@ public class MockUserMapper implements DataMapper<User> {
             	mockData.put(key, data);
             	mockData.put(lKey, data);
             	
-                Session.getIdentityMap(Person.class).put(key, person);
+                Session.getIdentityMap(Person.class).put(key, obj);
             }
         }
     }
