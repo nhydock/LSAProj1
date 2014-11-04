@@ -1,0 +1,11 @@
+CommandToCreateUser tom tomspass tommy; tom:tomspass:tommy
+CommandToCreateUser joey booty frank; joey:booty:frank
+CommandToCreateUser cody shorts pickle; cody:shorts:pickle
+CommandToSelectUser tom tomspass;
+CommandToMakeFriendRequest <userID> joey;
+CommandToPersistChanges;
+CommandToGetPendingOutgoingFriendList <userID>; joey
+CommandToMakeFriendRequest <userID> cody;
+CommandToGetPendingOutgoingFriendList <userID>; joey cody
+CommandToCancelChanges;
+CommandToGetPendingOutgoingFriendList <userID>; joey
