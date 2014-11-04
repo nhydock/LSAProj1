@@ -19,7 +19,7 @@ public class LoginKey implements Key {
         if (obj == null)
             return false;
         // is a person key
-        if (!(obj instanceof PersonKey))
+        if (!(obj instanceof LoginKey))
             return false;
         LoginKey key = (LoginKey) obj;
 
