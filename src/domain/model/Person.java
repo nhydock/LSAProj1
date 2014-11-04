@@ -34,7 +34,7 @@ public class Person extends User {
      * @param name
      * @param id
      */
-    public Person(String name, String displayName, String password, long id) {
+    public Person(String name, String password, String displayName, long id) {
         this.id = id;
         this.userName = name;
         this.displayName = displayName;

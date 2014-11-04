@@ -8,7 +8,7 @@ public class TestPerson {
 
     @Test
     public void testInitialization() {
-        long id = 0;
+        String id = "0";
         String name = "Leonidas";
         String password = "mypwd";
         Person person = new Person(name, password, id);
