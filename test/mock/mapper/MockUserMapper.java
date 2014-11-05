@@ -1,4 +1,4 @@
-package mock;
+package mock.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

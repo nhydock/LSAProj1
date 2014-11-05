@@ -18,6 +18,7 @@ public class TestUser {
 		TestSession session = new TestSession();
 		Session.replaceSession(session);
 	}
+	
 	@Test
 	public void testInitializationOfUsers() 
 	{
@@ -49,7 +50,6 @@ public class TestUser {
         Person load3 = (Person) Session.getMapper(Person.class).find(user3Key);
         assertEquals(user3.getUserName(), load3.getUserName());
         assertTrue(load3.getID() != -1);
-		
 	}
 
 }
