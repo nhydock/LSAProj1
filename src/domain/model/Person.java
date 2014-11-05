@@ -45,13 +45,6 @@ public class Person extends User {
     }
 
     /**
-     * @return person id
-     */
-    public long getID() {
-        return id;
-    }
-
-    /**
      * @return person name
      */
     public String getUserName() {

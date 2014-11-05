@@ -15,14 +15,8 @@ public class Friend extends User {
     }
 
     @Override
-    public void rollbackValues() {
-        userName = (String)values.get("userName");
-        displayName = (String)values.get("displayName");
-    }
+    public void rollbackValues() {}
 
     @Override
-    public void saveValues() {
-        values.put("userName", userName);
-        values.put("displayName", displayName);
-    }
+    public void saveValues() {}
 }
