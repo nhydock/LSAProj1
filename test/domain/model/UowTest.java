@@ -5,16 +5,18 @@ import mock.MockDomainModel;
 import mock.MockKey;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import system.Session;
+import system.TestSession;
 import domain.UnitOfWork;
 
 public class UowTest {
 
-    @After
+    @Before
     public void reset() {
-        Session.kill();
+    	Session.replaceSession(new TestSession());
     }
     
     @Test

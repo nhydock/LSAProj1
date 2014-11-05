@@ -2,10 +2,21 @@ package domain.model;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
-public class TestPerson {
+import system.Session;
+import system.TestSession;
 
+public class TestPerson {
+	
+	@Before
+	public void testSession()
+	{
+		TestSession session = new TestSession();
+		Session.replaceSession(session);
+	}
+	
     @Test
     public void testInitialization() {
         long id = 0;
@@ -31,12 +42,26 @@ public class TestPerson {
         String newpass = "qwerty";
 
         person.setPassword(newpass);
-        assertEquals(person.getPassword(), newpass.hashCode());
+        assertEquals(person.getPassword(), newpass);
     }
     
     @Test
     public void testRollback() {
-        fail("not yet tested");
+        String name = "Leonidas";
+        String password = "mypwd";
+        String displayName = "Leo";
+        Person person = new Person(name, password, displayName);
+        
+        Session.getUnitOfWork().commit();
+        
+        assertEquals(person.getPassword(), password);
+        String newpass = "qwerty";
+        person.setPassword(newpass);
+        assertEquals(person.getPassword(), newpass);
+    	
+        Session.getUnitOfWork().rollback();
+        
+        assertEquals(person.getPassword(), password);
     }
 
 }
