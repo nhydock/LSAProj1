@@ -16,7 +16,7 @@ public class TestFriendList {
 
     @Before
     public void setup() {
-        friends = new RealFriendList(1, new ArrayList<Friend>());
+        friends = new RealFriendList(1, new ArrayList<User>());
         friend = new Friend("YoYo", "Jesus", 12345);
         newFriend = new Friend("Ian", "Zeus", 1234);
 

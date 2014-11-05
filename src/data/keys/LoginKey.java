@@ -34,8 +34,8 @@ public class LoginKey implements Key {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (password.hashCode() ^ (password.hashCode() >>> 32));
-        result = prime * result + (int) (username.hashCode() ^ (username.hashCode() >>> 32));
+        result = prime * result + password.hashCode();
+        result = prime * result + username.hashCode();
         return result;
     }
 }
