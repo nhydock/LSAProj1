@@ -40,12 +40,12 @@ public class TestUser {
         assertEquals(user1.getUserName(), load1.getUserName());
         assertTrue(load1.getID() != -1);
         
-        LoginKey user2Key = new LoginKey(user1.getUserName(), user1.getPassword());
+        LoginKey user2Key = new LoginKey(user2.getUserName(), user2.getPassword());
         Person load2 = (Person) Session.getMapper(Person.class).find(user2Key);
         assertEquals(user2.getUserName(), load2.getUserName());
         assertTrue(load2.getID() != -1);
         
-        LoginKey user3Key = new LoginKey(user1.getUserName(), user1.getPassword());
+        LoginKey user3Key = new LoginKey(user3.getUserName(), user3.getPassword());
         Person load3 = (Person) Session.getMapper(Person.class).find(user3Key);
         assertEquals(user3.getUserName(), load3.getUserName());
         assertTrue(load3.getID() != -1);
