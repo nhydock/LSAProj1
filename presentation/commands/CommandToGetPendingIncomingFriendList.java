@@ -50,11 +50,12 @@ public class CommandToGetPendingIncomingFriendList implements Command {
     	String string = "";
     	for(User f : pendingFriendsList) {
     		if(string.equals("")) {
-        		string = f.getUserName();
+        		string = f.getDisplayName();
     		} else {
-        		string += " " + f.getUserName();
+        		string += " " + f.getDisplayName();
     		}
     	}
+    	System.out.println(string);
         return string;
     }
 

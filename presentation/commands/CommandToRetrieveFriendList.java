@@ -51,7 +51,7 @@ public class CommandToRetrieveFriendList implements Command {
     	String output = "";
     	for (int i = 0; i < list.size(); i++)
     	{
-    		output += list.get(i).getUserName();
+    		output += list.get(i).getDisplayName();
     		if (i + 1 < list.size()) {
     			output += " ";
     		}

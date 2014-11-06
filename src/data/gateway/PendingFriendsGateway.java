@@ -50,16 +50,16 @@ public class PendingFriendsGateway extends Gateway {
 
         try {
             String sql = "INSERT IGNORE INTO friend_map (pid, fid, accepted) VALUES ";
-            
             boolean newRelations = false;
-        
             for (int i = 0; i < pfldata.length; i++) {
                 PendingFriendsListData set = pfldata[i];
                 newRelations = newRelations || set.outgoingRequests.length > 0;
-                
-                for (int n = 0; n < set.outgoingRequests.length; n++)
-                {
-                    sql += String.format(((n > 0 || i > 0) ? "," : "") + "(%d, %d, 0)", set.userID, set.outgoingRequests[n]);
+                if(newRelations = false) {
+	                for (int n = 0; n < set.outgoingRequests.length; n++)
+	                {
+	                	System.out.println("[DEBUG] N: " + n + " I: " + i);
+	                    sql += String.format(((n > 0 || i > 0) ? "," : "") + "(%d, %d, 0)", set.userID, set.outgoingRequests[n]);
+	                }
                 }
             }
             
