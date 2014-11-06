@@ -15,16 +15,11 @@ import domain.model.Friend;
 import domain.model.PendingFriendsList;
 import domain.model.User;
 
-public class PendingFriendsMapper implements DataMapper<PendingFriendsList> {
+public class PendingFriendsMapper extends DataMapper<PendingFriendsList> {
 
     @Override
-    public PendingFriendsList find(Key key) {
-        
-    	if (Session.getIdentityMap(PendingFriendsList.class).containsKey(key)) {
-    		return Session.getIdentityMap(PendingFriendsList.class).get(key);
-    	}
-    	
-        try {
+    public PendingFriendsList read(Key key) {
+    	try {
             ResultSet result = Session.getGateway(PendingFriendsGateway.class).find(key);
             PendingFriendsListKey link = (PendingFriendsListKey) key;
 

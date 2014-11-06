@@ -15,28 +15,28 @@ import domain.model.Friend;
 import domain.model.Person;
 import domain.model.User;
 
-public class MockUserMapper implements DataMapper<User> {
+public class MockUserMapper extends DataMapper<User> {
 
 	private HashMap<Key, DataContainer> mockData = new HashMap<Key, DataContainer>();
 	
-	public MockUserMapper()
+	@Override
+	protected User checkExists(Key key)
 	{
-		
+		 if (key instanceof PersonKey && Session.getIdentityMap(Person.class).containsKey(key))
+         {
+            return Session.getIdentityMap(Person.class).get(key);
+         }
+         else if (key instanceof FriendKey && Session.getIdentityMap(Friend.class).containsKey(key))
+         {
+         	return Session.getIdentityMap(Friend.class).get(key);
+         }
+		 return null;
 	}
 	
-	public User find(Key key) {
+	public User read(Key key) {
     	
         if ((key instanceof PersonKey) || (key instanceof FriendKey) || (key instanceof LoginKey)) {
             User obj = null;
-
-            if (key instanceof PersonKey && Session.getIdentityMap(Person.class).containsKey(key))
-            {
-                return Session.getIdentityMap(Person.class).get(key);
-            }
-            else if (key instanceof FriendKey && Session.getIdentityMap(Friend.class).containsKey(key))
-            {
-            	return Session.getIdentityMap(Friend.class).get(key);
-            }
             
             DataContainer user = mockData.get(key);
             

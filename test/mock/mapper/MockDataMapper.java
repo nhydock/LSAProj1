@@ -4,10 +4,10 @@ import mock.MockDomainModel;
 import data.keys.Key;
 import domain.mappers.DataMapper;
 
-public class MockDataMapper implements DataMapper<MockDomainModel> {
+public class MockDataMapper extends DataMapper<MockDomainModel> {
 
 	@Override
-	public MockDomainModel find(Key key) {
+	public MockDomainModel read(Key key) {
 		// TODO Auto-generated method stub
 		return null;
 	}

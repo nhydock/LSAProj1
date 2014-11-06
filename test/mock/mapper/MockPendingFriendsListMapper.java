@@ -20,7 +20,7 @@ import domain.model.PendingFriendsList;
 import domain.model.Person;
 import domain.model.User;
 
-public class MockPendingFriendsListMapper implements DataMapper<PendingFriendsList> {
+public class MockPendingFriendsListMapper extends DataMapper<PendingFriendsList> {
 	
 	private HashMap<Key, PendingFriendsListData> mockData = new HashMap<Key, PendingFriendsListData>();
 
@@ -30,11 +30,7 @@ public class MockPendingFriendsListMapper implements DataMapper<PendingFriendsLi
 	}
 	
     @Override
-    public PendingFriendsList find(Key key) {
-    	if (Session.getIdentityMap(PendingFriendsList.class).containsKey(key)) {
-    		return Session.getIdentityMap(PendingFriendsList.class).get(key);
-    	}
-    	
+    public PendingFriendsList read(Key key) {
     	PendingFriendsList obj = null;
     	PendingFriendsListKey link = (PendingFriendsListKey) key;
     	

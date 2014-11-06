@@ -15,15 +15,9 @@ import domain.model.Friend;
 import domain.model.RealFriendList;
 import domain.model.User;
 
-public class FriendsMapper implements DataMapper<RealFriendList> {
+public class FriendsMapper extends DataMapper<RealFriendList> {
 
-    @Override
-    public RealFriendList find(Key key) {
-        if (Session.getIdentityMap(RealFriendList.class).containsKey(key))
-        {
-            return Session.getIdentityMap(RealFriendList.class).get(key);
-        }
-        
+	public RealFriendList read(Key key) {
         try {
             ResultSet result = Session.getGateway(FriendGateway.class).find(key);
             FriendListKey link = (FriendListKey)key;
@@ -54,7 +48,7 @@ public class FriendsMapper implements DataMapper<RealFriendList> {
             e.printStackTrace();
         }
         return null;
-    }
+	}
 
     @Override
     public void update(RealFriendList[] obj) {

@@ -37,15 +37,7 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
     	if (removed)
     	{
     		requests.remove(friend);
-    		
-        	PendingFriendsList friendsFriendList = (PendingFriendsList) Session.getMapper(PendingFriendsList.class).find(new PendingFriendsListKey(friend.getID()));
- 	        Person otherUser = (Person)Session.getMapper(Person.class).find(parentKey);
- 	        friendsFriendList.outgoingRequests.remove(otherUser);
- 	        friendsFriendList.incomingRequests.remove(otherUser);
-	        friendsFriendList.requests.remove(otherUser);
- 	        
- 	        Session.getUnitOfWork().markChanged(friendsFriendList);
- 	        Session.getUnitOfWork().markChanged(this);
+    		Session.getUnitOfWork().markChanged(this);
         
         }
     	return removed;
@@ -60,12 +52,6 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
         added = added && requests.add(friend);
         if (added)
         {
-	        PendingFriendsList friendsFriendList = (PendingFriendsList) Session.getMapper(PendingFriendsList.class).find(new PendingFriendsListKey(friend.getID()));
-	        Person otherUser = (Person)Session.getMapper(Person.class).find(parentKey);
-	        friendsFriendList.incomingRequests.add(otherUser);
-	        friendsFriendList.requests.add(otherUser);
-	        
-	        Session.getUnitOfWork().markChanged(friendsFriendList);
 	        Session.getUnitOfWork().markChanged(this);
 	    }
         
@@ -114,14 +100,7 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
         if (removed)
         {
         	requests.remove(friend);
-        	
-        	PendingFriendsList friendsFriendList = (PendingFriendsList) Session.getMapper(PendingFriendsList.class).find(new PendingFriendsListKey(friend.getID()));
- 	        Person otherUser = (Person)Session.getMapper(Person.class).find(parentKey);
- 	        friendsFriendList.outgoingRequests.remove(otherUser);
- 	        friendsFriendList.requests.remove(otherUser);
- 	        
- 	        Session.getUnitOfWork().markChanged(friendsFriendList);
- 	        Session.getUnitOfWork().markChanged(this);
+        	Session.getUnitOfWork().markChanged(this);
         }
         return removed;
     }
