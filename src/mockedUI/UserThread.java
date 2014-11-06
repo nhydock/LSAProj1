@@ -5,8 +5,7 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.Constructor;
 import java.util.Scanner;
 
-import commands.Command;
-import commands.CommandToSelectUser;
+import commands.*;
 import domain.model.Person;
 
 /**
@@ -85,7 +84,7 @@ public class UserThread implements Runnable
 		try
 		{
 			return (Class<? extends Command>) Class.forName(
-					"domainLogic." + command).asSubclass(Command.class);
+					"commands." + command).asSubclass(Command.class);
 		} catch (ClassNotFoundException e)
 		{
 			System.out.println("Unrecognized command: " + command);
@@ -104,7 +103,7 @@ public class UserThread implements Runnable
 	protected Command buildCommand(String commandDescription)
 	{
 		String[] instructionTokens = commandDescription.split(" ");
-		Class<? extends Command> commandClass = getCommandClass(instructionTokens[0]);
+		Class<? extends Command> commandClass = getCommandClass(instructionTokens[0].trim());
 		Constructor<?>[] constructors = commandClass.getConstructors();
 		Class<?>[] parameters = constructors[0].getParameterTypes();
 		Command result = null;
@@ -198,7 +197,7 @@ public class UserThread implements Runnable
 		}
 		if (parts.length == 2)
 		{
-			String result = (String) cmd.getResult();
+			String result = (cmd.getResult()).toString();
 			if (result == null)
 			{
 				return false;
@@ -245,7 +244,7 @@ public class UserThread implements Runnable
 		{
 			input = commandReader.nextLine();
 		}
-		while ((input != null) && input.startsWith("**"))
+		while ((input != null) && input.contains("**"))
 		{
 			if (commandReader.hasNextLine())
 			{
