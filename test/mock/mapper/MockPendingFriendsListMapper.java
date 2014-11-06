@@ -82,6 +82,7 @@ public class MockPendingFriendsListMapper implements DataMapper<PendingFriendsLi
 			
 			PendingFriendsListData frnd = data[i];
 			PendingFriendsListKey key = new PendingFriendsListKey(data[i].userID);
+			Session.getIdentityMap(PendingFriendsList.class).put(key, f);
 				
 			mockData.put(key, frnd);
 		}

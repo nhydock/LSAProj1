@@ -12,16 +12,18 @@ import system.TestSession;
 public class TestPendingFriendsList {
 
     private Person person;
-    private Friend friend;
-    private Friend newFriend;
+    private Person friend;
+    private Person newFriend;
 
     @Before
     public void setup() {
     	TestSession session = new TestSession();
 		Session.replaceSession(session);
-        friend = new Friend("asd", "Athena", 2);
-        newFriend = new Friend("dfsadfsad", "Dinosaur", 3);
+        friend = new Person("asd", "Athena", "Ian");
+        newFriend = new Person("dfsadfsad", "Dinosaur", "Tim");
         person = new Person("qwertyyuiop", "Velociraptor", "Frank");
+        Session.getUnitOfWork().commit();
+        person = (Person) Session.getMapper(Person.class).find(new LoginKey(person.getUserName(), person.getPassword()));
     }
 
     @Test
