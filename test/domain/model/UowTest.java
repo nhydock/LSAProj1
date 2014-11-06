@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 import mock.MockDomainModel;
 import mock.MockKey;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 

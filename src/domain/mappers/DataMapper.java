@@ -1,9 +1,7 @@
 package domain.mappers;
 
 import data.keys.Key;
-import data.keys.PersonKey;
 import domain.model.DomainModelObject;
-import domain.model.Person;
 
 public interface DataMapper<T extends DomainModelObject> {
 

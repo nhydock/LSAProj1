@@ -2,9 +2,7 @@ package domain.model.proxies;
 
 import java.util.ArrayList;
 
-import system.Session;
 import data.keys.FriendListKey;
-import domain.model.Friend;
 import domain.model.FriendList;
 import domain.model.LazyDomainObject;
 import domain.model.RealFriendList;

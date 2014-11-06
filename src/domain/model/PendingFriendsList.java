@@ -2,7 +2,6 @@ package domain.model;
 
 import java.util.ArrayList;
 
-import data.keys.FriendKey;
 import data.keys.PendingFriendsListKey;
 import data.keys.PersonKey;
 
