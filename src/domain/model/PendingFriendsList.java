@@ -38,14 +38,23 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
     	if (removed)
     	{
     		requests.remove(friend);
-    		Session.getUnitOfWork().markChanged(this);
+    		
+        	PendingFriendsList friendsFriendList = (PendingFriendsList) Session.getMapper(PendingFriendsList.class).find(new PendingFriendsListKey(friend.getID()));
+ 	        Person otherUser = (Person)Session.getMapper(Person.class).find(parentKey);
+ 	        friendsFriendList.outgoingRequests.remove(otherUser);
+ 	        friendsFriendList.incomingRequests.remove(otherUser);
+	        friendsFriendList.requests.remove(otherUser);
+ 	        
+ 	        Session.getUnitOfWork().markChanged(friendsFriendList);
+ 	        Session.getUnitOfWork().markChanged(this);
+        
         }
     	return removed;
     }
 
     @Override
     public boolean requestFriend(User friend) {
-    	if (friend == null)
+    	if (friend == null || friend.getID() == -1)
     		return false;
     	
         boolean added = outgoingRequests.add(friend);
@@ -53,7 +62,10 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
         if (added)
         {
 	        PendingFriendsList friendsFriendList = (PendingFriendsList) Session.getMapper(PendingFriendsList.class).find(new PendingFriendsListKey(friend.getID()));
-	        friendsFriendList.incomingRequests.add((Person)Session.getMapper(Person.class).find(parentKey));
+	        Person otherUser = (Person)Session.getMapper(Person.class).find(parentKey);
+	        friendsFriendList.incomingRequests.add(otherUser);
+	        friendsFriendList.requests.add(otherUser);
+	        
 	        Session.getUnitOfWork().markChanged(friendsFriendList);
 	        Session.getUnitOfWork().markChanged(this);
 	    }
@@ -102,7 +114,15 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
         boolean removed = incomingRequests.remove(friend);
         if (removed)
         {
-            Session.getUnitOfWork().markChanged(this);
+        	requests.remove(friend);
+        	
+        	PendingFriendsList friendsFriendList = (PendingFriendsList) Session.getMapper(PendingFriendsList.class).find(new PendingFriendsListKey(friend.getID()));
+ 	        Person otherUser = (Person)Session.getMapper(Person.class).find(parentKey);
+ 	        friendsFriendList.outgoingRequests.remove(otherUser);
+ 	        friendsFriendList.requests.remove(otherUser);
+ 	        
+ 	        Session.getUnitOfWork().markChanged(friendsFriendList);
+ 	        Session.getUnitOfWork().markChanged(this);
         }
         return removed;
     }

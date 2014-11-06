@@ -1,6 +1,5 @@
 package system;
 
-import mock.MockDomainModel;
 import mock.mapper.MockDataMapper;
 import mock.mapper.MockFriendListMapper;
 import mock.mapper.MockPendingFriendsListMapper;

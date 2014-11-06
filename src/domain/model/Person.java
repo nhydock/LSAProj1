@@ -22,14 +22,8 @@ public class Person extends User {
         this.id = -1;
         this.password = password;
         this.displayName = displayName;
-        friends = new RealFriendList(id, new ArrayList<User>());
-        ArrayList<User> incoming = new ArrayList<User>();
-        ArrayList<User> outgoing = new ArrayList<User>();
-        pendingFriends = new PendingFriendsList(id, incoming, outgoing);
         saveValues();
         Session.getUnitOfWork().markNew(this);
-        Session.getUnitOfWork().markNew((RealFriendList) friends);
-        Session.getUnitOfWork().markNew((PendingFriendsList) pendingFriends);
     }
 
     /**
