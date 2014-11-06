@@ -5,6 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import data.keys.LoginKey;
+import system.Session;
+import system.TestSession;
+
 public class TestPendingFriendsList {
 
     private Person person;
@@ -13,6 +17,8 @@ public class TestPendingFriendsList {
 
     @Before
     public void setup() {
+    	TestSession session = new TestSession();
+		Session.replaceSession(session);
         friend = new Friend("asd", "Athena", 2);
         newFriend = new Friend("dfsadfsad", "Dinosaur", 3);
         person = new Person("qwertyyuiop", "Velociraptor", "Frank");
