@@ -39,6 +39,7 @@ public class RealFriendList extends DomainModelObject implements FriendList {
     public ArrayList<User> getFriends() {
         return friends;
     }
+    
     @Override
     public long getUserID() {
         return id;

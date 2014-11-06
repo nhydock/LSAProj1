@@ -38,5 +38,8 @@ public class TestFriendList {
         friends.insertFriend(friend);
         friends.removeFriend(friend);
         assertEquals(friends.getFriends().size(), 0);
+        friends.removeFriend(friend);
+        assertEquals(friends.getFriends().size(), 0);
     }
+    
 }
