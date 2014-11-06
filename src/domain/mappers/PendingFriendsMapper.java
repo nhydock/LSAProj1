@@ -20,6 +20,10 @@ public class PendingFriendsMapper implements DataMapper<PendingFriendsList> {
     @Override
     public PendingFriendsList find(Key key) {
         
+    	if (Session.getIdentityMap(PendingFriendsList.class).containsKey(key)) {
+    		return Session.getIdentityMap(PendingFriendsList.class).get(key);
+    	}
+    	
         try {
             ResultSet result = Session.getGateway(PendingFriendsGateway.class).find(key);
             PendingFriendsListKey link = (PendingFriendsListKey) key;
