@@ -22,10 +22,14 @@ public class Person extends User {
         this.id = -1;
         this.password = password;
         this.displayName = displayName;
-        friends = new FriendListProxy(id);
-        pendingFriends = new PendingFriendsListProxy(id);
+        friends = new RealFriendList(id, new ArrayList<User>());
+        ArrayList<User> incoming = new ArrayList<User>();
+        ArrayList<User> outgoing = new ArrayList<User>();
+        pendingFriends = new PendingFriendsList(id, incoming, outgoing);
         saveValues();
         Session.getUnitOfWork().markNew(this);
+        Session.getUnitOfWork().markNew((RealFriendList) friends);
+        Session.getUnitOfWork().markNew((PendingFriendsList) pendingFriends);
     }
 
     /**
@@ -108,11 +112,11 @@ public class Person extends User {
         }
     }
 
-	public void removeFriend(Friend friend) {
+	public void removeFriend(User friend) {
 		friends.removeFriend(friend);
 	}
 	
-    public void declineFriendRequest(Friend friend) {
+    public void declineFriendRequest(User friend) {
         pendingFriends.denyFriend(friend);
     }
 
@@ -120,7 +124,7 @@ public class Person extends User {
         return (IPendingFriendsList) pendingFriends;
     }
 
-    public void requestFriend(Friend friend) {
+    public void requestFriend(User friend) {
     	pendingFriends.requestFriend(friend);
     }
 
