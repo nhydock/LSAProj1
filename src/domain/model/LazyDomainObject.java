@@ -3,6 +3,12 @@ package domain.model;
 import system.Session;
 import data.keys.Key;
 
+/**
+ * 
+ * @author nhydock
+ *
+ * @param <Proxy>
+ */
 public class LazyDomainObject<Proxy extends DomainModelObject> extends
         DomainModelObject {
 
@@ -33,7 +39,7 @@ public class LazyDomainObject<Proxy extends DomainModelObject> extends
     @SuppressWarnings("unchecked")
     protected final Proxy proxyObject() {
         if (!loaded) {
-            lazyObj = (Proxy)Session.getMapper(cls).find(key);
+            lazyObj = (Proxy)Session.getMapper(cls).find(key, true);
             loaded = true;
         }
         return lazyObj;
@@ -47,5 +53,13 @@ public class LazyDomainObject<Proxy extends DomainModelObject> extends
     @Override
     public void saveValues() {
         proxyObject().saveValues();
+    }
+    
+    /**
+     * Tells loaded resources to forcibly reload themselves for an exact copy
+     * from the database again
+     */
+    public void unload() {
+        loaded = false;
     }
 }

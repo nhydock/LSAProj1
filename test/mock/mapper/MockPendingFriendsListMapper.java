@@ -2,28 +2,25 @@ package mock.mapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import system.Session;
-import data.containers.DataContainer;
-import data.containers.FriendListData;
 import data.containers.PendingFriendsListData;
 import data.keys.FriendKey;
-import data.keys.FriendListKey;
 import data.keys.Key;
 import data.keys.PendingFriendsListKey;
-import data.keys.PersonKey;
 import domain.IdentityMap;
 import domain.mappers.DataMapper;
 import domain.model.Friend;
-import domain.model.FriendList;
 import domain.model.PendingFriendsList;
-import domain.model.Person;
 import domain.model.User;
 
 public class MockPendingFriendsListMapper extends DataMapper<PendingFriendsList> {
 	
 	private HashMap<Key, PendingFriendsListData> mockData = new HashMap<Key, PendingFriendsListData>();
-
+	private HashMap<Long, Set<Long>> requests = new HashMap<Long, Set<Long>>();
+	
 	public MockPendingFriendsListMapper()
 	{
 		
@@ -73,12 +70,19 @@ public class MockPendingFriendsListMapper extends DataMapper<PendingFriendsList>
 		for (int i = 0; i < pendingFriends.length; i++) 
 		{
 			PendingFriendsList f = pendingFriends[i];
+			Set<Long> frequests = requests.get(f.getUserID());
+			if (frequests == null){
+			    frequests = new HashSet<Long>();
+			    requests.put(f.getUserID(), frequests);
+			}
 			ArrayList<User> friends = f.getOutgoingRequests();
 			long[] ids = new long[friends.size()];
 			for (int n = 0; n < friends.size(); n++)
 			{
 				User friend = friends.get(n);
 				ids[n] = friend.getID();
+				
+				frequests.add(friend.getID());
 			}
 			data[i] = new PendingFriendsListData(f.getUserID(), ids);
 			

@@ -3,8 +3,21 @@ package mock;
 import domain.model.DomainModelObject;
 import system.Session;
 
-public class MockDomainModel extends DomainModelObject {
+public class MockDomainModel extends DomainModelObject implements MockObj {
     String displayName;
+    
+    public MockDomainModel()
+    {
+        saveValues();
+        Session.getUnitOfWork().markNew(this);
+    }
+    
+    public MockDomainModel(String name)
+    {
+        this.displayName = name;
+        
+        saveValues();
+    }
     
     public void setDisplayName(String name)
     {
@@ -19,13 +32,11 @@ public class MockDomainModel extends DomainModelObject {
 
     @Override
     public void rollbackValues() {
-        // TODO Auto-generated method stub
-        
+        displayName = (String)values.get("name");
     }
 
     @Override
     public void saveValues() {
-        // TODO Auto-generated method stub
-        
+        values.put("name", getDisplayName());
     }
 }

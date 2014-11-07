@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import mock.MockDomainModel;
 import system.Session;
 import domain.mappers.DataMapper;
 import domain.model.DomainModelObject;
@@ -132,6 +133,24 @@ public class UnitOfWork {
     }
     
     public State getState(DomainModelObject key) {
-        return register.get(key.getClass()).get(key);
+        HashMap<DomainModelObject, State> objStates = register.get(key.getClass());
+        //state of the object should be null if none of that kind of 
+        // object has been registered
+        if (objStates == null)
+            return null;
+        return objStates.get(key);
+    }
+
+    /**
+     * Removes an object and its state from being managed by the unit of work
+     * @param key
+     */
+    public void clear(MockDomainModel key) {
+        HashMap<DomainModelObject, State> objStates = register.get(key.getClass());
+        //state of the object should be null if none of that kind of 
+        // object has been registered
+        if (objStates != null) {
+            register.get(key.getClass()).remove(key);
+        }
     }
 }
