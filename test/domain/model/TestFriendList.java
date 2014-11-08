@@ -17,7 +17,7 @@ public class TestFriendList {
     @Before
     public void setup() {
         friends = new RealFriendList(1, new ArrayList<User>());
-        friend = new Friend("YoYo", "Jesus", 12345);
+        friend = new Friend("YoYo", "Jesus", 12345); 
         newFriend = new Friend("Ian", "Zeus", 1234);
     }
 
@@ -33,12 +33,20 @@ public class TestFriendList {
     }
 
     @Test
-    public void testDeletingFriend() {
+    public void testRemovingFriend() {
         friends.insertFriend(friend);
         friends.removeFriend(friend);
         assertEquals(friends.getFriends().size(), 0);
         friends.removeFriend(friend);
         assertEquals(friends.getFriends().size(), 0);
+        
+        assertEquals(friends.getRemovedFriends().get(0), friend);
+    }
+    
+    @Test
+    public void testGetID()
+    {
+        assertEquals(friends.getUserID(), 1);
     }
     
 }

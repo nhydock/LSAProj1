@@ -94,5 +94,19 @@ public class TestPendingFriendsList {
         
         
     }
-
+ 
+    @Test
+    public void testRemove()
+    {
+        person.requestFriend(friend);
+        friend.acceptFriendRequest(person);
+        
+        assertEquals(person.getFriends().size(), 1);
+        assertEquals(friend.getFriends().size(), 1);
+        
+        person.removeFriend(friend);
+        
+        assertEquals(person.getFriends().size(), 0);
+        assertEquals(friend.getFriends().size(), 0);
+    }
 }
