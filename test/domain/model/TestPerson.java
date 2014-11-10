@@ -26,7 +26,11 @@ public class TestPerson {
     @Test
     public void testInitialization() {
         Person person = new Person(dataA.name, dataA.password, dataA.displayName, dataA.id);
+        Session.getUnitOfWork().commit();
+        
         Person person2 = new Person(dataB.name, dataB.password, dataB.displayName, dataB.id);
+        Session.getUnitOfWork().commit();
+        
         assertEquals(person.getID(), dataA.id);
         assertEquals(person.getUserName(), dataA.name);
         assertEquals(person.getPassword(), dataA.password);
@@ -80,13 +84,18 @@ public class TestPerson {
                 
         person.requestFriend(person2);
         Session.getUnitOfWork().commit();
+
+        ((PendingFriendsListProxy)person2.getPendingFriends()).unload();
+        
+        assertEquals(1, person2.getPendingFriends().getAllRequests().size());
         person2.acceptFriendRequest(person);
+        assertEquals(0, person2.getPendingFriends().getAllRequests().size());
+        Session.getUnitOfWork().commit();
+        
         
         ((FriendListProxy)person.getFriendList()).unload();
-        ((PendingFriendsListProxy)person.getPendingFriends()).unload();
         
-        assertEquals(1, person.getFriendList().getFriends().size());
-        assertEquals(0, person.getPendingFriends().getAllRequests().size());
+        assertEquals(1, person.getFriendList().getFriends().size()); 
     }
     
     @Test 
@@ -96,9 +105,19 @@ public class TestPerson {
         
         person.requestFriend(person2);
         Session.getUnitOfWork().commit();
+        
+        ((PendingFriendsListProxy)person2.getPendingFriends()).unload();
+        
         person2.acceptFriendRequest(person);
+        Session.getUnitOfWork().commit();
+        
+        ((FriendListProxy)person.getFriendList()).unload(); 
         
         person.removeFriend(person2);
+        Session.getUnitOfWork().commit();
+       
+        ((FriendListProxy)person2.getFriendList()).unload();
+        
         
         assertEquals(0, person.getFriendList().getFriends().size());
         assertEquals(0, person2.getFriendList().getFriends().size());
@@ -113,6 +132,11 @@ public class TestPerson {
         assertEquals(0, person.getPendingFriends().getAllRequests().size());
                 
         person.requestFriend(person2);
+        Session.getUnitOfWork().commit();
+        
+        ((FriendListProxy)person.getFriendList()).unload(); 
+        ((PendingFriendsListProxy)person2.getPendingFriends()).unload();
+        
         
         assertEquals(0, person.getFriendList().getFriends().size());
         assertEquals(1, person.getPendingFriends().getAllRequests().size());
@@ -129,6 +153,7 @@ public class TestPerson {
         person.requestFriend(person2);
         Session.getUnitOfWork().commit();
         person2.declineFriendRequest(person);
+        Session.getUnitOfWork().commit();
         
         ((FriendListProxy)person.getFriendList()).unload(); 
         ((PendingFriendsListProxy)person.getPendingFriends()).unload();
@@ -164,6 +189,9 @@ public class TestPerson {
         person.requestFriend(person2);
         Session.getUnitOfWork().commit();
         person2.acceptFriendRequest(person);
+        Session.getUnitOfWork().commit();
+        
+        ((FriendListProxy)person.getFriendList()).unload(); 
         
         assertEquals(person.getFriends().size(), 1);
         assertEquals(person.getFriendList().getFriends().size(), 1);

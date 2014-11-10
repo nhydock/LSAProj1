@@ -18,7 +18,6 @@ import domain.model.User;
 
 public class MockPendingFriendsListMapper extends DataMapper<PendingFriendsList> {
 	
-	private HashMap<Key, PendingFriendsListData> mockData = new HashMap<Key, PendingFriendsListData>();
 	private HashMap<Long, Set<Long>> requests = new HashMap<Long, Set<Long>>();
 	
 	public MockPendingFriendsListMapper()
@@ -31,8 +30,20 @@ public class MockPendingFriendsListMapper extends DataMapper<PendingFriendsList>
     	PendingFriendsList obj = null;
     	PendingFriendsListKey link = (PendingFriendsListKey) key;
     	
-    	PendingFriendsListData data = mockData.get(link);
-    	if (data == null)
+    	PendingFriendsListData data;
+    	if(requests.containsKey(link.id))
+    	{
+    		Set<Long> r = requests.get(link.id);
+    		Iterator<Long> iter = r.iterator();
+    		long[] ids = new long[r.size()];
+    		int n = 0;
+    		while (iter.hasNext())
+    		{
+    			ids[n] = iter.next();
+    			n++;
+    		}
+    		data = new PendingFriendsListData(link.id, ids,new long[0]);
+    	}else 
     	{
     		data = new PendingFriendsListData(link.id, new long[0], new long[0]);
     	}
@@ -66,8 +77,7 @@ public class MockPendingFriendsListMapper extends DataMapper<PendingFriendsList>
 
     @Override
     public void update(PendingFriendsList[] pendingFriends) {
-    	PendingFriendsListData[] data = new PendingFriendsListData[pendingFriends.length];
-		for (int i = 0; i < pendingFriends.length; i++) 
+    	for (int i = 0; i < pendingFriends.length; i++) 
 		{
 			PendingFriendsList f = pendingFriends[i];
 			Set<Long> frequests = requests.get(f.getUserID());
@@ -75,9 +85,10 @@ public class MockPendingFriendsListMapper extends DataMapper<PendingFriendsList>
 			    frequests = new HashSet<Long>();
 			    requests.put(f.getUserID(), frequests);
 			}
-			Set<User> requests = f.getOutgoingRequests();
-			long[] ids = new long[requests.size()];
-			Iterator<User> friends = requests.iterator();
+			
+			Set<User> outgoingRequests = f.getOutgoingRequests();
+			long[] ids = new long[outgoingRequests.size()];
+			Iterator<User> friends = outgoingRequests.iterator();
 			int n = 0;
 			while (friends.hasNext())
 			{
@@ -85,28 +96,26 @@ public class MockPendingFriendsListMapper extends DataMapper<PendingFriendsList>
 				ids[n] = friend.getID();
 				frequests.add(friend.getID());
 				n++;
+			
+				Set<Long> theirRequests = requests.get(friend.getID());
+				if (theirRequests == null)
+				{
+					theirRequests = new HashSet<Long>();
+					requests.put(friend.getID(), theirRequests);
+				}
+				theirRequests.add(f.getUserID());
 			}
 			
 			Set<User> rejected = f.getRejected();
-        	long[] remove = new long[rejected.size()];
         	friends = rejected.iterator();
-        	n = 0;
         	while (friends.hasNext())
         	{
         		User friend = friends.next();
-        		remove[n] = friend.getID();
-        		n++;
+        		frequests.remove(friend.getID());
+        		Set<Long> theirRequests = requests.get(friend.getID());
+        		theirRequests.remove(f.getUserID());
         	}
-        	
-			data[i] = new PendingFriendsListData(f.getUserID(), ids, remove);
-			
-			PendingFriendsListData frnd = data[i];
-			PendingFriendsListKey key = new PendingFriendsListKey(data[i].userID);
-				
-			mockData.put(key, frnd);
 		}
-		
-    	
     }
 
     @Override
@@ -131,7 +140,7 @@ public class MockPendingFriendsListMapper extends DataMapper<PendingFriendsList>
 			PendingFriendsListKey key = new PendingFriendsListKey(data[i].userID);
 			Session.getIdentityMap(PendingFriendsList.class).put(key, f);
 				
-			mockData.put(key, frnd);
+	
 		}
     }
 

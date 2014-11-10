@@ -7,22 +7,36 @@ import java.util.Set;
 
 import system.Session;
 import data.containers.FriendListData;
+import data.containers.PendingFriendsListData;
 import data.keys.FriendListKey;
 import data.keys.Key;
 import data.keys.PersonKey;
 import domain.mappers.DataMapper;
+import domain.model.PendingFriendsList;
 import domain.model.RealFriendList;
 import domain.model.User;
 
 public class MockFriendListMapper extends DataMapper<RealFriendList> {
 	
-	private HashMap<Key, FriendListData> mockData = new HashMap<Key, FriendListData>();
+	private HashMap<Long, Set<Long>> friends = new HashMap<Long, Set<Long>>();
 
     @Override
     public RealFriendList read(Key key) {
         FriendListKey link = (FriendListKey)key;
-    	FriendListData data = mockData.get(key);
-    	if (data == null)
+        FriendListData data;
+    	if(friends.containsKey(link.id))
+    	{
+    		Set<Long> r = friends.get(link.id);
+    		Iterator<Long> iter = r.iterator();
+    		long[] ids = new long[r.size()];
+    		int n = 0;
+    		while (iter.hasNext())
+    		{
+    			ids[n] = iter.next();
+    			n++;
+    		}
+    		data = new FriendListData(link.id, ids,new long[0]);
+    	}else 
     	{
     		data = new FriendListData(link.id, new long[0], new long[0]);
     	}
@@ -40,8 +54,43 @@ public class MockFriendListMapper extends DataMapper<RealFriendList> {
     }
 
     @Override
-    public void update(RealFriendList[] obj) {
-    	
+    public void update(RealFriendList[] friendsListData) {
+    	for (int i = 0; i < friendsListData.length; i++) 
+		{
+    		RealFriendList friendList = friendsListData[i];
+    		Set<Long> myFriends = friends.get(friendList.getUserID());
+    		
+    		if (myFriends == null){
+			    myFriends = new HashSet<Long>();
+			    friends.put(friendList.getUserID(), myFriends);
+			}
+			
+			Set<User> acceptedFriends = friendList.getFriends();
+			Iterator<User> iter = acceptedFriends.iterator();
+			while (iter.hasNext())
+			{
+				User friend = iter.next();
+				myFriends.add(friend.getID());
+			
+				Set<Long> theirFriends = friends.get(friend.getID());
+				if (theirFriends == null)
+				{
+					theirFriends = new HashSet<Long>();
+					friends.put(friend.getID(), theirFriends);
+				}
+				theirFriends.add(friendList.getUserID());
+			}
+			
+			Set<User> unfriended = friendList.getRemovedFriends();
+        	iter = unfriended.iterator();
+        	while (iter.hasNext())
+        	{
+        		User friend = iter.next();
+        		myFriends.remove(friend.getID());
+        		Set<Long> theirRequests = friends.get(friend.getID());
+        		theirRequests.remove(friendList.getUserID());
+        	}
+		}
     }
 
     @Override
@@ -72,7 +121,7 @@ public class MockFriendListMapper extends DataMapper<RealFriendList> {
             FriendListData data = new FriendListData(list.getUserID(), friendIDs, removeIDs);
             
             Session.getIdentityMap(RealFriendList.class).put(key, list);
-            mockData.put(key, data);
+
     	}
     }
 
@@ -87,7 +136,7 @@ public class MockFriendListMapper extends DataMapper<RealFriendList> {
             FriendListKey key = new FriendListKey(list.getUserID());
             keys[i] = key;
             Session.getIdentityMap(RealFriendList.class).remove(key);
-            mockData.remove(key);
+          
         }
     }
 

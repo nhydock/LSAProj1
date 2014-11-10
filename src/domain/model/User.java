@@ -48,4 +48,9 @@ public abstract class User extends DomainModelObject {
     	User u = (User)obj;
     	return u.id == this.id;
     }
+    
+    @Override
+    public String toString(){
+    	return ""+id;
+    }
 }
