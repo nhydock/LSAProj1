@@ -1,6 +1,6 @@
 package domain.model;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 import system.Session;
 import domain.model.proxies.*;
@@ -88,7 +88,7 @@ public class Person extends User {
     /**
      * @return data representation of a friends list
      */
-    public ArrayList<User> getFriends() {
+    public Set<User> getFriends() {
         return friends.getFriends();
     }
 

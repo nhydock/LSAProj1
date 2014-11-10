@@ -11,7 +11,6 @@ import domain.IdentityMap;
 import domain.UnitOfWork;
 import domain.mappers.*;
 import domain.model.DomainModelObject;
-import domain.model.User;
 
 public class Session {
     

@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import system.Session;
 import system.TestSession;
-import commands.CommandToSelectUser;
 import data.keys.LoginKey;
 
 public class TestUser {

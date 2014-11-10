@@ -1,14 +1,16 @@
 package domain.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import system.Session;
 
 public class RealFriendList extends DomainModelObject implements FriendList {
 
     private long id;
-    private ArrayList<User> friends;
-    private ArrayList<User> removed;
+    private Set<User> friends;
+    private Set<User> removed;
 
     /**
      * @param id
@@ -16,17 +18,18 @@ public class RealFriendList extends DomainModelObject implements FriendList {
      * @param friends
      *            - friends of the user
      */
-    public RealFriendList(long id, ArrayList<User> friends) {
+    public RealFriendList(long id, Set<User> friends) {
         super();
         this.id = id;
         this.friends = friends;
-        removed = new ArrayList<User>();
+        removed = new HashSet<User>();
     }
 
     @Override
     public void insertFriend(User friend) {
-        friends.add(friend);
-        Session.getUnitOfWork().markChanged(this);
+        if (friends.add(friend)){
+        	Session.getUnitOfWork().markChanged(this);
+        }
     }
     @Override
     public void removeFriend(User friend) {
@@ -36,7 +39,7 @@ public class RealFriendList extends DomainModelObject implements FriendList {
         }
     }
     @Override
-    public ArrayList<User> getFriends() {
+    public Set<User> getFriends() {
         return friends;
     }
     
@@ -50,7 +53,7 @@ public class RealFriendList extends DomainModelObject implements FriendList {
     public void rollbackValues() {
         friends.clear();
         removed.clear();
-        friends.addAll((ArrayList<User>) values.get("friends"));
+        friends.addAll((Set<User>) values.get("friends"));
     }
 
     @Override
@@ -61,11 +64,11 @@ public class RealFriendList extends DomainModelObject implements FriendList {
     }
     
     /**
-     * Get the tmp array of removed friends.
+     * Get the tmp set of removed friends.
      * Should only be referenced by tightly coupled systems, such as data mappers
      * @return
      */
-    public ArrayList<User> getRemovedFriends() {
+    public Set<User> getRemovedFriends() {
     	return removed;
     }
 }

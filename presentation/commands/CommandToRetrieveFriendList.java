@@ -1,10 +1,10 @@
 package commands;
 
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 
 import system.Session;
 import data.keys.PersonKey;
-import domain.model.Friend;
 import domain.model.Person;
 import domain.model.User;
 
@@ -18,7 +18,7 @@ import domain.model.User;
 public class CommandToRetrieveFriendList implements Command {
 
     private int userID;
-    private ArrayList<User> list;
+    private Set<User> list;
 
     /**
      * The userID of the current user
@@ -49,10 +49,11 @@ public class CommandToRetrieveFriendList implements Command {
     @Override
     public String getResult() {
     	String output = "";
-    	for (int i = 0; i < list.size(); i++)
+    	Iterator<User> iter = list.iterator();
+    	while (iter.hasNext())
     	{
-    		output += list.get(i).getDisplayName();
-    		if (i + 1 < list.size()) {
+    		output += iter.next().getDisplayName();
+    		if (iter.hasNext()) {
     			output += " ";
     		}
     	}

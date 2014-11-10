@@ -1,6 +1,6 @@
 package domain.model.proxies;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 import data.keys.FriendListKey;
 import domain.model.FriendList;
@@ -29,7 +29,7 @@ public class FriendListProxy extends LazyDomainObject<RealFriendList> implements
         proxyObject().removeFriend(friend);
     }
     @Override
-    public ArrayList<User> getFriends() {
+    public Set<User> getFriends() {
         return proxyObject().getFriends();
     }
     @Override

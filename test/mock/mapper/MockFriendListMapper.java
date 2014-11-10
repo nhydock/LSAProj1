@@ -1,11 +1,12 @@
 package mock.mapper;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import system.Session;
 import data.containers.FriendListData;
-import data.gateway.FriendGateway;
 import data.keys.FriendListKey;
 import data.keys.Key;
 import data.keys.PersonKey;
@@ -25,7 +26,7 @@ public class MockFriendListMapper extends DataMapper<RealFriendList> {
     	{
     		data = new FriendListData(link.id, new long[0], new long[0]);
     	}
-        ArrayList<User> friends = new ArrayList<User>();
+        Set<User> friends = new HashSet<User>();
 
         for (long id : data.friends)
         {
@@ -49,17 +50,24 @@ public class MockFriendListMapper extends DataMapper<RealFriendList> {
         {
         	RealFriendList list = obj[i];
         	FriendListKey key = new FriendListKey(list.getUserID());
-        	ArrayList<User> friends = list.getFriends();
-            ArrayList<User> removed = list.getRemovedFriends();
+        	Set<User> friends = list.getFriends();
+            Set<User> removed = list.getRemovedFriends();
             long[] friendIDs = new long[friends.size()];
             long[] removeIDs = new long[removed.size()];
-            for (int n = 0; n < friends.size(); n++)
+            
+            int n = 0;
+            Iterator<User> iter = friends.iterator();
+            while (iter.hasNext())
             {
-                friendIDs[n] = friends.get(n).getID();
+            	friendIDs[n] = iter.next().getID();
+            	n++;
             }
-            for (int n = 0; n < removed.size(); n++)
+            n = 0;
+            iter = removed.iterator();
+            while (iter.hasNext())
             {
-            	removeIDs[n] = removed.get(n).getID();
+            	removeIDs[n] = iter.next().getID();
+            	n++;
             }
             FriendListData data = new FriendListData(list.getUserID(), friendIDs, removeIDs);
             

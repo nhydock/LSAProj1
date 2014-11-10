@@ -1,7 +1,5 @@
 package commands;
 
-import java.sql.SQLException;
-
 import system.Session;
 import data.keys.FriendKey;
 import domain.model.Person;

@@ -2,8 +2,7 @@ package domain.model;
 
 import static org.junit.Assert.*;
 
-import java.sql.Date;
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,13 +11,11 @@ public class TestFriendList {
 
     private Friend friend;
     private RealFriendList friends;
-    private Friend newFriend;
 
     @Before
     public void setup() {
-        friends = new RealFriendList(1, new ArrayList<User>());
+        friends = new RealFriendList(1, new HashSet<User>());
         friend = new Friend("YoYo", "Jesus", 12345); 
-        newFriend = new Friend("Ian", "Zeus", 1234);
     }
 
     @Test
@@ -40,7 +37,7 @@ public class TestFriendList {
         friends.removeFriend(friend);
         assertEquals(friends.getFriends().size(), 0);
         
-        assertEquals(friends.getRemovedFriends().get(0), friend);
+        assertTrue(friends.getRemovedFriends().contains(friend));
     }
     
     @Test

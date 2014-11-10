@@ -2,7 +2,9 @@ package domain.mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import system.Session;
 import data.containers.FriendListData;
@@ -21,7 +23,7 @@ public class FriendsMapper extends DataMapper<RealFriendList> {
         try {
             ResultSet result = Session.getGateway(FriendGateway.class).find(key);
             FriendListKey link = (FriendListKey)key;
-            ArrayList<User> friends = new ArrayList<User>();
+            Set<User> friends = new HashSet<User>();
 
             while (result.next()) {
             	Friend friend;
@@ -58,17 +60,23 @@ public class FriendsMapper extends DataMapper<RealFriendList> {
         for (int i = 0; i < obj.length; i++)
         {
             RealFriendList list = obj[i];
-            ArrayList<User> friends = list.getFriends();
-            ArrayList<User> removed = list.getRemovedFriends();
+            Set<User> friends = list.getFriends();
+            Set<User> removed = list.getRemovedFriends();
             long[] friendIDs = new long[friends.size()];
             long[] removeIDs = new long[removed.size()];
-            for (int n = 0; n < friends.size(); n++)
+            int n = 0;
+            Iterator<User> iter = friends.iterator();
+            while (iter.hasNext())
             {
-                friendIDs[n] = friends.get(n).getID();
+            	friendIDs[n] = iter.next().getID();
+            	n++;
             }
-            for (int n = 0; n < removed.size(); n++)
+            n = 0;
+            iter = removed.iterator();
+            while (iter.hasNext())
             {
-            	removeIDs[n] = removed.get(n).getID();
+            	removeIDs[n] = iter.next().getID();
+            	n++;
             }
             data[i] = new FriendListData(list.getUserID(), friendIDs, removeIDs);
         }
