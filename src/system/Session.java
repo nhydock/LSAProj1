@@ -142,19 +142,13 @@ public class Session {
     }
 
     /**
-     * Destroy the current session by replacing it with a new one
+     * Destroy the current session by clearing out its unit of work and identity maps
      */
     public static void kill() {
-    	session.get().unitOfWork.commit();
-    	if (session.get().connection != null) {
-	    	try {
-				session.get().connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.exit(-1);
-			}
-    	}
-        session.set(new Session());
+    	Session s = session.get();
+    	s.unitOfWork.commit();
+    	s.unitOfWork = new UnitOfWork();
+    	s.identityMaps.clear();
     }
     
     /**
