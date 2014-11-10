@@ -7,6 +7,7 @@ import java.sql.Statement;
 
 import system.Session;
 import data.containers.DataContainer;
+import data.containers.FriendListData;
 import data.containers.PendingFriendsListData;
 import data.gateway.interfaces.Gateway;
 import data.keys.Key;
@@ -68,6 +69,30 @@ public class PendingFriendsGateway extends Gateway {
 	            if (affectedRows == 0) {
 	                throw new SQLException("Creating pending friend relation failed, no rows affected.");
 	            }
+            }
+            
+            sql = "DELETE FROM friend_map WHERE ";
+            boolean remove = false;
+            for (int i = 0; i < pfldata.length; i++)
+            {
+            	PendingFriendsListData list = pfldata[i];
+        		remove = remove || list.toRemove.length > 0;
+        		for (int n = 0; n < list.toRemove.length; n++)
+        		{
+        			sql += String.format("(pid=%d AND fid=%d) OR (pid=%d AND fid=%d)", list.userID, list.toRemove[n], list.toRemove[n], list.userID);
+        			if (n + 1 < list.toRemove.length)
+        			{
+        				sql += " OR ";
+        			}
+        		}
+        		if (i + 1 < pfldata.length)
+        		{
+        			sql += " OR ";
+        		}
+            }
+            if (remove) {
+	            PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
+	            stmt.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -12,11 +12,13 @@ public class PendingFriendsListData implements DataContainer {
 
     public final long userID;
     public final long[] outgoingRequests;
+	public final long[] toRemove;
     
-    public PendingFriendsListData(long userID, long[] outgoingRequests)
+    public PendingFriendsListData(long userID, long[] outgoingRequests, long[] removed)
     {
         this.userID = userID;
         this.outgoingRequests = outgoingRequests;
+        this.toRemove = removed;
     }
     
 }

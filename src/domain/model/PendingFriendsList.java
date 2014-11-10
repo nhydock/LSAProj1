@@ -13,6 +13,7 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
     private Set<User> requests;
     private Set<User> incomingRequests;
     private Set<User> outgoingRequests;
+    private Set<User> removed;
     
     public PendingFriendsList(long id, Set<User> in, Set<User> out) {
         requests = new HashSet<User>();
@@ -20,6 +21,7 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
         requests.addAll(out);
         incomingRequests = in;
         outgoingRequests = out;
+        removed = new HashSet<User>();
         parentKey = new PersonKey(id);
         saveValues();
     }
@@ -60,6 +62,7 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
 	@Override
     public void rollbackValues() {
         requests.clear();
+        removed.clear();
         incomingRequests.clear();
         outgoingRequests.clear();
         requests.addAll((Set<User>) values.get("requests"));
@@ -97,10 +100,18 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
         boolean removed = incomingRequests.remove(friend);
         if (removed)
         {
-        	requests.remove(friend);
+        	this.removed.add(friend);
+    		requests.remove(friend);
         	Session.getUnitOfWork().markChanged(this);
         }
         return removed;
     }
+
+    /**
+     * @return rejected requests since last persist
+     */
+	public Set<User> getRejected() {
+		return removed;
+	}
 
 }

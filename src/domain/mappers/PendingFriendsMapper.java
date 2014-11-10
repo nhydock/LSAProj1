@@ -73,7 +73,19 @@ public class PendingFriendsMapper extends DataMapper<PendingFriendsList> {
         		ids[n] = friend.getID();
         		n++;
         	}
-        	data[i] = new PendingFriendsListData(p.getUserID(), ids);
+        	
+        	Set<User> rejected = p.getRejected();
+        	long[] remove = new long[rejected.size()];
+        	f = rejected.iterator();
+        	n = 0;
+        	while (f.hasNext())
+        	{
+        		User friend = f.next();
+        		remove[n] = friend.getID();
+        		n++;
+        	}
+        	
+        	data[i] = new PendingFriendsListData(p.getUserID(), ids, remove);
         }
     	Session.getGateway(PendingFriendsGateway.class).update(data);
     	for (int i = 0; i < obj.length; i++)
