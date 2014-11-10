@@ -49,6 +49,9 @@ public class UserThread implements Runnable
 	private Scanner commandReader;
 	private int currentUserID;
 	private boolean running;
+	
+	private final String testFile;
+	private int lineCount;
 
 	/**
 	 * Checks to see if this thread is currently running
@@ -69,6 +72,7 @@ public class UserThread implements Runnable
 	 */
 	public UserThread(String fileTitle) throws FileNotFoundException
 	{
+		testFile = fileTitle;
 		commandReader = new Scanner(new File(fileTitle));
 	}
 
@@ -197,13 +201,20 @@ public class UserThread implements Runnable
 		}
 		if (parts.length == 2)
 		{
-			String result = (cmd.getResult()).toString();
+			Object result = cmd.getResult();
 			if (result == null)
 			{
 				return false;
 			}
-			return (result.equals(parts[1]));
+			String strResult = result.toString();
+			if (strResult == null)
+			{
+				return false;
+			}
+			System.out.printf("[%s %d]:%s :: %s\n", testFile, lineCount, instruction, result);
+			return (strResult.equals(parts[1]));
 		}
+		System.out.printf("[%s %d]:%s\n", testFile, lineCount, instruction);
 		return true;
 	}
 
@@ -216,6 +227,7 @@ public class UserThread implements Runnable
 	public void run()
 	{
 		this.running = true;
+		lineCount = 0;
 		String input = getNextCommandLine();
 		boolean allIsWell = true;
 		while (allIsWell && input != null)
@@ -223,7 +235,7 @@ public class UserThread implements Runnable
 			if (!executeInstruction(input))
 			{
 				allIsWell = false;
-				System.out.println(Thread.currentThread().getName()
+				System.err.println(Thread.currentThread().getName()
 						+ " failed when executing this instruction: " + input);
 				input = getNextCommandLine();
 			} else
@@ -243,9 +255,11 @@ public class UserThread implements Runnable
 		if (commandReader.hasNextLine())
 		{
 			input = commandReader.nextLine();
+			lineCount++;
 		}
 		while ((input != null) && input.contains("**"))
 		{
+			lineCount++;
 			if (commandReader.hasNextLine())
 			{
 				input = commandReader.nextLine();
