@@ -94,11 +94,12 @@ public class UserGateway extends IUserGateway {
             {
                 PersonData object = objects[i];
                 
-                String sql = "UPDATE persons SET name=?,password=? WHERE id=?";
+                String sql = "UPDATE persons SET name=?,password=?,display_name=? WHERE id=?";
                 PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
                 stmt.setString(1, object.name);
                 stmt.setString(2, object.password);
-                stmt.setLong(3, object.id);
+                stmt.setString(3, object.displayName);
+                stmt.setLong(4, object.id);
 
                 stmt.executeUpdate();
             }
