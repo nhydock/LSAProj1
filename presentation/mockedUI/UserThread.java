@@ -247,7 +247,10 @@ public class UserThread implements Runnable
 			}
 		}
 		this.running = false;
-
+		if (allIsWell)
+		{
+			System.err.println(testFile + " ran successfully");
+		}
 	}
 
 	private String getNextCommandLine()

@@ -42,7 +42,7 @@ CommandToRejectFriendRequest <userID> bradpitt;
 ** TestGettingPendingOutingFriendsList
 CommandToSelectUser bradpitt pittspass;
 CommandToMakeFriendRequest <userID> snapple;
-CommandToGetPendingOutgoingFriendList <userId>; snapple
+CommandToGetPendingOutgoingFriendList <userID>; snapple
 CommandToRejectFriendRequest <userID> snapple;
 CommandToGetPendingOutgoingFriendList <userID>;
 ** TestModifyUser

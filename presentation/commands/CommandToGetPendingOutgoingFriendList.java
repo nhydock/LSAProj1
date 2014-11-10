@@ -1,5 +1,6 @@
 package commands;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import system.Session;
@@ -47,15 +48,17 @@ public class CommandToGetPendingOutgoingFriendList implements Command {
     @Override
     public String getResult() {
     	String string = "";
-    	for(User f : pendingFriendsList) {
-    		if(string.equals("")) {
-        		string = f.getDisplayName();
-    		} else {
-        		string += " " + f.getDisplayName();
+    	Iterator<User> iter = pendingFriendsList.iterator();
+    	while (iter.hasNext())
+    	{
+    		User user = iter.next();
+    		string += user.toString();
+    		if (iter.hasNext())
+    		{
+    			string += ",";
     		}
     	}
-    	System.out.println(string);
-        return string;
+    	return string.trim();
     }
 
 }

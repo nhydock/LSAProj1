@@ -29,7 +29,7 @@ public class PendingFriendsGateway extends Gateway {
         if (key instanceof PendingFriendsListKey) {
             PendingFriendsListKey link = (PendingFriendsListKey) key;
             try {
-                String sql = "SELECT * FROM friend_map f JOIN persons p1 on f.pid = p1.id JOIN persons p2 on f.fid = p2.id WHERE f.pid = ? OR f.fid = ? and f.accepted = 0";
+                String sql = "SELECT * FROM friend_map f JOIN persons p1 on f.pid = p1.id JOIN persons p2 on f.fid = p2.id WHERE (f.pid = ? OR f.fid = ?) and f.accepted = 0";
                 PreparedStatement stmt = Session.getConnection().prepareStatement(sql);
                 stmt.setLong(1, link.id);
                 stmt.setLong(2, link.id);
@@ -57,15 +57,13 @@ public class PendingFriendsGateway extends Gateway {
                 
                 for (int n = 0; n < set.outgoingRequests.length; n++)
                 {
-                	System.out.println("[DEBUG] N: " + n + " I: " + i);
-                    sql += String.format(((n > 0 || i > 0) ? "," : "") + "(%d, %d, 0)", set.userID, set.outgoingRequests[n]);
+                	sql += String.format(((n > 0 || i > 0) ? "," : "") + "(%d, %d, 0)", set.userID, set.outgoingRequests[n]);
                 }
             }
             
             if (newRelations)
             {
 	            PreparedStatement stmt = Session.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-	            System.out.println(stmt.toString());
 	            int affectedRows = stmt.executeUpdate();
 	            if (affectedRows == 0) {
 	                throw new SQLException("Creating pending friend relation failed, no rows affected.");

@@ -33,12 +33,12 @@ public class PendingFriendsMapper extends DataMapper<PendingFriendsList> {
                 Friend friend;
                 if (result.getLong("f.pid") == link.id)
                 {
-                    friend = new Friend(result.getString("p2.name"), result.getString("p2.name"), result.getLong("p2.id"));
+                    friend = new Friend(result.getString("p2.name"), result.getString("p2.display_name"), result.getLong("p2.id"));
                     outgoing.add(friend);
                 }
                 else
                 {
-                    friend = new Friend(result.getString("p1.name"), result.getString("p1.name"), result.getLong("p1.id"));
+                    friend = new Friend(result.getString("p1.name"), result.getString("p1.display_name"), result.getLong("p1.id"));
                     incoming.add(friend);
                 }
 

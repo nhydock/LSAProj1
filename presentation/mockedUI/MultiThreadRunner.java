@@ -27,17 +27,33 @@ public class MultiThreadRunner
 		Scanner inputScanner = new Scanner(System.in);
 		String input = inputScanner.nextLine();
 		String[] fileTitles = input.split(",");
+		
+		Runnable prepThread = null;
 		for(String title:fileTitles)
 		{
 			System.out.println("Creating Thread for " + title.trim());
 			UserThread target = new UserThread(title.trim());
-			uThreads.add(target);
-			threads.add(new Thread(target));
+			
+			if (title.contains("init.txt"))
+			{
+				prepThread = new UserThread(title.trim());
+			}
+			else
+			{
+				uThreads.add(target);
+				Thread t = new Thread(target);
+				t.setName(title);
+				threads.add(t);
+			}
 		}
 		inputScanner.close();
 		
-		new Thread(){
+		new Thread(prepThread){
 			public void run() {
+				//run prep thread first if it exists
+				super.run();
+				System.err.println("\nPreparation finished\n==================================\n");
+				
 				for (Thread t : threads)
 				{
 					t.start();
@@ -55,7 +71,7 @@ public class MultiThreadRunner
 					}
 				}
 				
-				System.out.println("Finished!");
+				System.err.println("\n==================================\nFinished!");
 			}
 		}.start();
 		

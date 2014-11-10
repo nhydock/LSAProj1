@@ -50,8 +50,7 @@ public class FriendGateway extends Gateway {
                     stmt.setLong(3, friendID);
                     stmt.setLong(4, list.id);
                     stmt.executeUpdate();
-                    System.out.println(stmt.toString());
-        		}
+                }
             }
 
             String sql = "DELETE FROM friend_map WHERE ";

@@ -52,9 +52,11 @@ public class CommandToRetrieveFriendList implements Command {
     	Iterator<User> iter = list.iterator();
     	while (iter.hasNext())
     	{
-    		output += iter.next().getDisplayName();
-    		if (iter.hasNext()) {
-    			output += " ";
+    		User user = iter.next();
+    		output += user.toString();
+    		if (iter.hasNext())
+    		{
+    			output += ",";
     		}
     	}
         return output;

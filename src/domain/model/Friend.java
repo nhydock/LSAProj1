@@ -19,4 +19,9 @@ public class Friend extends User {
 
     @Override
     public void saveValues() {}
+    
+    @Override
+    public String toString() {
+    	return this.getDisplayName();
+    }
 }

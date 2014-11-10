@@ -1,6 +1,5 @@
 package domain.model;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,6 +22,7 @@ public class RealFriendList extends DomainModelObject implements FriendList {
         this.id = id;
         this.friends = friends;
         removed = new HashSet<User>();
+        saveValues();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class RealFriendList extends DomainModelObject implements FriendList {
 
     @Override
     public void saveValues() {
-        ArrayList<User> clonedList = new ArrayList<User>(friends);
+        Set<User> clonedList = new HashSet<User>(friends);
         values.put("friends", clonedList);
         removed.clear();
     }

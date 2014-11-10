@@ -55,6 +55,7 @@ public class Session {
             String connectURL = String.format(connectFormat, host, db, user, pass);
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(connectURL);
+            System.out.println("Connection successfully made");
         } catch (Exception ex) {
             // if not successful, quit
             System.err.println("Cannot open database -- make sure MySQL JDBC is configured properly.");

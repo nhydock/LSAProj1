@@ -69,11 +69,11 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
 
     @Override
     public void saveValues() {
-        ArrayList<User> clonedList = new ArrayList<User>(requests);
+        Set<User> clonedList = new HashSet<User>(requests);
         values.put("requests", clonedList);
-        clonedList = new ArrayList<User>(incomingRequests);
+        clonedList = new HashSet<User>(incomingRequests);
         values.put("incomingRequests", clonedList);
-        clonedList = new ArrayList<User>(outgoingRequests);
+        clonedList = new HashSet<User>(outgoingRequests);
         values.put("outgoingRequests", clonedList);
     }
 
