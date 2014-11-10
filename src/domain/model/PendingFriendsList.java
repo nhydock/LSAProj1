@@ -1,21 +1,21 @@
 package domain.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-import data.keys.PendingFriendsListKey;
 import data.keys.PersonKey;
-
 import system.Session;
 
 public class PendingFriendsList extends DomainModelObject implements IPendingFriendsList{
 
 	private PersonKey parentKey;
-    private ArrayList<User> requests;
-    private ArrayList<User> incomingRequests;
-    private ArrayList<User> outgoingRequests;
+    private Set<User> requests;
+    private Set<User> incomingRequests;
+    private Set<User> outgoingRequests;
     
-    public PendingFriendsList(long id, ArrayList<User> in, ArrayList<User> out) {
-        requests = new ArrayList<User>();
+    public PendingFriendsList(long id, Set<User> in, Set<User> out) {
+        requests = new HashSet<User>();
         requests.addAll(in);
         requests.addAll(out);
         incomingRequests = in;
@@ -25,7 +25,7 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
     }
 
     @Override
-    public ArrayList<User> getAllRequests() {
+    public Set<User> getAllRequests() {
         return requests;
     }
     
@@ -38,7 +38,6 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
     	{
     		requests.remove(friend);
     		Session.getUnitOfWork().markChanged(this);
-        
         }
     	return removed;
     }
@@ -47,8 +46,7 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
     public boolean requestFriend(User friend) {
     	if (friend == null || friend.getID() == -1)
     		return false;
-    	
-        boolean added = outgoingRequests.add(friend);
+    	boolean added = outgoingRequests.add(friend);
         added = added && requests.add(friend);
         if (added)
         {
@@ -64,9 +62,9 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
         requests.clear();
         incomingRequests.clear();
         outgoingRequests.clear();
-        requests.addAll((ArrayList<User>) values.get("requests"));
-        incomingRequests.addAll((ArrayList<User>) values.get("incomingRequests"));
-        outgoingRequests.addAll((ArrayList<User>) values.get("outgoingRequests"));
+        requests.addAll((Set<User>) values.get("requests"));
+        incomingRequests.addAll((Set<User>) values.get("incomingRequests"));
+        outgoingRequests.addAll((Set<User>) values.get("outgoingRequests"));
     }
 
     @Override
@@ -85,12 +83,12 @@ public class PendingFriendsList extends DomainModelObject implements IPendingFri
     }
 
     @Override
-    public ArrayList<User> getIncomingRequests() {
+    public Set<User> getIncomingRequests() {
         return incomingRequests;
     }
 
     @Override
-    public ArrayList<User> getOutgoingRequests() {
+    public Set<User> getOutgoingRequests() {
         return outgoingRequests;
     }
 

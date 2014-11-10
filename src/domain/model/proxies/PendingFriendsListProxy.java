@@ -1,6 +1,6 @@
 package domain.model.proxies;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 import data.keys.PendingFriendsListKey;
 import domain.model.*;
@@ -26,7 +26,7 @@ public class PendingFriendsListProxy extends LazyDomainObject<PendingFriendsList
     }
 
     @Override
-    public ArrayList<User> getAllRequests() {
+    public Set<User> getAllRequests() {
         return proxyObject().getAllRequests();
     }
 
@@ -36,12 +36,12 @@ public class PendingFriendsListProxy extends LazyDomainObject<PendingFriendsList
     }
 
     @Override
-    public ArrayList<User> getIncomingRequests() {
+    public Set<User> getIncomingRequests() {
         return proxyObject().getIncomingRequests();
     }
 
     @Override
-    public ArrayList<User> getOutgoingRequests() {
+    public Set<User> getOutgoingRequests() {
         return proxyObject().getOutgoingRequests();
     }
 

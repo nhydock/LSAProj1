@@ -1,6 +1,6 @@
 package commands;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 import system.Session;
 import data.keys.PersonKey;
@@ -16,7 +16,7 @@ import domain.model.User;
  *
  */
 public class CommandToGetPendingOutgoingFriendList implements Command {
-    private ArrayList<User> pendingFriendsList;
+    private Set<User> pendingFriendsList;
     private int userID;
 
     /**

@@ -27,4 +27,23 @@ public abstract class User extends DomainModelObject {
     public String getDisplayName() {
     	return displayName;
     }
+    
+    @Override
+    public int hashCode() {
+    	return (int) id;
+    }
+    
+    @Override
+    public boolean equals(Object obj)
+    {
+    	if (obj == null)
+    		return false;
+    	if (obj == this)
+    		return true;
+    	if (!(obj instanceof User))
+    		return false;
+    	
+    	User u = (User)obj;
+    	return u.id == this.id;
+    }
 }

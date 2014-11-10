@@ -1,8 +1,8 @@
 package mock.mapper;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import system.Session;
@@ -37,8 +37,8 @@ public class MockPendingFriendsListMapper extends DataMapper<PendingFriendsList>
     		data = new PendingFriendsListData(link.id, new long[0]);
     	}
     	
-    	ArrayList<User> incoming = new ArrayList<User>();
-    	ArrayList<User> outgoing = new ArrayList<User>();
+    	Set<User> incoming = new HashSet<User>();
+    	Set<User> outgoing = new HashSet<User>();
     	
     	IdentityMap<Friend> imap = Session.getIdentityMap(Friend.class);
     	for (int i = 0; i < data.outgoingRequests.length; i++)
@@ -75,14 +75,16 @@ public class MockPendingFriendsListMapper extends DataMapper<PendingFriendsList>
 			    frequests = new HashSet<Long>();
 			    requests.put(f.getUserID(), frequests);
 			}
-			ArrayList<User> friends = f.getOutgoingRequests();
-			long[] ids = new long[friends.size()];
-			for (int n = 0; n < friends.size(); n++)
+			Set<User> requests = f.getOutgoingRequests();
+			long[] ids = new long[requests.size()];
+			Iterator<User> friends = requests.iterator();
+			int n = 0;
+			while (friends.hasNext())
 			{
-				User friend = friends.get(n);
+				User friend = friends.next();
 				ids[n] = friend.getID();
-				
 				frequests.add(friend.getID());
+				n++;
 			}
 			data[i] = new PendingFriendsListData(f.getUserID(), ids);
 			
@@ -101,12 +103,15 @@ public class MockPendingFriendsListMapper extends DataMapper<PendingFriendsList>
 		for (int i = 0; i < pendingFriends.length; i++) 
 		{
 			PendingFriendsList f = pendingFriends[i];
-			ArrayList<User> friends = f.getOutgoingRequests();
-			long[] ids = new long[friends.size()];
-			for (int n = 0; n < friends.size(); n++)
+			Set<User> requests = f.getOutgoingRequests();
+			long[] ids = new long[requests.size()];
+			Iterator<User> friends = requests.iterator();
+			int n = 0;
+			while (friends.hasNext())
 			{
-				User friend = friends.get(n);
+				User friend = friends.next();
 				ids[n] = friend.getID();
+				n++;
 			}
 			data[i] = new PendingFriendsListData(f.getUserID(), ids);
 			

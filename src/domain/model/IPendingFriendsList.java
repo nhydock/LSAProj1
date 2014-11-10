@@ -1,12 +1,12 @@
 package domain.model;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 public interface IPendingFriendsList {
 
-    public ArrayList<User> getAllRequests();
-    public ArrayList<User> getIncomingRequests();
-    public ArrayList<User> getOutgoingRequests();
+    public Set<User> getAllRequests();
+    public Set<User> getIncomingRequests();
+    public Set<User> getOutgoingRequests();
     public boolean requestFriend(User friend);
     public boolean denyFriend(User friend);
     public boolean removeRequest(User friend);

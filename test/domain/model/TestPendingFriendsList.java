@@ -3,6 +3,7 @@ package domain.model;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class TestPendingFriendsList {
     	IPendingFriendsList list = person.getPendingFriends();
     	assertNotNull(list);
     	
-    	ArrayList<User> requests = list.getAllRequests();
+    	Set<User> requests = list.getAllRequests();
         assertNotNull(requests);
         assertEquals(0, requests.size());
     }
@@ -62,8 +63,8 @@ public class TestPendingFriendsList {
     	IPendingFriendsList list = person.getPendingFriends();
     	IPendingFriendsList flist = friend.getPendingFriends();
     	
-    	ArrayList<User> myRequests = list.getAllRequests();
-    	ArrayList<User> theirRequests = flist.getAllRequests();
+    	Set<User> myRequests = list.getAllRequests();
+    	Set<User> theirRequests = flist.getAllRequests();
         
     	list.requestFriend(friend);
         assertEquals(1, myRequests.size());

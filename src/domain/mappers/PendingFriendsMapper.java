@@ -2,7 +2,9 @@ package domain.mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import system.Session;
 import data.containers.PendingFriendsListData;
@@ -23,8 +25,8 @@ public class PendingFriendsMapper extends DataMapper<PendingFriendsList> {
             ResultSet result = Session.getGateway(PendingFriendsGateway.class).find(key);
             PendingFriendsListKey link = (PendingFriendsListKey) key;
 
-            ArrayList<User> incoming = new ArrayList<User>();
-            ArrayList<User> outgoing = new ArrayList<User>();
+            Set<User> incoming = new HashSet<User>();
+            Set<User> outgoing = new HashSet<User>();
             
             IdentityMap<Friend> imap = Session.getIdentityMap(Friend.class);
             while (result.next()) {
@@ -57,16 +59,19 @@ public class PendingFriendsMapper extends DataMapper<PendingFriendsList> {
 
     @Override
     public void update(PendingFriendsList[] obj) {
-        PendingFriendsListData[] data = new PendingFriendsListData[obj.length];
+    	PendingFriendsListData[] data = new PendingFriendsListData[obj.length];
         for (int i = 0; i < obj.length; i++)
         {
         	PendingFriendsList p = obj[i];
-        	ArrayList<User> friends = p.getOutgoingRequests();
+        	Set<User> friends = p.getOutgoingRequests();
         	long[] ids = new long[friends.size()];
-        	for (int n = 0; n < friends.size(); n++)
+        	Iterator<User> f = friends.iterator();
+        	int n = 0;
+        	while (f.hasNext())
         	{
-        		User friend = friends.get(n);
+        		User friend = f.next();
         		ids[n] = friend.getID();
+        		n++;
         	}
         	data[i] = new PendingFriendsListData(p.getUserID(), ids);
         }
