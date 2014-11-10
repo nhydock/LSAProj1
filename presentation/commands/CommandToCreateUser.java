@@ -2,7 +2,9 @@ package commands;
 
 import system.Session;
 import data.keys.FriendKey;
+import domain.model.NullUser;
 import domain.model.Person;
+import domain.model.User;
 
 /**
  * Creates a new user in the system
@@ -15,7 +17,7 @@ public class CommandToCreateUser implements Command {
     private String userName;
     private String password;
     private String displayName;
-    private Person person;
+    private User person;
 
     /**
      * Create a command that will add a new user to the system
@@ -46,6 +48,7 @@ public class CommandToCreateUser implements Command {
             Session.getUnitOfWork().commit();
     	} else {
     		System.err.println("Duplicate entry found for user: " + userName);
+    		this.person = new NullUser();
     	}
     	
     }
@@ -57,7 +60,7 @@ public class CommandToCreateUser implements Command {
      * @see Command#getResult()
      */
     @Override
-    public Person getResult() {
+    public User getResult() {
         return person;
     }
 

@@ -42,7 +42,7 @@ CommandToRetrieveFriendList <userID>;
 CommandToSelectUser johnTedMovie pw1;
 CommandToUnFriend <userID> tedTedMovie;
 CommandToRetrieveFriendList <userID>;
-CommandToSelectUser tedTedMovie pw1;
+CommandToSelectUser tedTedMovie pw2;
 CommandToRetrieveFriendList <userID>;
 **
 **
@@ -247,7 +247,7 @@ CommandToGetPendingOutgoingFriendList <userID>; liz
 CommandToPersistChanges;
 CommandToSelectUser kateAshfield pw3;
 CommandToGetPendingIncomingFriendList <userID>; zombieDavid
-CommandToRejectFreindRequest <userID> dylanMoran;
+CommandToRejectFriendRequest <userID> dylanMoran;
 CommandToGetPendingIncomingFriendList <userID>;
 CommandToRetrieveFriendList <userID>;
 CommandToSelectUser dylanMoran pw5;

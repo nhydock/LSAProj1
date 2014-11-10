@@ -15,7 +15,7 @@ public class TestCreateUser {
         String displayName = "Bobby";
         CommandToCreateUser comm = new CommandToCreateUser(username, password, displayName);
         comm.execute();
-        Person p = comm.getResult();
+        Person p = (Person)comm.getResult();
         
         assertNotNull(p);
         assertEquals(p.getDisplayName(), displayName);

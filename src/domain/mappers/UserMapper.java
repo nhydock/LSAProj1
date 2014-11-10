@@ -13,6 +13,7 @@ import data.keys.LoginKey;
 import data.keys.PersonKey;
 import domain.mappers.DataMapper;
 import domain.model.Friend;
+import domain.model.NullUser;
 import domain.model.Person;
 import domain.model.User;
 
@@ -46,14 +47,14 @@ public class UserMapper extends DataMapper<User> {
                 
                 if (key instanceof PersonKey)
                 {
-                    obj = new Person(result.getString("name"), result.getString("display_name"), result.getString("password"), result.getLong("id"));
+                    obj = new Person(result.getString("name"), result.getString("password"), result.getString("display_name"), result.getLong("id"));
 
                     Session.getIdentityMap(Person.class).put(key, obj);
                 }
                 //make sure person getting mapped in is good to go
                 else if (key instanceof LoginKey)
                 {
-                    obj = new Person(result.getString("name"), result.getString("display_name"), result.getString("password"), result.getLong("id"));
+                    obj = new Person(result.getString("name"), result.getString("password"), result.getString("display_name"), result.getLong("id"));
                     key = new PersonKey(obj.getID());
 
                     Session.getIdentityMap(Person.class).put(key, obj);
@@ -70,7 +71,7 @@ public class UserMapper extends DataMapper<User> {
             }
             return obj;
         }
-        return null;
+        return new NullUser();
     }
 
     public void update(User[] user) {

@@ -61,7 +61,7 @@ public class FriendGateway extends Gateway {
         		remove = remove || list.toRemove.length > 0;
         		for (int n = 0; n < list.toRemove.length; n++)
         		{
-        			sql += String.format("(pid=%d AND fid=%d)", list.id, list.toRemove[n]);
+        			sql += String.format("(pid=%d AND fid=%d) OR (pid=%d AND fid=%d)", list.id, list.toRemove[n], list.toRemove[n], list.id);
         			if (n + 1 < list.toRemove.length)
         			{
         				sql += " OR ";

@@ -205,11 +205,12 @@ public class UserThread implements Runnable
 		if (parts.length == 2)
 		{
 			Object result = cmd.getResult();
-			System.out.printf("[%s %d]:%s :: %s\n", testFile, lineCount, instruction, result);
 			if (result == null)
 			{
+				System.out.printf("[%s %d]:%s :: %s\n", testFile, lineCount, instruction, "NullPointer");
 				return false;
 			}
+			System.out.printf("[%s %d]:%s :: %s\n", testFile, lineCount, instruction, result);
 			if (result instanceof List)
 			{
 				String[] expected = parts[1].split(",");

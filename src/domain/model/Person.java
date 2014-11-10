@@ -35,8 +35,8 @@ public class Person extends User {
     public Person(String name, String password, String displayName, long id) {
         this.id = id;
         this.userName = name;
-        this.displayName = displayName;
         this.password = password;
+        this.displayName = displayName;
         friends = new FriendListProxy(id);
         pendingFriends = new PendingFriendsListProxy(id);
         saveValues();
