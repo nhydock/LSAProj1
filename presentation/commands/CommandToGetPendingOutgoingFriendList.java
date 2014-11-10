@@ -1,6 +1,8 @@
 package commands;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import system.Session;
@@ -46,19 +48,7 @@ public class CommandToGetPendingOutgoingFriendList implements Command {
      * @see Command#getResult()
      */
     @Override
-    public String getResult() {
-    	String string = "";
-    	Iterator<User> iter = pendingFriendsList.iterator();
-    	while (iter.hasNext())
-    	{
-    		User user = iter.next();
-    		string += user.toString();
-    		if (iter.hasNext())
-    		{
-    			string += ",";
-    		}
-    	}
-    	return string.trim();
+    public List<User> getResult() {
+    	return new ArrayList<User>(pendingFriendsList);
     }
-
 }

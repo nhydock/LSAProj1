@@ -40,6 +40,8 @@ public abstract class User extends DomainModelObject {
     		return false;
     	if (obj == this)
     		return true;
+    	if (obj instanceof String)
+    		return obj.toString().equals(obj);
     	if (!(obj instanceof User))
     		return false;
     	

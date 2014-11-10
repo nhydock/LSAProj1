@@ -1,6 +1,8 @@
 package commands;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import system.Session;
@@ -47,19 +49,8 @@ public class CommandToRetrieveFriendList implements Command {
      * @see Command#getResult()
      */
     @Override
-    public String getResult() {
-    	String output = "";
-    	Iterator<User> iter = list.iterator();
-    	while (iter.hasNext())
-    	{
-    		User user = iter.next();
-    		output += user.toString();
-    		if (iter.hasNext())
-    		{
-    			output += ",";
-    		}
-    	}
-        return output;
+    public List<User> getResult() {
+    	return new ArrayList<User>(list);
     }
 
 }

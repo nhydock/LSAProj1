@@ -3,6 +3,9 @@ package mockedUI;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import commands.*;
@@ -202,16 +205,39 @@ public class UserThread implements Runnable
 		if (parts.length == 2)
 		{
 			Object result = cmd.getResult();
+			System.out.printf("[%s %d]:%s :: %s\n", testFile, lineCount, instruction, result);
 			if (result == null)
 			{
 				return false;
+			}
+			if (result instanceof List)
+			{
+				String[] expected = parts[1].split(",");
+				List<?> results = (List<?>)result;
+				if (expected.length != results.size()) {
+					return false;
+				}
+				
+				for (String val : expected)
+				{
+					boolean found = true;
+					for (Object obj : results)
+					{
+						if (!obj.equals(val)) {
+							found = false;
+						}
+					}
+					if (!found) {
+						return false;
+					}
+				}
+				return true;
 			}
 			String strResult = result.toString();
 			if (strResult == null)
 			{
 				return false;
 			}
-			System.out.printf("[%s %d]:%s :: %s\n", testFile, lineCount, instruction, result);
 			return (strResult.equals(parts[1]));
 		}
 		System.out.printf("[%s %d]:%s\n", testFile, lineCount, instruction);

@@ -33,10 +33,9 @@ public class CommandToSelectUser implements Command {
      */
     @Override
     public void execute() {
+        Session.kill();
         LoginKey person = new LoginKey(userName, password);
         loaded = (Person) Session.getMapper(Person.class).find(person);
-        Session.kill();
-        Session.getIdentityMap(Person.class).put(new PersonKey(loaded.getID()), loaded);
     }
 
     /**
