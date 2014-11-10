@@ -3,6 +3,7 @@ package domain.model;
 import java.util.Set;
 
 import system.Session;
+import data.keys.LoginKey;
 import domain.model.proxies.*;
 
 public class Person extends User {

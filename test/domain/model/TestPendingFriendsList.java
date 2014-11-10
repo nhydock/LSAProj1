@@ -22,7 +22,9 @@ public class TestPendingFriendsList {
     	TestSession session = new TestSession();
 		Session.replaceSession(session);
         friend = new Person("asd", "Athena", "Ian");
+        Session.getUnitOfWork().commit();
         newFriend = new Person("dfsadfsad", "Dinosaur", "Tim");
+        Session.getUnitOfWork().commit();
         person = new Person("qwertyyuiop", "Velociraptor", "Frank");
         Session.getUnitOfWork().commit();
         

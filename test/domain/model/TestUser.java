@@ -25,9 +25,13 @@ public class TestUser {
 		assertEquals("Pickle Shorts",  user1.getUserName());
 		assertEquals("Pickle Shorts", user1.getDisplayName());
 		
+		Session.getUnitOfWork().commit();
+		
 		Person user2 = new Person("Snapple", "madefromthebest", "Snapple");
 		assertEquals("Snapple",  user2.getUserName());
 		assertEquals("Snapple", user2.getDisplayName());
+		
+		Session.getUnitOfWork().commit();
 		
 		Person user3 = new Person("Nicholas", "nhydock", "Hydock");
 		assertEquals("Nicholas", user3.getUserName());
